@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finsight-pro"
+version = "0.1.0"
+description = "Financial statement analysis, ratios, charts and HTML reports"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pandas>=2.0", "openpyxl>=3.1", "matplotlib>=3.7"]
+
+[project.scripts]
+finsight = "finsight.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
