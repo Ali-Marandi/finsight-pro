@@ -1,67 +1,106 @@
 # Contributing to FinSight Pro
 
-Thank you for your interest in contributing to FinSight Pro! This document provides guidelines for contributing to both the open-source CLI engine and the commercial desktop application.
+Thank you for your interest in contributing to FinSight Pro! This document provides guidelines for contributing to both the open-source CLI and the commercial desktop application.
 
 ## Project Structure
 
 ```
 finsight-pro/
-├── src/finsight/          # Python analysis engine (open-source, MIT)
-├── tests/               # Test suite
-├── examples/            # Sample data files
-├── desktop/             # Commercial desktop application
-━── electron/           # Electron main process
-━── frontend/           # React + TypeScript GUI
-━── api/               # FastAPI backend wrapping the engine
-├── landing/             # Marketing website
-├── docs/                # Documentation
-└── .github/             # GitHub templates and workflows
+├── src/finsight/          # CLI tool (MIT License)
+│   ├── cli.py             # Command-line interface
+│   ├── ratios.py          # Financial ratio calculations
+│   ├── charts.py          # Chart generation (matplotlib)
+│   ├── io.py              # CSV/XLSX parsing
+│   └── report.py          # HTML report generation
+├── tests/                 # CLI tests
+├── desktop/               # Electron + React desktop app (Proprietary)
+│   ├── electron/          # Electron main process
+│   ├── src/main/          # React entry point
+│   └── src/renderer/      # React UI components
+├── api/                   # FastAPI backend (Proprietary)
+│   └── app/               # API routes, services, models
+├── docs/                  # Documentation
+└── .github/               # CI/CD and templates
 ```
 
-## Open-Source CLI Contributions
+## Licensing
 
-The Python analysis engine (`src/finsight/`) is open-source under the MIT License. Contributions are welcome!
+| Component | License | Contribution Rules |
+|-----------|---------|-------------------|
+| `src/finsight/`, `tests/` | MIT | Open contributions welcome |
+| `desktop/`, `api/` | Proprietary | Contributors must sign CLA |
 
-### How to Contribute
-
-1. **Fork** the repository
-2. **Create a feature branch**: `git checkout -b feature/your-feature-name`
-3. **Make your changes** with clear commit messages
-4. **Add tests** for any new functionality
-5. **Run tests**: `python -m pytest tests/ -v`
-6. **Submit a Pull Request** to the `main` branch
-
-### Code Standards
-
-- Python 3.10+
-- Follow PEP 8 style guidelines
-- All financial formulas must include a docstring explaining the calculation
-- Use type hints for all function signatures
-- Maintain test coverage above 80%
+## How to Contribute
 
 ### Reporting Bugs
 
-Please use the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.md) when reporting issues. Include:
-- The input file that caused the error (sanitized if necessary)
-- The full error traceback
-- Your Python version and operating system
+Use the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.yml). Include:
+- Steps to reproduce
+- Expected vs. actual behavior
+- App version and OS
+- Log output or screenshots
 
 ### Suggesting Features
 
-Feature suggestions for the open-source CLI are welcome via the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.md).
+Use the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.yml). Clearly describe the problem and your proposed solution.
 
-## Commercial Desktop Application
+### Pull Request Workflow
 
-The desktop application (`desktop/`) is proprietary software. External contributions to this portion are handled differently:
+1. **Fork** the repository
+2. **Branch** from `develop`: `git checkout -b feature/your-feature develop`
+3. **Commit** using [Conventional Commits](https://www.conventionalcommits.org/):
+   - `feat: add current ratio calculation`
+   - `fix: handle empty CSV rows gracefully`
+   - `docs: update README installation guide`
+4. **Push** to your fork
+5. **Open PR** against the `develop` branch
 
-- **Bug bounty program** for security vulnerabilities
-- **Beta testing program** for users who want early access
-- **Translation contributions** via Crowdin (coming soon)
+### Development Setup
 
-See the [landing page](https://finsightpro.com) for information about the Pro version.
+#### CLI (Python)
 
-## License
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -e ".[dev]"
+pytest tests/
+```
 
-- **CLI Engine** (`src/finsight/`): MIT License
-- **Desktop App** (`desktop/`): Proprietary - see LICENSE_DESKTOP
-- **Documentation**: CC BY 4.0
+#### Desktop App (Node.js + Python)
+
+```bash
+# Frontend
+cd desktop
+npm install
+npm run dev
+
+# Backend API
+cd api
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+## Code Standards
+
+### Python (CLI & API)
+- Format with `ruff format .`
+- Lint with `ruff check .`
+- Type hints required for API code
+- Docstrings for all public functions
+
+### TypeScript (Desktop)
+- Format with `prettier --write .`
+- Lint with `eslint .`
+- Strict mode enabled in `tsconfig.json`
+- Use Tailwind CSS utility classes
+
+## Code of Conduct
+
+- Be respectful and inclusive
+- Focus on constructive feedback
+- No harassment or discriminatory language
+- Maintainers reserve the right to remove contributions that violate these standards
+
+## Questions?
+
+Open a [Discussion](https://github.com/Ali-Marandi/finsight-pro/discussions) or reach out to the maintainers.

@@ -2,20 +2,97 @@ name: CI
 
 on:
   push:
+    branches: [main, develop]
   pull_request:
+    branches: [main, develop]
 
 jobs:
-  test:
+  test-cli:
+    name: CLI Tests (Python 3.10+)
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-      - run: python -m pip install --upgrade pip
-      - run: pip install -e .
-      - run: python -m unittest discover -s tests -v
+          python-version: "3.10"
+      - name: Install CLI dependencies
+        run: |
+          pip install -e .
+          pip install pytest pytest-cov
+      - name: Run CLI tests
+        run: pytest tests/ --cov=src/finsight --cov-report=xml
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+
+  test-api:
+    name: API Tests (FastAPI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install API dependencies
+        run: |
+          cd api
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio httpx
+      - name: Run API tests
+        run: pytest api/tests/
+
+  lint-desktop:
+    name: Desktop Lint (TypeScript)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: desktop/package-lock.json
+      - name: Install desktop dependencies
+        run: |
+          cd desktop
+          npm ci
+      - name: Lint
+        run: |
+          cd desktop
+          npm run lint
+      - name: Type check
+        run: |
+          cd desktop
+          npx tsc --noEmit
+
+  build-desktop:
+    name: Build Desktop App
+    needs: [lint-desktop, test-api]
+    runs-on: windows-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          cd desktop
+          npm ci
+      - name: Build
+        run: |
+          cd desktop
+          npm run build
+      - name: Package (electron-builder)
+        run: |
+          cd desktop
+          npx electron-builder --win --publish never
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FinSight-Pro-Setup
+          path: desktop/dist/*.exe

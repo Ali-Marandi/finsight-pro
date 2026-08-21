@@ -1,0 +1,59 @@
+name: Bug Report
+description: Report a bug in FinSight Pro
+title: "[Bug] "
+labels: ["bug", "triage"]
+assignees: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear description of the bug
+      placeholder: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Open the app
+        2. Import a CSV file
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Windows 11
+        - Windows 10
+        - macOS (not supported yet)
+        - Linux (not supported yet)
+    validations:
+      required: true
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Edition
+      options:
+        - CLI (Free)
+        - Desktop Pro
+        - Desktop Enterprise
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Screenshots
+      description: Paste relevant logs or attach screenshots
+      placeholder: Error output, stack trace, or screenshot description
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: |
+        - App version:
+        - OS version:
+        - File type being analyzed:

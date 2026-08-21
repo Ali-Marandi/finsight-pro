@@ -2,30 +2,48 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+venv/
 dist/
 build/
 *.egg-info/
 reports/
+*.db
+*.sqlite
+*.sqlite3
 .DS_Store
+Thumbs.db
+Desktop.ini
 
-# Desktop app
+# Desktop app (Electron + React)
 node_modules/
+desktop/node_modules/
+desktop/dist/
+desktop/out/
+desktop/.vite/
 desktop/release/
-desktop/frontend/node_modules/
-desktop/frontend/build/
-desktop/.cache/
-*.log
+desktop/src/main/*.js
+desktop/src/main/*.d.ts
+*.exe
+*.msi
+*.dmg
+
+# API backend
+api/__pycache__/
+api/*.pyc
+api/.venv/
+api/venv/
 
 # Environment
 .env
 .env.local
+.env.*.local
 
 # IDE
-.vscode/
+.vscode/settings.json
 .idea/
 *.swp
 *.swo
 
-# OS
-Thumbs.db
-Desktop.ini
+# Logs
+*.log
+npm-debug.log*

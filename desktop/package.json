@@ -1,65 +1,55 @@
 {
   "name": "finsight-pro-desktop",
-  "version": "0.2.0",
-  "description": "FinSight Pro - Professional Financial Analytics Desktop Application",
-  "main": "electron/main.js",
-  "author": "Ali-Marandi",
-  "license": "UNLICENSED",
+  "version": "0.1.0",
+  "description": "FinSight Pro - Professional Financial Statement Analysis Desktop App",
+  "main": "dist/electron/main.js",
+  "author": "FinSight Pro LLC",
+  "license": "Commercial",
   "private": true,
   "scripts": {
-    "dev:api": "cd api && uvicorn main:app --host 127.0.0.1 --port 8400 --reload",
-    "dev:react": "cd frontend && npm start",
-    "dev:electron": "electron .",
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:react\"",
-    "build:react": "cd frontend && npm run build",
-    "build": "npm run build:react && electron-builder --win",
-    "build:portable": "npm run build:react && electron-builder --win portable",
-    "lint": "cd frontend && npm run lint",
-    "test": "cd api && python -m pytest ../tests/ -v && cd ../frontend && npm test"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "npm run build && electron-builder",
+    "electron:build:win": "npm run build && electron-builder --win",
+    "electron:build:mac": "npm run build && electron-builder --mac",
+    "electron:build:linux": "npm run build && electron-builder --linux"
   },
-  "build": {
-    "appId": "com.finsightpro.desktop",
-    "productName": "FinSight Pro",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "electron/**/*",
-      "frontend/build/**/*",
-      "api/**/*",
-      "../src/finsight/**/*"
-    ],
-    "extraResources": [
-      {
-        "from": "api",
-        "to": "api"
-      }
-    ],
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": ["x64"]
-        }
-      ],
-      "icon": "electron/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "FinSight Pro"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "Ali-Marandi",
-      "repo": "finsight-pro"
-    }
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0",
+    "recharts": "^2.12.7",
+    "lucide-react": "^0.441.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.2",
+    "zustand": "^4.5.5",
+    "axios": "^1.7.5",
+    "react-dropzone": "^14.2.3",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
+    "@radix-ui/react-select": "^2.1.1",
+    "@radix-ui/react-tabs": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
+    "@radix-ui/react-tooltip": "^1.1.2",
+    "class-variance-authority": "^0.7.0"
   },
   "devDependencies": {
-    "concurrently": "^8.2.0",
-    "electron": "^28.0.0",
-    "electron-builder": "^24.9.0"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^8.2.2",
+    "electron": "^32.1.0",
+    "electron-builder": "^25.0.5",
+    "eslint": "^9.9.0",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2",
+    "wait-on": "^7.2.0"
   }
 }

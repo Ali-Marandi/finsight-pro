@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cascade-stone text-cascade-charcoal font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    @apply border-cascade-mist;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-cascade-soft-white border rounded shadow-card p-6;
+  }
+
+  .btn-primary {
+    @apply bg-cascade-gold text-white px-5 py-2.5 rounded font-semibold text-sm
+           hover:bg-cascade-gold-hover transition-all duration-200
+           active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-cascade-charcoal border border-cascade-mist
+           px-5 py-2.5 rounded font-medium text-sm
+           hover:border-cascade-sage hover:bg-cascade-soft-white
+           transition-all duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded border border-cascade-mist
+           bg-cascade-soft-white text-cascade-charcoal text-sm
+           placeholder:text-cascade-sage/50
+           focus:outline-none focus:border-cascade-gold focus:ring-1 focus:ring-cascade-gold/30
+           transition-colors duration-200;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+           text-cascade-sage hover:text-cascade-charcoal hover:bg-cascade-mist/50
+           transition-colors duration-150;
+  }
+
+  .sidebar-link.active {
+    @apply text-cascade-gold bg-cascade-gold/10;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .status-good {
+    @apply status-badge bg-semantic-success/10 text-semantic-success;
+  }
+
+  .status-warning {
+    @apply status-badge bg-semantic-warning/10 text-semantic-warning;
+  }
+
+  .status-critical {
+    @apply status-badge bg-semantic-danger/10 text-semantic-danger;
+  }
+
+  .page-header {
+    @apply flex items-center justify-between mb-8;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold tracking-tight;
+  }
+
+  .metric-value {
+    @apply text-metric text-cascade-charcoal;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #e7e5e4 transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #e7e5e4;
+    border-radius: 3px;
+  }
+}
+
+/* Drag region for frameless window */
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}

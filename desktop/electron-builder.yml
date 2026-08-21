@@ -1,0 +1,33 @@
+productName: FinSight Pro
+appId: com.finsightpro.desktop
+directories:
+  output: release
+files:
+  - dist/**/*
+  - node_modules/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: public/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  installerIcon: public/icon.ico
+  uninstallerIcon: public/icon.ico
+  installerHeaderIcon: public/icon.ico
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: FinSight Pro
+extraResources:
+  - from: ../api
+    to: api
+    filter:
+      - "**/*"
+      - "!__pycache__/**"
+      - "!venv/**"
+      - "!.venv/**"
+publish:
+  provider: github
+  releaseType: release

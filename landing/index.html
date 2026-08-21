@@ -3,477 +3,702 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinSight Pro - Professional Financial Analytics Desktop App</title>
-    <meta name="description" content="Transform financial statements into professional reports with validated ratios, interactive dashboards, and PDF export. The affordable alternative to Bloomberg.">
+    <title>FinSight Pro - Professional Financial Statement Analysis</title>
+    <meta name="description" content="Transform financial statements into actionable insights. 15+ ratios, interactive charts, and professional reports - all on your desktop.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg: #0a0a0f;
-            --bg-2: #12121a;
-            --bg-3: #1a1a26;
-            --text: #e8e8ed;
-            --text-muted: #8b8b9e;
-            --accent: #6c5ce7;
-            --accent-light: #a29bfe;
-            --accent-glow: rgba(108, 92, 231, 0.3);
-            --green: #00d2a0;
-            --green-glow: rgba(0, 210, 160, 0.15);
-            --border: rgba(255,255,255,0.08);
-            --radius: 12px;
-            --max-w: 1100px;
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        a { color: var(--accent-light); text-decoration: none; }
-        a:hover { color: #fff; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* NAV */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(10,10,15,0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 0 2rem;
+        :root {
+            --charcoal: #1a1a19;
+            --stone: #f5f5f4;
+            --gold: #92761f;
+            --gold-hover: #7a6219;
+            --olive: #4e4732;
+            --mist: #e7e5e4;
+            --sage: #78716c;
+            --soft-white: #fafaf9;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #2563eb;
+            --radius: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
         }
-        .nav-inner {
-            max-width: var(--max-w);
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--stone);
+            color: var(--charcoal);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(245, 245, 244, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--mist);
+            transition: box-shadow 0.3s;
+        }
+        .navbar.scrolled { box-shadow: var(--shadow-sm); }
+        .navbar-inner {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 64px;
         }
-        .nav-logo { font-weight: 800; font-size: 1.25rem; color: #fff; }
-        .nav-logo span { color: var(--accent-light); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
-        .nav-links a:hover { color: #fff; }
-        .btn-cta {
-            background: var(--accent);
-            color: #fff !important;
-            padding: 8px 20px;
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--charcoal);
             border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold);
+            font-weight: 700; font-size: 18px;
         }
-        .btn-cta:hover { background: #5b4cdb; transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+        .logo-text { font-weight: 700; font-size: 18px; color: var(--charcoal); letter-spacing: -0.02em; }
+        .logo-text span { color: var(--gold); }
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+        .nav-links a { text-decoration: none; color: var(--sage); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--charcoal); }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 20px; border-radius: 6px;
+            font-size: 14px; font-weight: 600;
+            text-decoration: none; border: none; cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary { background: var(--gold); color: #fff; }
+        .btn-primary:hover { background: var(--gold-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-secondary { background: transparent; color: var(--charcoal); border: 1px solid var(--mist); }
+        .btn-secondary:hover { border-color: var(--sage); background: var(--soft-white); }
 
-        /* HERO */
+        /* ===== HERO ===== */
         .hero {
-            min-height: 100vh;
-            display: flex;
+            padding: 160px 24px 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
             align-items: center;
-            justify-content: center;
+            min-height: 90vh;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 14px; border-radius: 20px;
+            background: rgba(146, 118, 31, 0.1);
+            color: var(--gold); font-size: 13px; font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+        .hero h1 {
+            font-size: 52px; font-weight: 700; line-height: 1.1;
+            letter-spacing: -0.03em; margin-bottom: 24px;
+        }
+        .hero h1 .highlight { color: var(--gold); }
+        .hero p { font-size: 18px; color: var(--sage); line-height: 1.7; margin-bottom: 40px; max-width: 480px; }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero-meta { display: flex; gap: 32px; margin-top: 48px; }
+        .hero-meta-item { text-align: left; }
+        .hero-meta-item .number { font-size: 28px; font-weight: 700; color: var(--charcoal); letter-spacing: -0.02em; }
+        .hero-meta-item .label { font-size: 13px; color: var(--sage); margin-top: 4px; }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            background: var(--charcoal);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--olive));
+        }
+        .hud-grid {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(146,118,31,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(146,118,31,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+        .hud-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; position: relative; z-index: 1; }
+        .hud-title { color: rgba(255,255,255,0.5); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+        .hud-status { display: flex; align-items: center; gap: 6px; color: var(--success); font-size: 11px; font-weight: 600; }
+        .hud-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+        .metric-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative; z-index: 1; }
+        .metric-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .metric-card .mc-label { color: rgba(255,255,255,0.4); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .metric-card .mc-value { color: #fff; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+        .metric-card .mc-change { font-size: 12px; margin-top: 6px; font-weight: 500; }
+        .mc-change.up { color: var(--success); }
+        .mc-change.down { color: var(--danger); }
+        .mc-change.stable { color: var(--sage); }
+        .hud-chart {
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 20px;
+            height: 140px;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .hud-bar {
+            flex: 1;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.6s ease;
+        }
+        .hud-bar-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: rgba(255,255,255,0.3);
+            white-space: nowrap;
+        }
+
+        /* ===== FEATURES ===== */
+        .features { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
+        .section-label {
+            font-size: 12px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--gold); margin-bottom: 12px;
+        }
+        .section-title { font-size: 36px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; }
+        .section-desc { font-size: 16px; color: var(--sage); max-width: 560px; margin-bottom: 60px; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .feature-card {
+            background: var(--soft-white);
+            border: 1px solid var(--mist);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: all 0.3s;
+        }
+        .feature-card:hover { border-color: var(--gold); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .feature-icon {
+            width: 48px; height: 48px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; margin-bottom: 20px;
+        }
+        .fi-gold { background: rgba(146,118,31,0.1); }
+        .fi-green { background: rgba(22,163,74,0.1); }
+        .fi-blue { background: rgba(37,99,235,0.1); }
+        .fi-amber { background: rgba(217,119,6,0.1); }
+        .fi-red { background: rgba(220,38,38,0.1); }
+        .fi-charcoal { background: rgba(26,26,25,0.1); }
+        .feature-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+        .feature-card p { font-size: 14px; color: var(--sage); line-height: 1.7; }
+
+        /* ===== RATIOS SHOWCASE ===== */
+        .ratios { padding: 100px 24px; background: var(--charcoal); color: #fff; }
+        .ratios-inner { max-width: 1200px; margin: 0 auto; }
+        .ratios .section-label { color: var(--gold); }
+        .ratios .section-title { color: #fff; }
+        .ratios .section-desc { color: rgba(255,255,255,0.5); }
+        .ratio-categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .ratio-cat {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius);
+            padding: 28px;
+            background: rgba(255,255,255,0.02);
+            transition: border-color 0.3s;
+        }
+        .ratio-cat:hover { border-color: var(--gold); }
+        .ratio-cat h4 { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em; }
+        .ratio-cat ul { list-style: none; }
+        .ratio-cat li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; color: rgba(255,255,255,0.7); display: flex; justify-content: space-between; }
+        .ratio-cat li:last-child { border-bottom: none; }
+        .ratio-cat li span { color: rgba(255,255,255,0.35); font-size: 12px; }
+
+        /* ===== PRICING ===== */
+        .pricing { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+        .pricing-card {
+            background: var(--soft-white);
+            border: 1px solid var(--mist);
+            border-radius: 12px;
+            padding: 36px;
+            position: relative;
+        }
+        .pricing-card.featured {
+            border-color: var(--gold);
+            box-shadow: var(--shadow-lg);
+            transform: scale(1.04);
+        }
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--gold); color: #fff;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+            padding: 4px 16px; border-radius: 20px;
+        }
+        .pricing-tier { font-size: 14px; font-weight: 600; color: var(--sage); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+        .pricing-price { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 4px; }
+        .pricing-price span { font-size: 16px; font-weight: 400; color: var(--sage); }
+        .pricing-desc { font-size: 14px; color: var(--sage); margin-bottom: 28px; }
+        .pricing-features { list-style: none; margin-bottom: 32px; }
+        .pricing-features li { padding: 10px 0; border-bottom: 1px solid var(--mist); font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .pricing-features li:last-child { border-bottom: none; }
+        .check { color: var(--success); font-weight: 700; }
+        .pricing-features li.disabled { color: var(--sage); opacity: 0.5; }
+        .pricing-features li.disabled .check { color: var(--sage); }
+        .btn-full { width: 100%; justify-content: center; }
+
+        /* ===== CTA / WAITLIST ===== */
+        .cta-section { padding: 100px 24px; }
+        .cta-inner {
+            max-width: 700px;
+            margin: 0 auto;
             text-align: center;
-            padding: 120px 2rem 80px;
+            background: var(--charcoal);
+            border-radius: 20px;
+            padding: 64px 48px;
             position: relative;
             overflow: hidden;
         }
-        .hero::before {
+        .cta-inner::before {
             content: '';
             position: absolute;
-            top: -200px; left: 50%; transform: translateX(-50%);
-            width: 800px; height: 800px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            pointer-events: none;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), #c9a82e, var(--gold));
         }
-        .hero-content { position: relative; z-index: 1; max-width: 720px; }
-        .hero-badge {
-            display: inline-block;
-            background: var(--bg-3);
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            padding: 6px 16px;
-            font-size: 0.8rem;
-            color: var(--green);
-            font-weight: 500;
-            margin-bottom: 24px;
-        }
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            letter-spacing: -0.03em;
-        }
-        .hero h1 .gradient {
-            background: linear-gradient(135deg, var(--accent-light), var(--green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            max-width: 540px;
-            margin: 0 auto 36px;
-        }
-        .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-        .btn-primary {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: var(--accent);
-            color: #fff;
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-primary:hover { background: #5b4cdb; transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-glow); }
-        .btn-secondary {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: transparent;
-            color: var(--text);
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-secondary:hover { border-color: var(--accent-light); color: #fff; }
-        .hero-stats {
-            display: flex; gap: 48px; justify-content: center;
-            margin-top: 56px;
-            padding-top: 40px;
-            border-top: 1px solid var(--border);
-        }
-        .hero-stat-value { font-size: 1.75rem; font-weight: 800; color: #fff; }
-        .hero-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
-
-        /* FEATURES */
-        .section { padding: 100px 2rem; }
-        .section-inner { max-width: var(--max-w); margin: 0 auto; }
-        .section-label {
-            display: inline-block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent-light);
-            margin-bottom: 12px;
-        }
-        .section h2 {
-            font-size: clamp(1.75rem, 3vw, 2.5rem);
-            font-weight: 800;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-        .section .subtitle { color: var(--text-muted); max-width: 560px; margin-bottom: 48px; }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .feature-card {
-            background: var(--bg-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 28px;
-            transition: all 0.3s;
-        }
-        .feature-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .feature-icon {
-            width: 44px; height: 44px;
-            background: var(--bg-3);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem;
-            margin-bottom: 16px;
-        }
-        .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-        .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
-
-        /* COMPARISON */
-        .comparison {
-            background: var(--bg-2);
-        }
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        .comparison-table th, .comparison-table td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        .comparison-table th {
-            color: var(--text-muted);
-            font-weight: 500;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .comparison-table td:first-child { font-weight: 600; }
-        .highlight-col { color: var(--green); font-weight: 600; }
-        .muted-val { color: var(--text-muted); }
-
-        /* WAITLIST */
-        .waitlist {
-            text-align: center;
-        }
-        .waitlist-form {
-            display: flex;
-            gap: 8px;
-            max-width: 480px;
-            margin: 0 auto;
-        }
+        .cta-inner h2 { color: #fff; font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; }
+        .cta-inner p { color: rgba(255,255,255,0.5); font-size: 16px; margin-bottom: 36px; max-width: 440px; margin-left: auto; margin-right: auto; }
+        .waitlist-form { display: flex; gap: 12px; max-width: 440px; margin: 0 auto 20px; }
         .waitlist-form input {
             flex: 1;
             padding: 14px 18px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--bg-2);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
             color: #fff;
-            font-size: 0.95rem;
-            outline: none;
+            font-size: 14px;
             font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
         }
-        .waitlist-form input:focus { border-color: var(--accent); }
-        .waitlist-form input::placeholder { color: var(--text-muted); }
+        .waitlist-form input::placeholder { color: rgba(255,255,255,0.3); }
+        .waitlist-form input:focus { border-color: var(--gold); }
         .waitlist-form button {
-            padding: 14px 24px;
-            border-radius: 10px;
-            border: none;
-            background: var(--green);
-            color: #0a0a0f;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
+            padding: 14px 28px;
+            background: var(--gold);
+            color: #fff; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            font-family: inherit;
             transition: all 0.2s;
             white-space: nowrap;
-            font-family: inherit;
         }
-        .waitlist-form button:hover { background: #00e8b0; transform: translateY(-1px); }
-        .waitlist-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; }
-        .waitlist-success {
-            display: none;
-            background: var(--green-glow);
-            border: 1px solid var(--green);
-            border-radius: 10px;
-            padding: 16px 24px;
-            color: var(--green);
-            font-weight: 600;
-            max-width: 480px;
-            margin: 24px auto 0;
-        }
+        .waitlist-form button:hover { background: var(--gold-hover); }
+        .waitlist-msg { font-size: 13px; min-height: 20px; }
+        .waitlist-msg.success { color: var(--success); }
+        .waitlist-msg.error { color: var(--danger); }
+        .cta-note { color: rgba(255,255,255,0.25); font-size: 12px; margin-top: 16px; }
 
-        /* FOOTER */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 40px 2rem;
-            text-align: center;
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 40px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--mist);
         }
-        footer p { color: var(--text-muted); font-size: 0.85rem; }
-        footer a { color: var(--accent-light); }
+        .footer-left { font-size: 13px; color: var(--sage); }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { font-size: 13px; color: var(--sage); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--charcoal); }
 
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .nav-links .hide-mobile { display: none; }
-            .hero-stats { gap: 24px; }
-            .hero-stat-value { font-size: 1.25rem; }
-            .waitlist-form { flex-direction: column; }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 120px; min-height: auto; }
+            .hero-visual { max-width: 560px; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .ratio-categories { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .pricing-card.featured { transform: none; }
+        }
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 36px; }
+            .hero-meta { gap: 20px; }
             .features-grid { grid-template-columns: 1fr; }
+            .ratio-categories { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .waitlist-form { flex-direction: column; }
+            .cta-inner { padding: 40px 24px; }
+            .footer { flex-direction: column; gap: 16px; text-align: center; }
         }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeInUp 0.6s ease forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
-<nav>
-    <div class="nav-inner">
-        <div class="nav-logo">FinSight <span>Pro</span></div>
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+        <a href="#" class="logo">
+            <div class="logo-icon">F</div>
+            <div class="logo-text">FinSight <span>Pro</span></div>
+        </a>
         <div class="nav-links">
-            <a href="#features" class="hide-mobile">Features</a>
-            <a href="#comparison" class="hide-mobile">Pricing</a>
-            <a href="https://github.com/Ali-Marandi/finsight-pro" class="hide-mobile">GitHub</a>
-            <a href="#waitlist" class="btn-cta">Get Early Access</a>
+            <a href="#features">Features</a>
+            <a href="#ratios">Ratios</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
         </div>
     </div>
 </nav>
 
-<!-- HERO -->
+<!-- Hero -->
 <section class="hero">
     <div class="hero-content">
-        <div class="hero-badge">v0.1.0 Now Open Source</div>
-        <h1>Financial Analysis<br><span class="gradient">Made Effortless</span></h1>
-        <p>Drop a CSV or Excel file. Get validated ratios, interactive dashboards, and publication-ready reports. No spreadsheets, no formulas, no errors.</p>
-        <div class="hero-actions">
-            <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
-            <a href="https://github.com/Ali-Marandi/finsight-pro" class="btn-secondary">View on GitHub</a>
+        <div class="hero-badge animate-in">Early Access - Join 200+ Analysts on Waitlist</div>
+        <h1 class="animate-in delay-1">Financial Analysis,<br><span class="highlight">Redefined.</span></h1>
+        <p class="animate-in delay-2">Drop a CSV or Excel file. Get 15+ financial ratios, interactive charts, and publication-ready reports in seconds. No cloud. No subscription fatigue. Your data stays on your machine.</p>
+        <div class="hero-actions animate-in delay-3">
+            <a href="#waitlist" class="btn btn-primary">Get Early Access</a>
+            <a href="https://github.com/Ali-Marandi/finsight-pro" class="btn btn-secondary" target="_blank">View CLI on GitHub</a>
         </div>
-        <div class="hero-stats">
-            <div>
-                <div class="hero-stat-value">15</div>
-                <div class="hero-stat-label">Financial Ratios</div>
+        <div class="hero-meta animate-in delay-4">
+            <div class="hero-meta-item">
+                <div class="number">15+</div>
+                <div class="label">Financial Ratios</div>
             </div>
-            <div>
-                <div class="hero-stat-value">109+</div>
-                <div class="hero-stat-label">GitHub Stars</div>
+            <div class="hero-meta-item">
+                <div class="number">4</div>
+                <div class="label">Analysis Categories</div>
             </div>
-            <div>
-                <div class="hero-stat-value">MIT</div>
-                <div class="hero-stat-label">Open Source</div>
+            <div class="hero-meta-item">
+                <div class="number">109</div>
+                <div class="label">GitHub Stars</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-visual animate-in delay-2">
+        <div class="hud-grid"></div>
+        <div class="hud-header">
+            <div class="hud-title">Financial Dashboard</div>
+            <div class="hud-status">Live Analysis</div>
+        </div>
+        <div class="metric-cards">
+            <div class="metric-card">
+                <div class="mc-label">Gross Margin</div>
+                <div class="mc-value">42.3%</div>
+                <div class="mc-change up">+3.2% vs last period</div>
+            </div>
+            <div class="metric-card">
+                <div class="mc-label">Current Ratio</div>
+                <div class="mc-value">2.1x</div>
+                <div class="mc-change stable">Healthy range</div>
+            </div>
+            <div class="metric-card">
+                <div class="mc-label">Debt/Equity</div>
+                <div class="mc-value">0.65</div>
+                <div class="mc-change down">Below industry avg</div>
+            </div>
+            <div class="metric-card">
+                <div class="mc-label">ROE</div>
+                <div class="mc-value">24.1%</div>
+                <div class="mc-change up">+1.8% vs last period</div>
+            </div>
+        </div>
+        <div class="hud-chart">
+            <div class="hud-bar" style="height:60%; background: rgba(146,118,31,0.6); position:relative;"><span class="hud-bar-label">GPM</span></div>
+            <div class="hud-bar" style="height:80%; background: rgba(146,118,31,0.8); position:relative;"><span class="hud-bar-label">NPM</span></div>
+            <div class="hud-bar" style="height:50%; background: rgba(146,118,31,0.4); position:relative;"><span class="hud-bar-label">ROA</span></div>
+            <div class="hud-bar" style="height:90%; background: var(--gold); position:relative;"><span class="hud-bar-label">ROE</span></div>
+            <div class="hud-bar" style="height:70%; background: rgba(146,118,31,0.6); position:relative;"><span class="hud-bar-label">CR</span></div>
+            <div class="hud-bar" style="height:45%; background: rgba(146,118,31,0.4); position:relative;"><span class="hud-bar-label">D/E</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything you need to analyze financials</h2>
+    <p class="section-desc">Built for financial analysts, accountants, and business owners who need fast, reliable insights without complex software.</p>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon fi-gold">📊</div>
+            <h3>15+ Financial Ratios</h3>
+            <p>Profitability, liquidity, leverage, and efficiency ratios calculated instantly from your income statement and balance sheet data.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-green">📈</div>
+            <h3>Interactive Charts</h3>
+            <p>Bar charts, radar plots, and trend lines that update in real-time. Hover for details, click to drill down into specific metrics.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-blue">📄</div>
+            <h3>Professional Reports</h3>
+            <p>Generate publication-ready PDF reports with your branding. One-click export to Excel, HTML, or PDF format.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-amber">📁</div>
+            <h3>Multi-Format Import</h3>
+            <p>Drop CSV or Excel files directly. Auto-detects column structures and maps data to the correct financial statement fields.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-charcoal">🔒</div>
+            <h3>100% Offline & Private</h3>
+            <p>All processing happens locally on your machine. No data leaves your computer. Perfect for sensitive financial information.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-red">🎯</div>
+            <h3>Industry Benchmarks</h3>
+            <p>Compare your ratios against industry medians. Color-coded status indicators show where you stand instantly.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Ratios -->
+<section class="ratios" id="ratios">
+    <div class="ratios-inner">
+        <div class="section-label">Analysis Engine</div>
+        <h2 class="section-title">4 Categories, 15+ Ratios</h2>
+        <p class="section-desc">A comprehensive suite of financial metrics powered by proven calculation methodologies.</p>
+        <div class="ratio-categories">
+            <div class="ratio-cat">
+                <h4>Profitability</h4>
+                <ul>
+                    <li>Gross Profit Margin <span>%</span></li>
+                    <li>Net Profit Margin <span>%</span></li>
+                    <li>Return on Assets <span>%</span></li>
+                    <li>Return on Equity <span>%</span></li>
+                    <li>Operating Margin <span>%</span></li>
+                </ul>
+            </div>
+            <div class="ratio-cat">
+                <h4>Liquidity</h4>
+                <ul>
+                    <li>Current Ratio <span>x</span></li>
+                    <li>Quick Ratio <span>x</span></li>
+                    <li>Cash Ratio <span>x</span></li>
+                    <li>Working Capital <span>$</span></li>
+                </ul>
+            </div>
+            <div class="ratio-cat">
+                <h4>Leverage</h4>
+                <ul>
+                    <li>Debt-to-Equity <span>x</span></li>
+                    <li>Debt-to-Assets <span>%</span></li>
+                    <li>Interest Coverage <span>x</span></li>
+                    <li>Equity Multiplier <span>x</span></li>
+                </ul>
+            </div>
+            <div class="ratio-cat">
+                <h4>Efficiency</h4>
+                <ul>
+                    <li>Asset Turnover <span>x</span></li>
+                    <li>Inventory Turnover <span>x</span></li>
+                    <li>Receivables Turnover <span>x</span></li>
+                    <li>Days Sales Outstanding <span>days</span></li>
+                </ul>
             </div>
         </div>
     </div>
 </section>
 
-<!-- FEATURES -->
-<section class="section" id="features">
-    <div class="section-inner">
-        <div class="section-label">Features</div>
-        <h2>Everything you need for<br>financial statement analysis</h2>
-        <p class="subtitle">Built for financial analysts, accountants, and SMB CFOs who need professional results without enterprise pricing.</p>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">&#x1F4CA;</div>
-                <h3>15 Validated Ratios</h3>
-                <p>Profitability, liquidity, leverage, and efficiency ratios calculated with auditable formulas and zero-conflict division handling.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#x1F4C8;</div>
-                <h3>Interactive Dashboards</h3>
-                <p>Real-time charts with tooltips, filters, and drill-down. Compare multiple periods and spot trends at a glance.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#x1F4C4;</div>
-                <h3>PDF Report Export</h3>
-                <p>Generate publication-ready reports with your logo, custom colors, and professional formatting. Share with clients instantly.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#x1F4E6;</div>
-                <h3>Drag-and-Drop Import</h3>
-                <p>Drop CSV or Excel files directly into the app. Auto-detects schema, validates data, and highlights errors for correction.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#x1F310;</div>
-                <h3>12+ Languages</h3>
-                <p>Full localization including RTL support (Arabic, Persian), number formatting, currency symbols, and date formats per locale.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#x1F512;</div>
-                <h3>Offline and Private</h3>
-                <p>Your financial data never leaves your computer. No cloud dependency, no data uploads. Works without internet connection.</p>
-            </div>
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Simple, transparent pricing</h2>
+    <p class="section-desc">Start free with the CLI. Upgrade to the desktop app for a professional analysis experience.</p>
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <div class="pricing-tier">CLI Free</div>
+            <div class="pricing-price">$0 <span>/ forever</span></div>
+            <div class="pricing-desc">Open-source command-line tool for quick analysis</div>
+            <ul class="pricing-features">
+                <li><span class="check">✓</span> All 15+ financial ratios</li>
+                <li><span class="check">✓</span> CSV & XLSX import</li>
+                <li><span class="check">✓</span> HTML report output</li>
+                <li><span class="check">✓</span> Matplotlib charts</li>
+                <li class="disabled"><span class="check">✗</span> Interactive GUI</li>
+                <li class="disabled"><span class="check">✗</span> PDF report generation</li>
+                <li class="disabled"><span class="check">✗</span> Industry benchmarks</li>
+            </ul>
+            <a href="https://github.com/Ali-Marandi/finsight-pro" class="btn btn-secondary btn-full" target="_blank">Get on GitHub</a>
+        </div>
+        <div class="pricing-card featured">
+            <div class="pricing-tier">Pro Desktop</div>
+            <div class="pricing-price">$99 <span>/ year</span></div>
+            <div class="pricing-desc">Full-featured desktop application for professional analysts</div>
+            <ul class="pricing-features">
+                <li><span class="check">✓</span> Everything in Free</li>
+                <li><span class="check">✓</span> Beautiful desktop GUI</li>
+                <li><span class="check">✓</span> Interactive charts & dashboards</li>
+                <li><span class="check">✓</span> PDF & XLSX report export</li>
+                <li><span class="check">✓</span> Industry benchmarks</li>
+                <li><span class="check">✓</span> Analysis history & comparison</li>
+                <li><span class="check">✓</span> Batch processing (10 files)</li>
+            </ul>
+            <a href="#waitlist" class="btn btn-primary btn-full">Join Waitlist</a>
+        </div>
+        <div class="pricing-card">
+            <div class="pricing-tier">Enterprise</div>
+            <div class="pricing-price">$299 <span>/ seat / year</span></div>
+            <div class="pricing-desc">For teams and organizations needing scale and compliance</div>
+            <ul class="pricing-features">
+                <li><span class="check">✓</span> Everything in Pro</li>
+                <li><span class="check">✓</span> Multi-user licensing</li>
+                <li><span class="check">✓</span> Custom ratio definitions</li>
+                <li><span class="check">✓</span> API for integration</li>
+                <li><span class="check">✓</span> Priority support (< 24h)</li>
+                <li><span class="check">✓</span> Custom branding on reports</li>
+                <li><span class="check">✓</span> Invoice billing</li>
+            </ul>
+            <a href="#waitlist" class="btn btn-secondary btn-full">Contact Sales</a>
         </div>
     </div>
 </section>
 
-<!-- COMPARISON -->
-<section class="section comparison" id="comparison">
-    <div class="section-inner">
-        <div class="section-label">Pricing</div>
-        <h2>Professional tools,<br>accessible pricing</h2>
-        <p class="subtitle">More affordable than a single hour of consulting. More powerful than a month of spreadsheet work.</p>
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>Feature</th>
-                    <th>Free (CLI)</th>
-                    <th>Pro (Desktop)</th>
-                    <th>Enterprise</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Ratio Calculations</td>
-                    <td class="highlight-col">15 ratios</td>
-                    <td class="highlight-col">15 ratios</td>
-                    <td class="highlight-col">15 + Custom</td>
-                </tr>
-                <tr>
-                    <td>User Interface</td>
-                    <td class="muted-val">CLI only</td>
-                    <td class="highlight-col">Full GUI</td>
-                    <td class="highlight-col">Full GUI</td>
-                </tr>
-                <tr>
-                    <td>File Import</td>
-                    <td>CSV / XLSX</td>
-                    <td class="highlight-col">Drag-and-drop</td>
-                    <td class="highlight-col">+ API import</td>
-                </tr>
-                <tr>
-                    <td>Reports</td>
-                    <td>HTML</td>
-                    <td class="highlight-col">PDF + HTML + Custom</td>
-                    <td class="highlight-col">+ Branded templates</td>
-                </tr>
-                <tr>
-                    <td>Batch Processing</td>
-                    <td class="muted-val">No</td>
-                    <td class="highlight-col">Yes</td>
-                    <td class="highlight-col">Yes</td>
-                </tr>
-                <tr>
-                    <td>Offline Use</td>
-                    <td class="highlight-col">Yes</td>
-                    <td class="highlight-col">Yes</td>
-                    <td class="highlight-col">Yes</td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td>Free</td>
-                    <td class="highlight-col">$99/yr</td>
-                    <td>$299/seat/yr</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<!-- WAITLIST -->
-<section class="section waitlist" id="waitlist">
-    <div class="section-inner">
-        <div class="section-label">Early Access</div>
-        <h2>Join the Waitlist</h2>
-        <p class="subtitle" style="margin: 0 auto 32px;">Be among the first to try FinSight Pro Desktop. Founding members get lifetime pricing at $79 (regular $149).</p>
+<!-- CTA / Waitlist -->
+<section class="cta-section" id="waitlist">
+    <div class="cta-inner">
+        <h2>Be the First to Experience<br>FinSight Pro Desktop</h2>
+        <p>Join the early access waitlist. You'll get a 30% discount when we launch, plus priority access to beta builds.</p>
         <form class="waitlist-form" id="waitlistForm">
-            <input type="email" id="emailInput" placeholder="your@email.com" required>
-            <button type="submit">Get Early Access</button>
+            <input type="email" id="emailInput" placeholder="Enter your email address" required>
+            <button type="submit">Join Waitlist</button>
         </form>
-        <p class="waitlist-note">No spam. Unsubscribe anytime. We respect your privacy.</p>
-        <div class="waitlist-success" id="successMessage">
-            You are on the list! We will notify you when FinSight Pro Desktop is ready.
-        </div>
+        <div class="waitlist-msg" id="waitlistMsg"></div>
+        <div class="cta-note">No spam. Unsubscribe anytime. We respect your privacy.</div>
     </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-    <p>
-        <a href="https://github.com/Ali-Marandi/finsight-pro">FinSight Pro</a> &mdash;
-        Open-source financial analytics engine. Desktop version coming soon.
-    </p>
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-left">&copy; 2025 FinSight Pro LLC. All rights reserved.</div>
+    <div class="footer-links">
+        <a href="https://github.com/Ali-Marandi/finsight-pro" target="_blank">GitHub</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="mailto:hello@finsightpro.com">Contact</a>
+    </div>
 </footer>
 
 <script>
-    document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Waitlist form
+    const form = document.getElementById('waitlistForm');
+    const emailInput = document.getElementById('emailInput');
+    const msg = document.getElementById('waitlistMsg');
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('emailInput').value;
-        // Store locally (replace with actual backend endpoint)
-        const entries = JSON.parse(localStorage.getItem('finsight_waitlist') || '[]');
-        entries.push({ email: email, date: new Date().toISOString() });
-        localStorage.setItem('finsight_waitlist', JSON.stringify(entries));
-        document.getElementById('waitlistForm').style.display = 'none';
-        document.querySelector('.waitlist-note').style.display = 'none';
-        document.getElementById('successMessage').style.display = 'block';
-        // In production, POST to your API endpoint:
-        // fetch('/api/waitlist', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ email }) })
+        const email = emailInput.value.trim();
+        if (!email || !email.includes('@')) {
+            msg.textContent = 'Please enter a valid email address.';
+            msg.className = 'waitlist-msg error';
+            return;
+        }
+
+        const btn = form.querySelector('button');
+        const originalText = btn.textContent;
+        btn.textContent = 'Joining...';
+        btn.disabled = true;
+
+        // Simulate API call (replace with actual endpoint)
+        try {
+            // In production, replace with: await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+            await new Promise(resolve => setTimeout(resolve, 1200));
+            msg.textContent = 'You're on the list! Check your inbox for confirmation.';
+            msg.className = 'waitlist-msg success';
+            emailInput.value = '';
+            // Store locally for demo
+            const waitlist = JSON.parse(localStorage.getItem('finsight_waitlist') || '[]');
+            waitlist.push({ email, date: new Date().toISOString() });
+            localStorage.setItem('finsight_waitlist', JSON.stringify(waitlist));
+        } catch {
+            msg.textContent = 'Something went wrong. Please try again.';
+            msg.className = 'waitlist-msg error';
+        } finally {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.feature-card, .ratio-cat, .pricing-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(el);
+    });
+    // Override to use transform instead of animation
+    const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                animObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    document.querySelectorAll('.feature-card, .ratio-cat, .pricing-card').forEach(el => {
+        animObserver.observe(el);
     });
 </script>
 </body>
