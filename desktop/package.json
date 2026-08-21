@@ -1,0 +1,65 @@
+{
+  "name": "finsight-pro-desktop",
+  "version": "0.2.0",
+  "description": "FinSight Pro - Professional Financial Analytics Desktop Application",
+  "main": "electron/main.js",
+  "author": "Ali-Marandi",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "dev:api": "cd api && uvicorn main:app --host 127.0.0.1 --port 8400 --reload",
+    "dev:react": "cd frontend && npm start",
+    "dev:electron": "electron .",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:react\"",
+    "build:react": "cd frontend && npm run build",
+    "build": "npm run build:react && electron-builder --win",
+    "build:portable": "npm run build:react && electron-builder --win portable",
+    "lint": "cd frontend && npm run lint",
+    "test": "cd api && python -m pytest ../tests/ -v && cd ../frontend && npm test"
+  },
+  "build": {
+    "appId": "com.finsightpro.desktop",
+    "productName": "FinSight Pro",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/build/**/*",
+      "api/**/*",
+      "../src/finsight/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "api",
+        "to": "api"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "electron/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "FinSight Pro"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Ali-Marandi",
+      "repo": "finsight-pro"
+    }
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.0"
+  }
+}

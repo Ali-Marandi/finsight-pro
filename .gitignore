@@ -7,3 +7,25 @@ build/
 *.egg-info/
 reports/
 .DS_Store
+
+# Desktop app
+node_modules/
+desktop/release/
+desktop/frontend/node_modules/
+desktop/frontend/build/
+desktop/.cache/
+*.log
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini

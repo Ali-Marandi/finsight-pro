@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinSight Pro - Professional Financial Analytics Desktop App</title>
+    <meta name="description" content="Transform financial statements into professional reports with validated ratios, interactive dashboards, and PDF export. The affordable alternative to Bloomberg.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0f;
+            --bg-2: #12121a;
+            --bg-3: #1a1a26;
+            --text: #e8e8ed;
+            --text-muted: #8b8b9e;
+            --accent: #6c5ce7;
+            --accent-light: #a29bfe;
+            --accent-glow: rgba(108, 92, 231, 0.3);
+            --green: #00d2a0;
+            --green-glow: rgba(0, 210, 160, 0.15);
+            --border: rgba(255,255,255,0.08);
+            --radius: 12px;
+            --max-w: 1100px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a { color: var(--accent-light); text-decoration: none; }
+        a:hover { color: #fff; }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(10,10,15,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+        }
+        .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .nav-logo { font-weight: 800; font-size: 1.25rem; color: #fff; }
+        .nav-logo span { color: var(--accent-light); }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #fff; }
+        .btn-cta {
+            background: var(--accent);
+            color: #fff !important;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        .btn-cta:hover { background: #5b4cdb; transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 2rem 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px; left: 50%; transform: translateX(-50%);
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 720px; }
+        .hero-badge {
+            display: inline-block;
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            color: var(--green);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.03em;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--accent-light), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 540px;
+            margin: 0 auto 36px;
+        }
+        .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { background: #5b4cdb; transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-glow); }
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: transparent;
+            color: var(--text);
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover { border-color: var(--accent-light); color: #fff; }
+        .hero-stats {
+            display: flex; gap: 48px; justify-content: center;
+            margin-top: 56px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+        .hero-stat-value { font-size: 1.75rem; font-weight: 800; color: #fff; }
+        .hero-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* FEATURES */
+        .section { padding: 100px 2rem; }
+        .section-inner { max-width: var(--max-w); margin: 0 auto; }
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-light);
+            margin-bottom: 12px;
+        }
+        .section h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        .section .subtitle { color: var(--text-muted); max-width: 560px; margin-bottom: 48px; }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .feature-card {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: all 0.3s;
+        }
+        .feature-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .feature-icon {
+            width: 44px; height: 44px;
+            background: var(--bg-3);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+        .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+        .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* COMPARISON */
+        .comparison {
+            background: var(--bg-2);
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .comparison-table td:first-child { font-weight: 600; }
+        .highlight-col { color: var(--green); font-weight: 600; }
+        .muted-val { color: var(--text-muted); }
+
+        /* WAITLIST */
+        .waitlist {
+            text-align: center;
+        }
+        .waitlist-form {
+            display: flex;
+            gap: 8px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .waitlist-form input {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-2);
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            font-family: inherit;
+        }
+        .waitlist-form input:focus { border-color: var(--accent); }
+        .waitlist-form input::placeholder { color: var(--text-muted); }
+        .waitlist-form button {
+            padding: 14px 24px;
+            border-radius: 10px;
+            border: none;
+            background: var(--green);
+            color: #0a0a0f;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+        .waitlist-form button:hover { background: #00e8b0; transform: translateY(-1px); }
+        .waitlist-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; }
+        .waitlist-success {
+            display: none;
+            background: var(--green-glow);
+            border: 1px solid var(--green);
+            border-radius: 10px;
+            padding: 16px 24px;
+            color: var(--green);
+            font-weight: 600;
+            max-width: 480px;
+            margin: 24px auto 0;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 2rem;
+            text-align: center;
+        }
+        footer p { color: var(--text-muted); font-size: 0.85rem; }
+        footer a { color: var(--accent-light); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links .hide-mobile { display: none; }
+            .hero-stats { gap: 24px; }
+            .hero-stat-value { font-size: 1.25rem; }
+            .waitlist-form { flex-direction: column; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="nav-inner">
+        <div class="nav-logo">FinSight <span>Pro</span></div>
+        <div class="nav-links">
+            <a href="#features" class="hide-mobile">Features</a>
+            <a href="#comparison" class="hide-mobile">Pricing</a>
+            <a href="https://github.com/Ali-Marandi/finsight-pro" class="hide-mobile">GitHub</a>
+            <a href="#waitlist" class="btn-cta">Get Early Access</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">v0.1.0 Now Open Source</div>
+        <h1>Financial Analysis<br><span class="gradient">Made Effortless</span></h1>
+        <p>Drop a CSV or Excel file. Get validated ratios, interactive dashboards, and publication-ready reports. No spreadsheets, no formulas, no errors.</p>
+        <div class="hero-actions">
+            <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
+            <a href="https://github.com/Ali-Marandi/finsight-pro" class="btn-secondary">View on GitHub</a>
+        </div>
+        <div class="hero-stats">
+            <div>
+                <div class="hero-stat-value">15</div>
+                <div class="hero-stat-label">Financial Ratios</div>
+            </div>
+            <div>
+                <div class="hero-stat-value">109+</div>
+                <div class="hero-stat-label">GitHub Stars</div>
+            </div>
+            <div>
+                <div class="hero-stat-value">MIT</div>
+                <div class="hero-stat-label">Open Source</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+    <div class="section-inner">
+        <div class="section-label">Features</div>
+        <h2>Everything you need for<br>financial statement analysis</h2>
+        <p class="subtitle">Built for financial analysts, accountants, and SMB CFOs who need professional results without enterprise pricing.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4CA;</div>
+                <h3>15 Validated Ratios</h3>
+                <p>Profitability, liquidity, leverage, and efficiency ratios calculated with auditable formulas and zero-conflict division handling.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4C8;</div>
+                <h3>Interactive Dashboards</h3>
+                <p>Real-time charts with tooltips, filters, and drill-down. Compare multiple periods and spot trends at a glance.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4C4;</div>
+                <h3>PDF Report Export</h3>
+                <p>Generate publication-ready reports with your logo, custom colors, and professional formatting. Share with clients instantly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4E6;</div>
+                <h3>Drag-and-Drop Import</h3>
+                <p>Drop CSV or Excel files directly into the app. Auto-detects schema, validates data, and highlights errors for correction.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F310;</div>
+                <h3>12+ Languages</h3>
+                <p>Full localization including RTL support (Arabic, Persian), number formatting, currency symbols, and date formats per locale.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F512;</div>
+                <h3>Offline and Private</h3>
+                <p>Your financial data never leaves your computer. No cloud dependency, no data uploads. Works without internet connection.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section comparison" id="comparison">
+    <div class="section-inner">
+        <div class="section-label">Pricing</div>
+        <h2>Professional tools,<br>accessible pricing</h2>
+        <p class="subtitle">More affordable than a single hour of consulting. More powerful than a month of spreadsheet work.</p>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Free (CLI)</th>
+                    <th>Pro (Desktop)</th>
+                    <th>Enterprise</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ratio Calculations</td>
+                    <td class="highlight-col">15 ratios</td>
+                    <td class="highlight-col">15 ratios</td>
+                    <td class="highlight-col">15 + Custom</td>
+                </tr>
+                <tr>
+                    <td>User Interface</td>
+                    <td class="muted-val">CLI only</td>
+                    <td class="highlight-col">Full GUI</td>
+                    <td class="highlight-col">Full GUI</td>
+                </tr>
+                <tr>
+                    <td>File Import</td>
+                    <td>CSV / XLSX</td>
+                    <td class="highlight-col">Drag-and-drop</td>
+                    <td class="highlight-col">+ API import</td>
+                </tr>
+                <tr>
+                    <td>Reports</td>
+                    <td>HTML</td>
+                    <td class="highlight-col">PDF + HTML + Custom</td>
+                    <td class="highlight-col">+ Branded templates</td>
+                </tr>
+                <tr>
+                    <td>Batch Processing</td>
+                    <td class="muted-val">No</td>
+                    <td class="highlight-col">Yes</td>
+                    <td class="highlight-col">Yes</td>
+                </tr>
+                <tr>
+                    <td>Offline Use</td>
+                    <td class="highlight-col">Yes</td>
+                    <td class="highlight-col">Yes</td>
+                    <td class="highlight-col">Yes</td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td>Free</td>
+                    <td class="highlight-col">$99/yr</td>
+                    <td>$299/seat/yr</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="section waitlist" id="waitlist">
+    <div class="section-inner">
+        <div class="section-label">Early Access</div>
+        <h2>Join the Waitlist</h2>
+        <p class="subtitle" style="margin: 0 auto 32px;">Be among the first to try FinSight Pro Desktop. Founding members get lifetime pricing at $79 (regular $149).</p>
+        <form class="waitlist-form" id="waitlistForm">
+            <input type="email" id="emailInput" placeholder="your@email.com" required>
+            <button type="submit">Get Early Access</button>
+        </form>
+        <p class="waitlist-note">No spam. Unsubscribe anytime. We respect your privacy.</p>
+        <div class="waitlist-success" id="successMessage">
+            You are on the list! We will notify you when FinSight Pro Desktop is ready.
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>
+        <a href="https://github.com/Ali-Marandi/finsight-pro">FinSight Pro</a> &mdash;
+        Open-source financial analytics engine. Desktop version coming soon.
+    </p>
+</footer>
+
+<script>
+    document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('emailInput').value;
+        // Store locally (replace with actual backend endpoint)
+        const entries = JSON.parse(localStorage.getItem('finsight_waitlist') || '[]');
+        entries.push({ email: email, date: new Date().toISOString() });
+        localStorage.setItem('finsight_waitlist', JSON.stringify(entries));
+        document.getElementById('waitlistForm').style.display = 'none';
+        document.querySelector('.waitlist-note').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+        // In production, POST to your API endpoint:
+        // fetch('/api/waitlist', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ email }) })
+    });
+</script>
+</body>
+</html>
