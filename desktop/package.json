@@ -4,6 +4,10 @@
   "description": "FinSight Pro - Professional Financial Statement Analysis Desktop App",
   "main": "dist/electron/main.js",
   "author": "FinSight Pro LLC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ali-Marandi/finsight-pro.git"
+  },
   "license": "Commercial",
   "private": true,
   "type": "module",

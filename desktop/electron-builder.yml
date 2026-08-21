@@ -1,14 +1,10 @@
 productName: FinSight Pro
 appId: com.finsightpro.desktop
-repository:
-  type: git
-  url: https://github.com/Ali-Marandi/finsight-pro.git
 directories:
   output: release
 files:
   - dist/**/*
   - node_modules/**/*
-  - public/icon.ico
 win:
   target:
     - target: nsis
