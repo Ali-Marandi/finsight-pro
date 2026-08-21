@@ -1,4 +1,3 @@
-import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import { useLicense } from '../hooks/useLicense';
 import { Bell, Crown } from 'lucide-react';
 

@@ -5,7 +5,7 @@ import { formatDate } from '../lib/utils';
 import FileUpload from '../components/FileUpload';
 
 export default function Dashboard() {
-  const { analyses, currentAnalysis, isLoading } = useAnalysisStore();
+  const { analyses, isLoading } = useAnalysisStore();
 
   const handleFileSelected = async (filePath: string) => {
     // Will be connected to API in Phase 2

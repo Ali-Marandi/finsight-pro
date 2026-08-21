@@ -4,11 +4,11 @@ import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import FileUpload from '../components/FileUpload';
 import RatioCard from '../components/RatioCard';
 import RatioChart from '../components/RatioChart';
-import { Download, FileText, BarChart3 } from 'lucide-react';
+import { Download, FileText } from 'lucide-react';
 
 export default function Analysis() {
   const { id } = useParams();
-  const { currentAnalysis, isLoading, setCurrentAnalysis, setIsLoading } = useAnalysisStore();
+  const { currentAnalysis, isLoading, setIsLoading, setCurrentAnalysis } = useAnalysisStore();
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const handleFileSelected = async (filePath: string) => {

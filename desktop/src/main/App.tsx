@@ -1,15 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Analysis from './pages/Analysis';
-import Reports from './pages/Reports';
-import History from './pages/History';
-import Settings from './pages/Settings';
-import { useAnalysisStore } from './hooks/useAnalysisStore';
+import Layout from '../renderer/components/Layout';
+import Dashboard from '../renderer/pages/Dashboard';
+import Analysis from '../renderer/pages/Analysis';
+import Reports from '../renderer/pages/Reports';
+import History from '../renderer/pages/History';
+import Settings from '../renderer/pages/Settings';
 
 export default function App() {
-  const { analyses } = useAnalysisStore();
-
   return (
     <BrowserRouter>
       <Layout>

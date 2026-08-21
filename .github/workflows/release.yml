@@ -14,47 +14,62 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Get version from tag
         id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
         shell: bash
-      - name: Install dependencies
-        run: |
-          cd desktop
-          npm ci
-      - name: Build & Package
-        run: |
-          cd desktop
-          npm run build
-          npx electron-builder --win --publish always
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Install desktop dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Install API dependencies
+        working-directory: api
+        run: pip install -r requirements.txt
+
+      - name: Build application
+        working-directory: desktop
+        run: npm run build
+
+      - name: Package Windows installer
+        working-directory: desktop
+        run: npx electron-builder --win --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload to Release
+
+      - name: Upload installer to release
         uses: softprops/action-gh-release@v2
         with:
-          files: desktop/dist/*.exe
+          files: desktop/release/*.exe
           generate_release_notes: true
+          body: |
+            ## FinSight Pro Desktop v${{ steps.version.outputs.VERSION }}
 
-  publish-cli:
-    name: Publish CLI to PyPI
-    runs-on: ubuntu-latest
-    needs: []
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-      - name: Build package
-        run: |
-          pip install build
-          python -m build
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+            ### Installation
+            1. Download `FinSight Pro Setup x.x.x.exe` below
+            2. Run the installer
+            3. Launch FinSight Pro from your Start Menu
+
+            ### What's Included
+            - 17+ financial ratios across 4 categories
+            - Interactive bar and radar charts
+            - PDF and Excel report export
+            - Industry benchmarking
+            - 100% offline — your data never leaves your machine
+
+            ### System Requirements
+            - Windows 10 (64-bit) or later
+            - ~150 MB disk space
+
+            ### Known Limitations
+            - This is an early access release
+            - API backend requires Python 3.10+ (bundled in future versions)

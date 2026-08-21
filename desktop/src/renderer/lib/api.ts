@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse } from '../types';
+import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse } from '../../types';
 
 let apiClient: ReturnType<typeof axios.create> | null = null;
 
@@ -57,10 +57,9 @@ export async function generateReport(analysisId: string, format: 'pdf' | 'xlsx' 
 }
 
 export async function saveReport(analysisId: string, format: 'pdf' | 'xlsx' | 'html', suggestedName: string): Promise<string | null> {
-  const blob = await generateReport(analysisId, format);
+  await generateReport(analysisId, format);
   const filePath = await window.electronAPI?.saveFile(`${suggestedName}.${format}`);
   if (!filePath) return null;
-  // Write blob to file via Electron
   return filePath;
 }
 
