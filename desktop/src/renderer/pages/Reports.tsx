@@ -1,9 +1,24 @@
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import { FileText, Download, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { saveReport } from '../lib/api';
+import { useToast } from '../components/Toast';
 
 export default function Reports() {
   const { analyses } = useAnalysisStore();
+  const { toast } = useToast();
+
+  const handleExport = async (analysisId: string, companyName: string, period: string, format: 'pdf' | 'xlsx' | 'html') => {
+    try {
+      const name = `${companyName.replace(/\s+/g, '_')}_${period}`;
+      const filePath = await saveReport(analysisId, format, name);
+      if (filePath) {
+        toast('success', `${format.toUpperCase()} report saved successfully`);
+      }
+    } catch {
+      toast('error', `Failed to generate ${format.toUpperCase()} report`);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -29,27 +44,30 @@ export default function Reports() {
           </Link>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {analyses.map((item) => (
-            <div key={item.analysisId} className="card flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-lg bg-cascade-gold/10 flex items-center justify-center">
-                  <FileText size={18} className="text-cascade-gold" />
+            <div key={item.analysisId} className="card flex items-center justify-between py-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-cascade-gold/10 flex items-center justify-center shrink-0">
+                  <FileText size={16} className="text-cascade-gold" />
                 </div>
                 <div>
                   <p className="font-medium text-sm">{item.companyName || 'Untitled Report'}</p>
-                  <p className="text-xs text-cascade-sage">{item.period} • {item.fileName}</p>
+                  <p className="text-xs text-cascade-sage">{item.period}</p>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5">
-                  <Download size={14} /> PDF
+              <div className="flex gap-1.5">
+                <button
+                  onClick={() => handleExport(item.analysisId, item.companyName, item.period, 'pdf')}
+                  className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5"
+                >
+                  <Download size={12} /> PDF
                 </button>
-                <button className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5">
-                  <Download size={14} /> XLSX
-                </button>
-                <button className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5">
-                  <Download size={14} /> HTML
+                <button
+                  onClick={() => handleExport(item.analysisId, item.companyName, item.period, 'xlsx')}
+                  className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5"
+                >
+                  <Download size={12} /> XLSX
                 </button>
               </div>
             </div>

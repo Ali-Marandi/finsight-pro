@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Cell } from 'recharts';
 import type { RatioResult } from '../../types';
 import { useState } from 'react';
 
@@ -76,7 +76,7 @@ export default function RatioChart({ ratios, title }: RatioChartProps) {
               />
               <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                 {barData.map((entry, index) => (
-                  <rect key={index} fill={entry.fill} />
+                  <Cell key={index} fill={entry.fill} />
                 ))}
               </Bar>
             </BarChart>

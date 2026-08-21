@@ -99,6 +99,21 @@
   }
 }
 
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.2s ease-out;
+}
+
 /* Drag region for frameless window */
 .drag-region {
   -webkit-app-region: drag;
@@ -106,4 +121,18 @@
 
 .no-drag {
   -webkit-app-region: no-drag;
+}
+
+/* Hide scrollbars for cleaner look */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Selection color */
+::selection {
+  background: #92761f33;
 }

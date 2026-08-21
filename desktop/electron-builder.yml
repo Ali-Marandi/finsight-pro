@@ -7,10 +7,12 @@ files:
   - node_modules/**/*
 win:
   target:
-    - target: nsis
+    - target: portable
       arch:
         - x64
   icon: public/icon.ico
+  signAndEditExecutable: false
+  publisherName: FinSight Pro LLC
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
@@ -18,6 +20,8 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: FinSight Pro
+portable:
+  artifactName: FinSight-Pro-Portable-${version}-x64.exe
 extraResources:
   - from: ../api
     to: api
@@ -26,6 +30,8 @@ extraResources:
       - "!__pycache__/**"
       - "!venv/**"
       - "!.venv/**"
+      - "!.pytest_cache/**"
+      - "!*.pyc"
 publish:
   provider: github
   releaseType: release

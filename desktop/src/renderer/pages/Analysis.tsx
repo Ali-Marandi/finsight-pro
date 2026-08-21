@@ -1,25 +1,77 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import FileUpload from '../components/FileUpload';
 import RatioCard from '../components/RatioCard';
 import RatioChart from '../components/RatioChart';
+import Spinner from '../components/Spinner';
 import { Download, FileText } from 'lucide-react';
+import { uploadAndAnalyze, getAnalysisById, saveReport } from '../lib/api';
+import { useToast } from '../components/Toast';
+import type { AnalysisResult, AnalysisHistoryItem } from '../../types';
 
 export default function Analysis() {
   const { id } = useParams();
-  const { currentAnalysis, isLoading, setIsLoading, setCurrentAnalysis } = useAnalysisStore();
+  const { currentAnalysis, setCurrentAnalysis, isLoading, setIsLoading } = useAnalysisStore();
   const [activeCategory, setActiveCategory] = useState<string>('all');
+  const { toast } = useToast();
+
+  // Load analysis by ID if navigating from history
+  useEffect(() => {
+    if (id && id !== 'undefined') {
+      loadAnalysis(id);
+    }
+  }, [id]);
+
+  const loadAnalysis = async (analysisId: string) => {
+    setIsLoading(true);
+    try {
+      const res = await getAnalysisById(analysisId);
+      if (res.data) setCurrentAnalysis(res.data);
+    } catch {
+      toast('warning', 'Could not load analysis from server. Showing cached data.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleFileSelected = async (filePath: string) => {
     setIsLoading(true);
     try {
-      // Will be connected to API:
-      // const result = await uploadAndAnalyze(filePath);
-      // if (result.data) setCurrentAnalysis(result.data);
-      console.log('Analyzing:', filePath);
+      const result = await uploadAndAnalyze(filePath);
+      if (result.data) {
+        setCurrentAnalysis(result.data);
+        const historyItem: AnalysisHistoryItem = {
+          analysisId: result.data.analysisId,
+          companyName: result.data.companyName,
+          period: result.data.period,
+          fileName: result.data.fileName,
+          createdAt: result.data.createdAt,
+          summary: computeSummary(result.data.ratios),
+        };
+        const { analyses: current } = useAnalysisStore.getState();
+        useAnalysisStore.getState().setAnalyses([historyItem, ...current]);
+        toast('success', `Analysis complete: ${result.data.companyName}`);
+      } else if (result.error) {
+        toast('error', result.error.message);
+      }
+    } catch (err: any) {
+      toast('error', `Analysis failed: ${err.message || 'Unknown error'}`);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleExport = async (format: 'pdf' | 'xlsx' | 'html') => {
+    if (!currentAnalysis) return;
+    try {
+      const name = `${currentAnalysis.companyName.replace(/\s+/g, '_')}_${currentAnalysis.period}`;
+      const path = await saveReport(currentAnalysis.analysisId, format, name);
+      if (path) {
+        toast('success', `Report saved to ${path}`);
+      }
+    } catch {
+      toast('error', 'Failed to generate report');
     }
   };
 
@@ -33,12 +85,25 @@ export default function Analysis() {
       : currentAnalysis.ratios.filter((r) => r.category === activeCategory)
     : [];
 
+  // Category score computation
+  const categoryScores = currentAnalysis
+    ? computeCategoryScores(currentAnalysis.ratios)
+    : null;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <Spinner size={32} />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            {id ? 'Analysis Details' : 'New Analysis'}
+            {currentAnalysis ? 'Analysis Details' : 'New Analysis'}
           </h1>
           <p className="text-cascade-sage text-sm mt-1">
             {currentAnalysis
@@ -48,11 +113,11 @@ export default function Analysis() {
         </div>
         {currentAnalysis && (
           <div className="flex gap-2">
-            <button className="btn-secondary flex items-center gap-2">
-              <Download size={16} /> Export PDF
+            <button onClick={() => handleExport('pdf')} className="btn-secondary flex items-center gap-2">
+              <Download size={16} /> PDF
             </button>
-            <button className="btn-secondary flex items-center gap-2">
-              <FileText size={16} /> Export XLSX
+            <button onClick={() => handleExport('xlsx')} className="btn-secondary flex items-center gap-2">
+              <FileText size={16} /> XLSX
             </button>
           </div>
         )}
@@ -64,6 +129,30 @@ export default function Analysis() {
         </div>
       ) : (
         <>
+          {/* Score Overview */}
+          {categoryScores && (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {Object.entries(categoryScores).map(([cat, score]) => (
+                <div key={cat} className="card py-3 px-4">
+                  <p className="text-xs text-cascade-sage capitalize mb-1">{cat}</p>
+                  <div className="flex items-end gap-2">
+                    <span className={`text-xl font-bold ${score >= 70 ? 'text-semantic-success' : score >= 50 ? 'text-semantic-warning' : 'text-semantic-danger'}`}>
+                      {score}%
+                    </span>
+                    <div className="flex-1 h-1.5 bg-cascade-mist rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          score >= 70 ? 'bg-semantic-success' : score >= 50 ? 'bg-semantic-warning' : 'bg-semantic-danger'
+                        }`}
+                        style={{ width: `${score}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Category Filter */}
           <div className="flex gap-2 flex-wrap">
             {categories.map((cat) => (
@@ -82,10 +171,12 @@ export default function Analysis() {
           </div>
 
           {/* Chart */}
-          <RatioChart ratios={filteredRatios} title={`${activeCategory === 'all' ? 'All' : activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Ratios`} />
+          {filteredRatios.length > 0 && (
+            <RatioChart ratios={filteredRatios} title={`${activeCategory === 'all' ? 'All' : activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Ratios`} />
+          )}
 
           {/* Ratio Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredRatios.map((ratio, index) => (
               <RatioCard key={`${ratio.category}-${ratio.ratioName}-${index}`} ratio={ratio} />
             ))}
@@ -94,4 +185,33 @@ export default function Analysis() {
       )}
     </div>
   );
+}
+
+function computeSummary(ratios: AnalysisResult['ratios']): AnalysisHistoryItem['summary'] {
+  const byCategory = { profitability: [] as number[], liquidity: [] as number[], leverage: [] as number[], efficiency: [] as number[] };
+  for (const r of ratios) {
+    if (byCategory[r.category]) {
+      byCategory[r.category].push(r.status === 'good' ? 100 : r.status === 'warning' ? 60 : 30);
+    }
+  }
+  const avg = (arr: number[]) => arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
+  return {
+    profitability: avg(byCategory.profitability),
+    liquidity: avg(byCategory.liquidity),
+    leverage: avg(byCategory.leverage),
+    efficiency: avg(byCategory.efficiency),
+  };
+}
+
+function computeCategoryScores(ratios: AnalysisResult['ratios']): Record<string, number> {
+  const byCategory: Record<string, number[]> = {};
+  for (const r of ratios) {
+    if (!byCategory[r.category]) byCategory[r.category] = [];
+    byCategory[r.category].push(r.status === 'good' ? 100 : r.status === 'warning' ? 60 : 30);
+  }
+  const scores: Record<string, number> = {};
+  for (const [cat, vals] of Object.entries(byCategory)) {
+    scores[cat] = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+  }
+  return scores;
 }

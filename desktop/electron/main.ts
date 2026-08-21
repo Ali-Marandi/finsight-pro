@@ -1,28 +1,30 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import path from 'path';
 import { spawn, ChildProcess } from 'child_process';
+import fs from 'fs';
 
 let mainWindow: BrowserWindow | null = null;
 let apiProcess: ChildProcess | null = null;
 
 const isDev = !app.isPackaged;
 const API_PORT = 8000;
+const API_STARTUP_TIMEOUT = 30000;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
+    width: 1400,
+    height: 900,
     minWidth: 1024,
     minHeight: 680,
     title: 'FinSight Pro',
     backgroundColor: '#f5f5f4',
-    titleBarStyle: 'hiddenInset',
-    trafficLightPosition: { x: 16, y: 16 },
+    frame: false,
+    titleBarStyle: 'hidden',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: true,
+      sandbox: false,
     },
   });
 
@@ -36,46 +38,111 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  // Prevent external navigation
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (url !== 'http://localhost:5173' && !url.startsWith('file://')) {
+      event.preventDefault();
+      shell.openExternal(url);
+    }
+  });
 }
 
-function startApiServer() {
-  const apiPath = isDev
-    ? path.join(__dirname, '..', '..', 'api')
-    : path.join(process.resourcesPath, 'api');
+function startApiServer(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const apiPath = isDev
+      ? path.join(__dirname, '..', '..', 'api')
+      : path.join(process.resourcesPath, 'api');
 
-  const pythonExe = isDev
-    ? 'python'
-    : path.join(process.resourcesPath, 'python', 'python.exe');
+    // Check if api directory exists
+    if (!fs.existsSync(apiPath)) {
+      console.warn(`API directory not found at ${apiPath}, running without backend`);
+      resolve();
+      return;
+    }
 
-  apiProcess = spawn(pythonExe, ['-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', String(API_PORT)], {
-    cwd: apiPath,
-    env: { ...process.env, FINSGHT_ENV: isDev ? 'development' : 'production' },
-  });
+    const pythonExe = isDev
+      ? 'python3'
+      : path.join(process.resourcesPath, 'python', 'python.exe');
 
-  apiProcess.stdout?.on('data', (data: Buffer) => {
-    console.log(`[API] ${data.toString()}`);
-  });
+    const args = [
+      '-m', 'uvicorn', 'app.main:app',
+      '--host', '127.0.0.1',
+      '--port', String(API_PORT),
+      '--log-level', 'warning',
+    ];
 
-  apiProcess.stderr?.on('data', (data: Buffer) => {
-    console.error(`[API] ${data.toString()}`);
-  });
+    apiProcess = spawn(pythonExe, args, {
+      cwd: apiPath,
+      env: { ...process.env, FINSIGHT_ENV: isDev ? 'development' : 'production' },
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
 
-  apiProcess.on('error', (err) => {
-    console.error('Failed to start API server:', err);
+    let started = false;
+    const timeout = setTimeout(() => {
+      if (!started) {
+        console.warn('API server startup timed out, continuing without backend');
+        resolve();
+      }
+    }, API_STARTUP_TIMEOUT);
+
+    apiProcess.stdout?.on('data', (data: Buffer) => {
+      const msg = data.toString();
+      console.log(`[API] ${msg}`);
+      if (!started && msg.includes('Uvicorn running')) {
+        started = true;
+        clearTimeout(timeout);
+        console.log('API server is ready');
+        resolve();
+      }
+    });
+
+    apiProcess.stderr?.on('data', (data: Buffer) => {
+      const msg = data.toString();
+      console.error(`[API] ${msg}`);
+      if (!started && msg.includes('Uvicorn running')) {
+        started = true;
+        clearTimeout(timeout);
+        resolve();
+      }
+    });
+
+    apiProcess.on('error', (err) => {
+      console.error('Failed to start API server:', err);
+      clearTimeout(timeout);
+      resolve(); // Don't block the app
+    });
+
+    apiProcess.on('exit', (code, signal) => {
+      console.log(`API process exited with code ${code}, signal ${signal}`);
+      apiProcess = null;
+    });
   });
 }
 
 function stopApiServer() {
   if (apiProcess) {
-    apiProcess.kill();
-    apiProcess = null;
+    try {
+      apiProcess.kill('SIGTERM');
+      // Force kill after 3 seconds
+      const forceKill = setTimeout(() => {
+        if (apiProcess) {
+          apiProcess.kill('SIGKILL');
+          apiProcess = null;
+        }
+      }, 3000);
+      apiProcess.on('exit', () => clearTimeout(forceKill));
+    } catch (e) {
+      console.error('Error stopping API:', e);
+    }
   }
 }
 
 // IPC Handlers
 
 ipcMain.handle('open-file', async () => {
-  const result = await dialog.showOpenDialog(mainWindow!, {
+  if (!mainWindow) return null;
+  const result = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile'],
     filters: [
       { name: 'Financial Statements', extensions: ['csv', 'xlsx', 'xls'] },
@@ -87,7 +154,8 @@ ipcMain.handle('open-file', async () => {
 });
 
 ipcMain.handle('save-file', async (_event, suggestedName: string) => {
-  const result = await dialog.showSaveDialog(mainWindow!, {
+  if (!mainWindow) return null;
+  const result = await dialog.showSaveDialog(mainWindow, {
     defaultPath: suggestedName,
     filters: [
       { name: 'PDF Report', extensions: ['pdf'] },
@@ -97,6 +165,25 @@ ipcMain.handle('save-file', async (_event, suggestedName: string) => {
   });
   if (result.canceled) return null;
   return result.filePath;
+});
+
+ipcMain.handle('read-file-buffer', async (_event, filePath: string) => {
+  try {
+    const buffer = fs.readFileSync(filePath);
+    const ext = path.extname(filePath).toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      '.csv': 'text/csv',
+      '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      '.xls': 'application/vnd.ms-excel',
+    };
+    return {
+      buffer: buffer.toString('base64'),
+      name: path.basename(filePath),
+      mimeType: mimeTypes[ext] || 'application/octet-stream',
+    };
+  } catch (err: any) {
+    throw new Error(`Failed to read file: ${err.message}`);
+  }
 });
 
 ipcMain.handle('get-api-url', () => {
@@ -111,10 +198,31 @@ ipcMain.handle('get-app-path', () => {
   return app.getPath('userData');
 });
 
+// Window control IPC
+ipcMain.handle('window-minimize', () => {
+  mainWindow?.minimize();
+});
+
+ipcMain.handle('window-maximize', () => {
+  if (mainWindow?.isMaximized()) {
+    mainWindow.unmaximize();
+  } else {
+    mainWindow?.maximize();
+  }
+});
+
+ipcMain.handle('window-close', () => {
+  mainWindow?.close();
+});
+
+ipcMain.handle('window-is-maximized', () => {
+  return mainWindow?.isMaximized() ?? false;
+});
+
 // App Lifecycle
 
-app.whenReady().then(() => {
-  startApiServer();
+app.whenReady().then(async () => {
+  await startApiServer();
   createWindow();
 
   app.on('activate', () => {

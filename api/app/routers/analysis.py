@@ -14,30 +14,22 @@ async def upload_and_analyze(
     db: Session = Depends(get_db),
 ):
     """Upload a CSV/XLSX financial statement and run full analysis."""
-    # Validate file type
     if not file.filename:
         raise HTTPException(status_code=400, detail="No filename provided")
     
     ext = file.filename.split(".")[-1].lower()
     if ext not in ("csv", "xlsx", "xls"):
-        raise HTTPException(
-            status_code=400,
-            detail="Unsupported file format. Please upload CSV or XLSX.",
-            error_code="INVALID_FILE_FORMAT",
-        )
+        raise HTTPException(status_code=400, detail="Unsupported file format")
     
-    # Read file content
     content = await file.read()
     
     try:
-        # Run analysis
         result = analyze_financial_statement(
             file_content=content,
             filename=file.filename,
             extension=ext,
         )
         
-        # Store in database
         from app.models.models import AnalysisModel, RatioResultModel
         
         analysis_id = str(uuid.uuid4())
@@ -87,7 +79,6 @@ async def get_history(
 ):
     """Get paginated analysis history."""
     from app.models.models import AnalysisModel, RatioResultModel
-    from sqlalchemy import func
     
     offset = (page - 1) * per_page
     analyses = db.query(AnalysisModel).order_by(AnalysisModel.created_at.desc()).offset(offset).limit(per_page).all()
@@ -100,11 +91,12 @@ async def get_history(
         for r in ratios:
             if r.category not in category_scores:
                 category_scores[r.category] = []
-            category_scores[r.category].append(r.value)
+            score_map = {"good": 100, "warning": 60, "critical": 30}
+            category_scores[r.category].append(score_map.get(r.status, 50))
         
         summary = {}
-        for cat, values in category_scores.items():
-            summary[cat] = sum(values) / len(values) if values else 0
+        for cat, scores in category_scores.items():
+            summary[cat] = round(sum(scores) / len(scores)) if scores else 0
         
         items.append({
             "analysis_id": a.id,
@@ -147,3 +139,19 @@ async def get_analysis(analysis_id: str, db: Session = Depends(get_db)):
             for r in ratios
         ],
     }
+
+
+@router.delete("/{analysis_id}")
+async def delete_analysis(analysis_id: str, db: Session = Depends(get_db)):
+    """Delete an analysis and its ratio results."""
+    from app.models.models import AnalysisModel, RatioResultModel
+    
+    analysis = db.query(AnalysisModel).filter(AnalysisModel.id == analysis_id).first()
+    if not analysis:
+        raise HTTPException(status_code=404, detail="Analysis not found")
+    
+    db.query(RatioResultModel).filter(RatioResultModel.analysis_id == analysis_id).delete()
+    db.delete(analysis)
+    db.commit()
+    
+    return {"status": "deleted"}

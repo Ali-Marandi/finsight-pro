@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastProvider } from '../renderer/components/Toast';
 import Layout from '../renderer/components/Layout';
 import Dashboard from '../renderer/pages/Dashboard';
 import Analysis from '../renderer/pages/Analysis';
@@ -8,18 +9,20 @@ import Settings from '../renderer/pages/Settings';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/analysis" element={<Analysis />} />
-          <Route path="/analysis/:id" element={<Analysis />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <HashRouter>
+      <ToastProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/analysis" element={<Analysis />} />
+            <Route path="/analysis/:id" element={<Analysis />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Layout>
+      </ToastProvider>
+    </HashRouter>
   );
 }
