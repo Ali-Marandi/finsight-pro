@@ -7,69 +7,168 @@ on:
 
 permissions:
   contents: write
+  attestations: write
 
 jobs:
+  # ────────────────────────────────────────────
+  # Job 1: Build Windows NSIS + Portable EXE
+  # ────────────────────────────────────────────
   build-windows:
-    name: Build Windows Installer
+    name: Build Windows (${{ matrix.target }})
     runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: nsis
+            artifact: FinSight-Pro-Setup-${{ github.ref_name }}.exe
+          - target: portable
+            artifact: FinSight-Pro-Portable-${{ github.ref_name }}.exe
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Node.js ──
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: desktop/package-lock.json
 
-      - uses: actions/setup-python@v5
+      # ── Python (for bundled FastAPI backend) ──
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Get version from tag
-        id: version
-        shell: bash
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
+      # ── Install desktop npm dependencies ──
       - name: Install desktop dependencies
         working-directory: desktop
         run: npm ci
 
+      # ── Install Python API dependencies (for requirements validation only) ──
       - name: Install API dependencies
         working-directory: api
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Build application
+      # ── TypeScript compilation + Vite build ──
+      - name: Build application (TypeScript + Vite)
         working-directory: desktop
         run: npm run build
 
-      - name: Package Windows installer
+      # ── Package Windows installer / portable ──
+      - name: Package Windows ${{ matrix.target }}
         working-directory: desktop
-        run: npx electron-builder --win --publish never
+        run: npx electron-builder --win --${{ matrix.target }} --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Force-disable all code signing
+          CSC_IDENTITY_AUTO_DISCOVERY: ''
 
-      - name: Upload installer to release
+      # ── Upload build artifact (shared across matrix jobs) ──
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ matrix.target }}-x64
+          path: |
+            desktop/release/*.exe
+            desktop/release/*.zip
+          if-no-files-found: error
+          retention-days: 7
+
+  # ────────────────────────────────────────────
+  # Job 2: Create GitHub Release with all assets
+  # ────────────────────────────────────────────
+  release:
+    name: Publish GitHub Release
+    needs: [build-windows]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Download all Windows artifacts ──
+      - name: Download NSIS installer
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-nsis-x64
+          path: ./release-assets/
+
+      - name: Download Portable EXE
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-portable-x64
+          path: ./release-assets/
+
+      # ── Compute file sizes for release notes ──
+      - name: Compute asset info
+        id: assets
+        run: |
+          echo "## Asset Sizes" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          for f in ./release-assets/*; do
+            if [ -f "$f" ]; then
+              size=$(du -h "$f" | cut -f1)
+              name=$(basename "$f")
+              echo "| \`$name\` | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          ls -lh ./release-assets/
+
+      # ── Create/update the GitHub Release ──
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: desktop/release/*.exe
-          generate_release_notes: true
+          name: ${{ github.ref_name }} — Desktop Release
           body: |
-            ## FinSight Pro Desktop v${{ steps.version.outputs.VERSION }}
+            ## FinSight Pro Desktop ${{ github.ref_name }}
 
             ### Installation
-            1. Download `FinSight Pro Setup x.x.x.exe` below
-            2. Run the installer
-            3. Launch FinSight Pro from your Start Menu
+            **Option A — NSIS Installer (recommended):**
+            1. Download `FinSight Pro Setup x.x.x.exe`
+            2. Run the installer and follow the wizard
+            3. Launch FinSight Pro from Start Menu or Desktop shortcut
+
+            **Option B — Portable:**
+            1. Download `FinSight-Pro-Portable-x.x.x.exe`
+            2. Run directly — no installation required
+            3. Place anywhere on your system
 
             ### What's Included
-            - 17+ financial ratios across 4 categories
-            - Interactive bar and radar charts
-            - PDF and Excel report export
-            - Industry benchmarking
-            - 100% offline — your data never leaves your machine
+            - **17+ financial ratios** across 4 categories (Profitability, Liquidity, Leverage, Efficiency)
+            - **Interactive charts** — Bar and Radar visualizations
+            - **Status classification** — Good / Warning / Critical with color coding
+            - **Industry benchmarks** — Compare against standard thresholds
+            - **PDF & Excel export** — Professional reports with Cascade design
+            - **Drag-and-drop upload** — CSV, XLS, XLSX support
+            - **Custom Windows titlebar** — Frameless modern UI
+            - **Toast notifications** — Real-time feedback
+            - **API status monitor** — Live backend health indicator
+            - **Demo data** — 3 pre-loaded sample analyses
+            - **Multi-language** — English, فارسی, العربية
+            - **100% offline & private** — Your data never leaves your machine
+
+            ### Tech Stack
+            - Electron 32 · React 18 · TypeScript · Tailwind CSS
+            - Recharts · Zustand · Radix UI · Lucide Icons
+            - FastAPI · SQLAlchemy · SQLite backend
 
             ### System Requirements
             - Windows 10 (64-bit) or later
-            - ~150 MB disk space
+            - ~200 MB disk space for installed version
 
-            ### Known Limitations
-            - This is an early access release
-            - API backend requires Python 3.10+ (bundled in future versions)
+            ---
+            <p align="center">
+              <i>Built with precision by <a href="https://github.com/Ali-Marandi">Ali Marandi</a></i>
+            </p>
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') || contains(github.ref_name, 'rc') }}
+          files: ./release-assets/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

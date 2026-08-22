@@ -1,27 +1,83 @@
 productName: FinSight Pro
 appId: com.finsightpro.desktop
+
+# Remove the 'publish' key to prevent electron-builder from
+# trying to authenticate with GitHub during the build step.
+# The workflow uploads assets separately.
+
+# The 'directories' section is configured for local development.
+# For CI, the workflow sets output_dir via command-line flags.
+# Note: electron-builder resolves relative paths from the working
+# directory, which is 'desktop/' in CI. So '../api' resolves
+# correctly to the repo root 'api/' folder.
 directories:
   output: release
+  buildResources: build
+
+# 'files' specifies what goes into the app.asar archive.
+# The 'node_modules/**/*' pattern ensures all runtime dependencies
+# are included. The 'dist/**/*' pattern includes the compiled
+# renderer (dist/renderer/) and electron main process (dist/electron/).
 files:
   - dist/**/*
   - node_modules/**/*
+  - package.json
+
 win:
   target:
+    - target: nsis
+      arch:
+        - x64
     - target: portable
       arch:
         - x64
   icon: public/icon.ico
   signAndEditExecutable: false
   publisherName: FinSight Pro LLC
+  verified: false
+  # Force disable signing on all platforms
+  # This overrides any auto-detected certificates
+  # so CI builds don't hang waiting for a cert
+  # that doesn't exist.
+  # The '--config.win.signDll=false' flag is the
+  # canonical way to disable per-DLL signing.
+
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
+  allowElevation: true
   installerIcon: public/icon.ico
+  uninstallerIcon: public/icon.ico
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: FinSight Pro
+  installerLanguages:
+    - en
+    - fa
+    - ar
+  language: 1033
+  # NSIS display name shown in Add/Remove Programs
+  uninstallDisplayName: FinSight Pro
+  # Show a custom install header
+  # installerHeaderIcon: public/icon.ico
+  # Run the app after installation
+  runAfterFinish: true
+
 portable:
   artifactName: FinSight-Pro-Portable-${version}-x64.exe
+  # Request execution level for portable too
+  requestExecutionLevel: asInvoker
+
+# Files copied alongside the app (outside asar)
+# The FastAPI backend is bundled as an extra resource
+# so the Electron main process can spawn it as a child
+# process via Python/uvicorn.
+#
+# On Windows, this ends up in:
+#   C:\Users\<user>\AppData\Local\Programs\finsight-pro\resources\api\
+#
+# The 'from' path is relative to the working directory
+# (which is desktop/ in CI, repo root locally).
 extraResources:
   - from: ../api
     to: api
@@ -32,6 +88,10 @@ extraResources:
       - "!.venv/**"
       - "!.pytest_cache/**"
       - "!*.pyc"
-publish:
-  provider: github
-  releaseType: release
+      - "!*.pyo"
+      - "!.mypy_cache/**"
+      - "!.ruff_cache/**"
+      - "!**/__pycache__/**"
+
+# Compression: 'maximum' for smaller installers
+compression: maximum
