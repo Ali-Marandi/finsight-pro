@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from app.services.ai_copilot import chat_with_ai
@@ -27,7 +27,7 @@ class AIConfigRequest(BaseModel):
 
 
 @router.post("/chat")
-async def copilot_chat(request: ChatRequest, db: Session = None):
+async def copilot_chat(request: ChatRequest, db: Session = Depends(get_db)):
     """Chat with the AI Financial Copilot."""
     analysis_data = None
     prediction_data = None
@@ -113,7 +113,7 @@ async def copilot_chat(request: ChatRequest, db: Session = None):
 
 
 @router.post("/configure")
-async def configure_ai(config: AIConfigRequest, db: Session = None):
+async def configure_ai(config: AIConfigRequest, db: Session = Depends(get_db)):
     """Configure the AI Copilot API settings."""
     try:
         from app.models.database import SessionLocal
@@ -147,7 +147,7 @@ async def configure_ai(config: AIConfigRequest, db: Session = None):
 
 
 @router.get("/configure")
-async def get_ai_config(db: Session = None):
+async def get_ai_config(db: Session = Depends(get_db)):
     """Get current AI configuration (without API key)."""
     try:
         from app.models.database import SessionLocal

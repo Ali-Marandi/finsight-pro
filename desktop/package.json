@@ -19,6 +19,7 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test",
     "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "electron:build": "npm run build && electron-builder",
     "electron:build:win": "npm run build && electron-builder --win",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@playwright/test": "^1.49.1",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "concurrently": "^8.2.2",

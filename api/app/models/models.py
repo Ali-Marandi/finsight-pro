@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Float, Integer, DateTime, Boolean, Text, ForeignKey
+from sqlalchemy import Column, String, Float, Integer, DateTime, Boolean, Text, ForeignKey, UniqueConstraint
 from sqlalchemy.sql import func
 from app.models.database import Base
 import uuid
@@ -39,6 +39,21 @@ class ReportModel(Base):
     file_path = Column(String, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     size_bytes = Column(Integer, nullable=True)
+
+
+class SyncEventModel(Base):
+    __tablename__ = "sync_events"
+    __table_args__ = (UniqueConstraint("organization_id", "client_event_id", name="uq_sync_events_organization_client_event"),)
+
+    cursor = Column(Integer, primary_key=True, autoincrement=True)
+    organization_id = Column(String, nullable=False, index=True)
+    client_event_id = Column(String, nullable=False, index=True)
+    entity_type = Column(String, nullable=False)
+    entity_id = Column(String, nullable=False)
+    revision = Column(Integer, nullable=False)
+    payload_ciphertext = Column(Text, nullable=False)
+    payload_digest = Column(String, nullable=False)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
 class SettingsModel(Base):

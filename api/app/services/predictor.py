@@ -1,5 +1,5 @@
 ""
-Financial Distress & Bankruptcy Prediction Service.
+"""Financial Distress & Bankruptcy Prediction Service.
 Implements multiple well-established prediction models:
 - Altman Z-Score (1968, updated 1983 for private/non-manufacturing)
 - Springate Model (1978)

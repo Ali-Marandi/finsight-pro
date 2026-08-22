@@ -47,3 +47,8 @@ api/venv/
 # Logs
 *.log
 npm-debug.log*
+
+# Automated test artifacts
+desktop/playwright-report/
+desktop/test-results/
+load_tests/results/

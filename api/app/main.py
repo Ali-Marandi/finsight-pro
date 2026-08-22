@@ -7,7 +7,7 @@ from app.routers import (
     analysis, evidence, reports, license as license_router, settings,
     ai_copilot, prediction,
     document_intelligence, benchmarking, compliance as compliance_router,
-    consolidation, tsetmc,
+    consolidation, tsetmc, cloud_sync,
 )
 
 
@@ -47,6 +47,7 @@ app.include_router(benchmarking.router, prefix="/api/v1/benchmarking", tags=["Be
 app.include_router(compliance_router.router, prefix="/api/v1/compliance", tags=["Compliance"])
 app.include_router(consolidation.router, prefix="/api/v1/consolidation", tags=["Consolidation"])
 app.include_router(tsetmc.router, prefix="/api/v1/tsetmc", tags=["TSETMC"])
+app.include_router(cloud_sync.router, prefix="/api/v1/cloud-sync", tags=["Cloud Sync"])
 
 
 @app.get("/api/v1/health")

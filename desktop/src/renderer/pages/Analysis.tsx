@@ -25,7 +25,12 @@ export default function Analysis() {
   useEffect(() => {
     if (id && id !== 'undefined') {
       loadAnalysis(id);
+      return;
     }
+    // The unparameterized route always starts a fresh evidence-review workflow.
+    setCurrentAnalysis(null);
+    setEvidence(null);
+    setSelectedFilePath(null);
   }, [id]);
 
   const loadAnalysis = async (analysisId: string) => {
