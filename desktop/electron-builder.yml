@@ -34,13 +34,6 @@ win:
   icon: public/icon.ico
   signAndEditExecutable: false
   publisherName: FinSight Pro LLC
-  verified: false
-  # Force disable signing on all platforms
-  # This overrides any auto-detected certificates
-  # so CI builds don't hang waiting for a cert
-  # that doesn't exist.
-  # The '--config.win.signDll=false' flag is the
-  # canonical way to disable per-DLL signing.
 
 nsis:
   oneClick: false

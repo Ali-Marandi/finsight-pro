@@ -12,6 +12,7 @@ DATA = {
     "period": ["2024", "2025"],
     "revenue": [1000, 1200],
     "gross_profit": [400, 540],
+    "cost_of_goods_sold": [600, 660],
     "operating_income": [200, 264],
     "net_income": [120, 156],
     "total_assets": [2000, 2200],
@@ -23,6 +24,7 @@ DATA = {
     "equity": [1100, 1250],
     "operating_cash_flow": [180, 210],
     "interest_expense": [40, 44],
+    "accounts_receivable": [250, 280],
 }
 
 
