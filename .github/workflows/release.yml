@@ -63,7 +63,7 @@ jobs:
       # ── Package Windows installer / portable ──
       - name: Package Windows ${{ matrix.target }}
         working-directory: desktop
-        run: npx electron-builder --win --${{ matrix.target }} --publish never
+        run: npx electron-builder --win ${{ matrix.target }} --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Force-disable all code signing
