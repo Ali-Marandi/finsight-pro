@@ -14,10 +14,10 @@ SRC_ROOT = PROJECT_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from finsight.evidence import inspect_statement  # noqa: E402
+from finsight.evidence import extract_tax_report_evidence, inspect_statement  # noqa: E402
 
 router = APIRouter()
-SUPPORTED_EXTENSIONS = {".csv", ".xlsx", ".xlsm"}
+SUPPORTED_EXTENSIONS = {".csv", ".xlsx", ".xlsm", ".pdf"}
 
 
 @router.post("/inspect")
@@ -32,8 +32,9 @@ async def inspect_evidence(
     """
 
     source_name = Path(file.filename or "statement.csv").name
-    if Path(source_name).suffix.lower() not in SUPPORTED_EXTENSIONS:
-        raise HTTPException(status_code=400, detail="Use a CSV, XLSX, or XLSM financial statement.")
+    suffix = Path(source_name).suffix.lower()
+    if suffix not in SUPPORTED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Use a CSV, XLSX, XLSM, or PDF financial statement.")
 
     overrides: dict[str, str | None] | None = None
     if mapping_overrides:
@@ -52,7 +53,10 @@ async def inspect_evidence(
         source_path = Path(temporary_directory) / source_name
         source_path.write_bytes(await file.read())
         try:
-            result = inspect_statement(source_path, mapping_overrides=overrides)
-        except ValueError as exc:
+            if suffix == ".pdf":
+                if overrides:
+                    raise ValueError("Column mapping overrides apply to CSV/XLSX statements, not PDF tax reports.")
+                return {"kind": "tax_audit_pdf", **extract_tax_report_evidence(source_path).to_dict()}
+            return {"kind": "financial_statement", **inspect_statement(source_path, mapping_overrides=overrides).to_dict()}
+        except (ImportError, ValueError) as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
-        return result.to_dict()

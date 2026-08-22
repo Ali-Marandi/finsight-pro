@@ -37,6 +37,9 @@ class EvidenceLocation:
     sheet_name: str
     column_name: str
     row_number: int | None = None
+    page_number: int | None = None
+    table_index: int | None = None
+    cell_reference: str | None = None
 
 
 @dataclass
@@ -142,4 +145,6 @@ def source_type_for(path: Path) -> str:
         return "csv"
     if suffix in {".xlsx", ".xlsm"}:
         return "excel"
+    if suffix == ".pdf":
+        return "pdf"
     return "unknown"
