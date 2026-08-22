@@ -52,3 +52,16 @@ export interface ApiResponse<T> {
     details: string | null;
   };
 }
+
+export interface AIConfig {
+  configured: boolean;
+  model: string;
+  endpoint: string;
+}
+
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  sources?: string[];
+  modelUsed?: string;
+}

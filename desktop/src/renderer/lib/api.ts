@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig } from '../../types';
 
 let apiClient: ReturnType<typeof axios.create> | null = null;
 
@@ -118,4 +118,26 @@ export async function updatePreferences(prefs: Partial<UserPreferences>): Promis
 
 export function getLocalApiUrl(): string {
   return 'http://127.0.0.1:8000/api/v1';
+}
+
+export async function getAIConfig(): Promise<AIConfig> {
+  try {
+    const client = await getApiClient();
+    const { data } = await client.get('/ai/configure');
+    return data;
+  } catch {
+    return { configured: false, model: '', endpoint: '' };
+  }
+}
+
+export async function configureAI(apiKey: string, endpoint: string, model: string): Promise<{ status: string; model: string }> {
+  const client = await getApiClient();
+  const { data } = await client.post('/ai/configure', { api_key: apiKey, api_endpoint: endpoint, model });
+  return data;
+}
+
+export async function runPrediction(analysisId: string): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/prediction/from-analysis', { analysis_id: analysisId });
+  return data;
 }

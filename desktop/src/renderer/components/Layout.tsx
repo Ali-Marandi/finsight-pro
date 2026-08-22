@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, BarChart3, FileText, History, Settings,
-  ChevronLeft, ChevronRight, Menu,
+  ChevronLeft, ChevronRight, Menu, Sparkles, Activity,
 } from 'lucide-react';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import Header from './Header';
@@ -12,6 +12,8 @@ import { getAnalysisHistory } from '../lib/api';
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/analysis', icon: BarChart3, label: 'New Analysis' },
+  { to: '/ai-copilot', icon: Sparkles, label: 'AI Copilot' },
+  { to: '/prediction', icon: Activity, label: 'Prediction' },
   { to: '/reports', icon: FileText, label: 'Reports' },
   { to: '/history', icon: History, label: 'History' },
   { to: '/settings', icon: Settings, label: 'Settings' },

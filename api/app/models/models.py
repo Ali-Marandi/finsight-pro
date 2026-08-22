@@ -46,6 +46,7 @@ class SettingsModel(Base):
 
     key = Column(String, primary_key=True)
     value = Column(Text, nullable=False)
+    ai_config = Column(Text, nullable=True)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
 

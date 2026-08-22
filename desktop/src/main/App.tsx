@@ -6,6 +6,8 @@ import Analysis from '../renderer/pages/Analysis';
 import Reports from '../renderer/pages/Reports';
 import History from '../renderer/pages/History';
 import Settings from '../renderer/pages/Settings';
+import AICopilot from '../renderer/pages/AICopilot';
+import Prediction from '../renderer/pages/Prediction';
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/analysis" element={<Analysis />} />
             <Route path="/analysis/:id" element={<Analysis />} />
+            <Route path="/ai-copilot" element={<AICopilot />} />
+            <Route path="/prediction" element={<Prediction />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />

@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import { useLicense } from '../hooks/useLicense';
-import { Crown, Globe, Palette, Save, Key, RotateCcw, Monitor } from 'lucide-react';
-import { updatePreferences } from '../lib/api';
+import { Crown, Globe, Palette, Save, Key, RotateCcw, Monitor, Sparkles, Eye, EyeOff, CheckCircle, XCircle } from 'lucide-react';
+import { updatePreferences, getAIConfig, configureAI } from '../lib/api';
 import { useToast } from '../components/Toast';
 
 export default function Settings() {
@@ -12,6 +12,22 @@ export default function Settings() {
   const [licenseKey, setLicenseKey] = useState('');
   const [activating, setActivating] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // AI Configuration state
+  const [aiApiKey, setAiApiKey] = useState('');
+  const [aiEndpoint, setAiEndpoint] = useState('https://api.openai.com/v1');
+  const [aiModel, setAiModel] = useState('gpt-4o-mini');
+  const [aiConfigured, setAiConfigured] = useState(false);
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [savingAI, setSavingAI] = useState(false);
+
+  useEffect(() => {
+    getAIConfig().then((cfg) => {
+      setAiConfigured(cfg.configured);
+      if (cfg.model) setAiModel(cfg.model);
+      if (cfg.endpoint) setAiEndpoint(cfg.endpoint);
+    });
+  }, []);
 
   const handleSave = async () => {
     try {
@@ -43,6 +59,22 @@ export default function Settings() {
   const handleReset = () => {
     setPreferences({ defaultLanguage: 'en', chartTheme: 'light', decimalPlaces: 2, autoSave: true });
     toast('info', 'Preferences reset to defaults');
+  };
+
+  const handleSaveAI = async () => {
+    if (!aiApiKey.trim()) {
+      toast('error', 'API key is required');
+      return;
+    }
+    setSavingAI(true);
+    try {
+      await configureAI(aiApiKey.trim(), aiEndpoint.trim(), aiModel.trim());
+      setAiConfigured(true);
+      toast('success', 'AI configuration saved');
+    } catch {
+      toast('error', 'Failed to save AI configuration');
+    }
+    setSavingAI(false);
   };
 
   return (
@@ -147,11 +179,99 @@ export default function Settings() {
         </SettingRow>
       </SettingsCard>
 
+      {/* AI Copilot Configuration */}
+      <SettingsCard icon={Sparkles} iconBg="bg-gradient-to-br from-cascade-gold/10 to-amber-100" iconColor="text-cascade-gold" title="AI Financial Copilot" desc="Connect your LLM for intelligent analysis">
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            {aiConfigured ? (
+              <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+                <CheckCircle size={12} /> Connected
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5 text-xs font-medium text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
+                <XCircle size={12} /> Using built-in engine
+              </span>
+            )}
+          </div>
+
+          <SettingRow label="API Key">
+            <div className="relative w-72">
+              <input
+                type={showApiKey ? 'text' : 'password'}
+                value={aiApiKey}
+                onChange={(e) => setAiApiKey(e.target.value)}
+                placeholder="sk-..."
+                className="input-field w-full pr-10 font-mono text-xs"
+              />
+              <button
+                type="button"
+                onClick={() => setShowApiKey(!showApiKey)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-cascade-sage hover:text-cascade-charcoal"
+              >
+                {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
+              </button>
+            </div>
+          </SettingRow>
+
+          <SettingRow label="API Endpoint">
+            <select
+              value={aiEndpoint}
+              onChange={(e) => setAiEndpoint(e.target.value)}
+              className="input-field w-72 text-xs"
+            >
+              <option value="https://api.openai.com/v1">OpenAI</option>
+              <option value="https://api.deepseek.com/v1">DeepSeek</option>
+              <option value="https://openrouter.ai/api/v1">OpenRouter</option>
+              <option value="http://localhost:11434/v1">Ollama (Local)</option>
+              <option value="custom">Custom Endpoint...</option>
+            </select>
+          </SettingRow>
+
+          {aiEndpoint === 'custom' && (
+            <SettingRow label="Custom URL">
+              <input
+                type="url"
+                value={aiEndpoint}
+                onChange={(e) => setAiEndpoint(e.target.value)}
+                placeholder="https://your-api.com/v1"
+                className="input-field w-72 text-xs font-mono"
+              />
+            </SettingRow>
+          )}
+
+          <SettingRow label="Model">
+            <input
+              type="text"
+              value={aiModel}
+              onChange={(e) => setAiModel(e.target.value)}
+              placeholder="gpt-4o-mini"
+              className="input-field w-72 text-xs font-mono"
+            />
+          </SettingRow>
+
+          <div className="flex justify-end pt-1">
+            <button
+              onClick={handleSaveAI}
+              disabled={savingAI || !aiApiKey.trim()}
+              className="btn-primary flex items-center gap-2 text-xs"
+            >
+              <Sparkles size={14} /> {savingAI ? 'Saving...' : 'Save AI Config'}
+            </button>
+          </div>
+
+          <p className="text-[10px] text-cascade-sage leading-relaxed">
+            Without an API key, the AI Copilot uses a built-in rule-based engine that provides analysis
+            in English and Persian. Connect an LLM for deeper, more nuanced insights.
+            Your API key is stored locally and never sent to our servers.
+          </p>
+        </div>
+      </SettingsCard>
+
       {/* About */}
       <SettingsCard icon={Monitor} iconBg="bg-cascade-mist" iconColor="text-cascade-sage" title="About" desc="Application information">
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between"><span className="text-cascade-sage">Version</span><span className="font-medium">0.1.0-beta</span></div>
-          <div className="flex justify-between"><span className="text-cascade-sage">Engine</span><span className="font-medium">17 Financial Ratios</span></div>
+          <div className="flex justify-between"><span className="text-cascade-sage">Version</span><span className="font-medium">0.3.0</span></div>
+          <div className="flex justify-between"><span className="text-cascade-sage">Engine</span><span className="font-medium">17 Ratios + 5 Prediction Models + AI</span></div>
           <div className="flex justify-between"><span className="text-cascade-sage">License</span><span className="font-medium">{isPro ? (license?.tier?.toUpperCase() || 'PRO') : 'Free Tier'}</span></div>
           <div className="flex justify-between"><span className="text-cascade-sage">Data</span><span className="font-medium">Local Only</span></div>
         </div>

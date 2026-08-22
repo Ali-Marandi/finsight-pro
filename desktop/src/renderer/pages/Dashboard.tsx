@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
-import { BarChart3, FileText, TrendingUp, Clock, Shield, Zap, Globe } from 'lucide-react';
+import { BarChart3, FileText, TrendingUp, Clock, Shield, Zap, Globe, Sparkles, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../lib/utils';
 import { uploadAndAnalyze, getAnalysisHistory } from '../lib/api';
@@ -68,7 +68,7 @@ export default function Dashboard() {
       </div>
 
       {/* Feature Highlights */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <div className="card py-3 px-4 flex items-center gap-3">
           <Shield size={16} className="text-cascade-gold shrink-0" />
           <span className="text-xs text-cascade-sage">100% Offline & Private</span>
@@ -81,6 +81,14 @@ export default function Dashboard() {
           <Globe size={16} className="text-cascade-gold shrink-0" />
           <span className="text-xs text-cascade-sage">Multi-Format Support</span>
         </div>
+        <Link to="/ai-copilot" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-cascade-gold/5 to-transparent">
+          <Sparkles size={16} className="text-cascade-gold shrink-0" />
+          <span className="text-xs text-cascade-gold font-medium">AI Copilot</span>
+        </Link>
+        <Link to="/prediction" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-red-50 to-transparent">
+          <Activity size={16} className="text-red-400 shrink-0" />
+          <span className="text-xs text-red-500 font-medium">Bankruptcy Prediction</span>
+        </Link>
       </div>
 
       {/* Quick Stats */}
@@ -100,18 +108,18 @@ export default function Dashboard() {
           label="Financial Ratios"
         />
         <StatCard
-          icon={FileText}
-          iconBg="bg-semantic-info/10"
-          iconColor="text-semantic-info"
-          value="3"
-          label="Export Formats"
+          icon={Sparkles}
+          iconBg="bg-cascade-gold/10"
+          iconColor="text-cascade-gold"
+          value="AI"
+          label="Financial Copilot"
         />
         <StatCard
-          icon={Clock}
-          iconBg="bg-semantic-warning/10"
-          iconColor="text-semantic-warning"
-          value="<2s"
-          label="Analysis Time"
+          icon={Activity}
+          iconBg="bg-red-50"
+          iconColor="text-red-400"
+          value="5"
+          label="Prediction Models"
         />
       </div>
 
