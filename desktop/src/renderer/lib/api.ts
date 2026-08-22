@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceReviewResult } from '../../types';
 
 let apiClient: ReturnType<typeof axios.create> | null = null;
 
@@ -20,6 +20,43 @@ export async function getApiClient(): Promise<ReturnType<typeof axios.create>> {
     });
   }
   return apiClient;
+}
+
+async function buildUploadFormData(filePath: string, mappingOverrides?: Record<string, string | null>): Promise<FormData> {
+  let blob: Blob;
+  let fileName: string;
+
+  if (window.electronAPI) {
+    const fileInfo = await window.electronAPI.readFileBuffer(filePath);
+    const buffer = Uint8Array.from(atob(fileInfo.buffer), (c) => c.charCodeAt(0));
+    blob = new Blob([buffer], { type: fileInfo.mimeType });
+    fileName = fileInfo.name;
+  } else {
+    const response = await fetch(filePath);
+    blob = await response.blob();
+    fileName = filePath.split(/[\\/]/).pop() || 'statement.csv';
+  }
+
+  const formData = new FormData();
+  formData.append('file', blob, fileName);
+  if (mappingOverrides) formData.append('mapping_overrides', JSON.stringify(mappingOverrides));
+  return formData;
+}
+
+export async function inspectEvidence(
+  filePath: string,
+  mappingOverrides?: Record<string, string | null>,
+): Promise<ApiResponse<EvidenceReviewResult>> {
+  try {
+    const client = await getApiClient();
+    const formData = await buildUploadFormData(filePath, mappingOverrides);
+    const { data } = await client.post('/evidence/inspect', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return { data };
+  } catch (error: any) {
+    return { error: { code: 'EVIDENCE_INSPECTION_FAILED', message: error.response?.data?.detail || error.message || 'Evidence inspection failed', details: null } };
+  }
 }
 
 export async function uploadAndAnalyze(filePath: string): Promise<ApiResponse<AnalysisResult>> {

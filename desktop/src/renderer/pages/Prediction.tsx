@@ -16,7 +16,7 @@ interface ModelResult {
 }
 
 interface PredictionResponse {
-  overall_assessment: string;
+  overall_assessment: 'safe' | 'grey' | 'distress';
   overall_text: string;
   consensus_probability: number;
   zone_votes: { safe: number; grey: number; distress: number };

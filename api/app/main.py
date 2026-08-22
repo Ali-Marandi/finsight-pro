@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.models.database import engine, Base, init_db
-from app.routers import analysis, reports, license as license_router, settings, ai_copilot, prediction
+from app.routers import analysis, evidence, reports, license as license_router, settings, ai_copilot, prediction
 
 
 @asynccontextmanager
@@ -31,6 +31,7 @@ app.add_middleware(
 )
 
 app.include_router(analysis.router, prefix="/api/v1/analysis", tags=["Analysis"])
+app.include_router(evidence.router, prefix="/api/v1/evidence", tags=["Evidence Review"])
 app.include_router(reports.router, prefix="/api/v1/reports", tags=["Reports"])
 app.include_router(license_router.router, prefix="/api/v1/license", tags=["License"])
 app.include_router(settings.router, prefix="/api/v1/settings", tags=["Settings"])

@@ -2,18 +2,22 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import FileUpload from '../components/FileUpload';
+import EvidenceReview from '../components/EvidenceReview';
 import RatioCard from '../components/RatioCard';
 import RatioChart from '../components/RatioChart';
 import Spinner from '../components/Spinner';
 import { Download, FileText } from 'lucide-react';
-import { uploadAndAnalyze, getAnalysisById, saveReport } from '../lib/api';
+import { uploadAndAnalyze, inspectEvidence, getAnalysisById, saveReport } from '../lib/api';
 import { useToast } from '../components/Toast';
-import type { AnalysisResult, AnalysisHistoryItem } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, EvidenceReviewResult } from '../../types';
 
 export default function Analysis() {
   const { id } = useParams();
   const { currentAnalysis, setCurrentAnalysis, isLoading, setIsLoading } = useAnalysisStore();
   const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [evidence, setEvidence] = useState<EvidenceReviewResult | null>(null);
+  const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
+  const [isReviewingEvidence, setIsReviewingEvidence] = useState(false);
   const { toast } = useToast();
 
   // Load analysis by ID if navigating from history
@@ -35,12 +39,13 @@ export default function Analysis() {
     }
   };
 
-  const handleFileSelected = async (filePath: string) => {
+  const runAnalysis = async (filePath: string) => {
     setIsLoading(true);
     try {
       const result = await uploadAndAnalyze(filePath);
       if (result.data) {
         setCurrentAnalysis(result.data);
+        setEvidence(null);
         const historyItem: AnalysisHistoryItem = {
           analysisId: result.data.analysisId,
           companyName: result.data.companyName,
@@ -60,6 +65,38 @@ export default function Analysis() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleFileSelected = async (filePath: string) => {
+    setIsLoading(true);
+    try {
+      const result = await inspectEvidence(filePath);
+      if (result.data) {
+        setSelectedFilePath(filePath);
+        setEvidence(result.data);
+      } else if (result.error) {
+        toast('error', result.error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConfirmMappings = async (overrides: Record<string, string | null>) => {
+    if (!selectedFilePath) return;
+    setIsReviewingEvidence(true);
+    const result = await inspectEvidence(selectedFilePath, overrides);
+    if (result.data) {
+      setEvidence(result.data);
+    } else if (result.error) {
+      toast('error', result.error.message);
+    }
+    setIsReviewingEvidence(false);
+  };
+
+  const resetEvidence = () => {
+    setEvidence(null);
+    setSelectedFilePath(null);
   };
 
   const handleExport = async (format: 'pdf' | 'xlsx' | 'html') => {
@@ -124,9 +161,19 @@ export default function Analysis() {
       </div>
 
       {!currentAnalysis ? (
-        <div className="max-w-2xl mx-auto">
-          <FileUpload onFileSelected={handleFileSelected} isLoading={isLoading} />
-        </div>
+        evidence ? (
+          <EvidenceReview
+            evidence={evidence}
+            isRefreshing={isReviewingEvidence}
+            onConfirmMappings={handleConfirmMappings}
+            onContinue={() => selectedFilePath && runAnalysis(selectedFilePath)}
+            onStartOver={resetEvidence}
+          />
+        ) : (
+          <div className="max-w-2xl mx-auto">
+            <FileUpload onFileSelected={handleFileSelected} isLoading={isLoading} />
+          </div>
+        )
       ) : (
         <>
           {/* Score Overview */}

@@ -65,3 +65,39 @@ export interface ChatMessage {
   sources?: string[];
   modelUsed?: string;
 }
+
+export type EvidenceSeverity = 'info' | 'warning' | 'blocking';
+export type EvidenceMappingStatus = 'confirmed' | 'suggested' | 'needs_review';
+
+export interface EvidenceMapping {
+  source_column: string;
+  concept_id: string | null;
+  confidence: number;
+  rationale: string;
+  status: EvidenceMappingStatus;
+}
+
+export interface EvidenceIssue {
+  rule_id: string;
+  severity: EvidenceSeverity;
+  status: 'pass' | 'fail' | 'not_applicable';
+  message: string;
+  remediation: string;
+}
+
+export interface EvidenceReviewResult {
+  manifest: {
+    file_name: string;
+    file_hash: string;
+    source_type: string;
+    sheet_name: string;
+    imported_at: string;
+    detected_locale: string | null;
+    row_count: number;
+    column_count: number;
+  };
+  mappings: EvidenceMapping[];
+  health: Record<EvidenceSeverity, number>;
+  ready_for_analysis: boolean;
+  issues: EvidenceIssue[];
+}
