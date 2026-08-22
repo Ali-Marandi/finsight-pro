@@ -58,8 +58,6 @@ nsis:
 
 portable:
   artifactName: FinSight-Pro-Portable-${version}-x64.exe
-  # Request execution level for portable too
-  requestExecutionLevel: asInvoker
 
 # Files copied alongside the app (outside asar)
 # The FastAPI backend is bundled as an extra resource
