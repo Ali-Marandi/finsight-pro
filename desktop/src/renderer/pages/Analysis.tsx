@@ -3,19 +3,20 @@ import { useParams } from 'react-router-dom';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import FileUpload from '../components/FileUpload';
 import EvidenceReview from '../components/EvidenceReview';
+import TaxAuditEvidenceReview from '../components/TaxAuditEvidenceReview';
 import RatioCard from '../components/RatioCard';
 import RatioChart from '../components/RatioChart';
 import Spinner from '../components/Spinner';
 import { Download, FileText } from 'lucide-react';
 import { uploadAndAnalyze, inspectEvidence, getAnalysisById, saveReport } from '../lib/api';
 import { useToast } from '../components/Toast';
-import type { AnalysisResult, AnalysisHistoryItem, EvidenceReviewResult } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, EvidenceInspectionResult } from '../../types';
 
 export default function Analysis() {
   const { id } = useParams();
   const { currentAnalysis, setCurrentAnalysis, isLoading, setIsLoading } = useAnalysisStore();
   const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [evidence, setEvidence] = useState<EvidenceReviewResult | null>(null);
+  const [evidence, setEvidence] = useState<EvidenceInspectionResult | null>(null);
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
   const [isReviewingEvidence, setIsReviewingEvidence] = useState(false);
   const { toast } = useToast();
@@ -83,7 +84,7 @@ export default function Analysis() {
   };
 
   const handleConfirmMappings = async (overrides: Record<string, string | null>) => {
-    if (!selectedFilePath) return;
+    if (!selectedFilePath || evidence?.kind !== 'financial_statement') return;
     setIsReviewingEvidence(true);
     const result = await inspectEvidence(selectedFilePath, overrides);
     if (result.data) {
@@ -162,13 +163,21 @@ export default function Analysis() {
 
       {!currentAnalysis ? (
         evidence ? (
-          <EvidenceReview
-            evidence={evidence}
-            isRefreshing={isReviewingEvidence}
-            onConfirmMappings={handleConfirmMappings}
-            onContinue={() => selectedFilePath && runAnalysis(selectedFilePath)}
-            onStartOver={resetEvidence}
-          />
+          evidence.kind === 'tax_audit_pdf' ? (
+            <TaxAuditEvidenceReview
+              evidence={evidence}
+              onContinue={() => selectedFilePath && runAnalysis(selectedFilePath)}
+              onStartOver={resetEvidence}
+            />
+          ) : (
+            <EvidenceReview
+              evidence={evidence}
+              isRefreshing={isReviewingEvidence}
+              onConfirmMappings={handleConfirmMappings}
+              onContinue={() => selectedFilePath && runAnalysis(selectedFilePath)}
+              onStartOver={resetEvidence}
+            />
+          )
         ) : (
           <div className="max-w-2xl mx-auto">
             <FileUpload onFileSelected={handleFileSelected} isLoading={isLoading} />

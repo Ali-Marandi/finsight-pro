@@ -3,15 +3,10 @@ import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import { BarChart3, FileText, TrendingUp, Clock, Shield, Zap, Globe, Sparkles, Activity, FileSearch, ShieldCheck, Merge } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../lib/utils';
-import { uploadAndAnalyze, getAnalysisHistory } from '../lib/api';
-import { useToast } from '../components/Toast';
-import FileUpload from '../components/FileUpload';
-import Spinner from '../components/Spinner';
-import type { AnalysisResult, AnalysisHistoryItem } from '../../types';
+import { getAnalysisHistory } from '../lib/api';
 
 export default function Dashboard() {
-  const { analyses, setAnalyses, isLoading, setIsLoading, setCurrentAnalysis } = useAnalysisStore();
-  const { toast } = useToast();
+  const { analyses, setAnalyses } = useAnalysisStore();
 
   // Load history on mount
   useEffect(() => {
@@ -26,34 +21,6 @@ export default function Dashboard() {
       }
     } catch {
       // Demo data already loaded by Layout
-    }
-  };
-
-  const handleFileSelected = async (filePath: string) => {
-    setIsLoading(true);
-    try {
-      const result = await uploadAndAnalyze(filePath);
-      if (result.data) {
-        setCurrentAnalysis(result.data);
-        // Add to history
-        const historyItem: AnalysisHistoryItem = {
-          analysisId: result.data.analysisId,
-          companyName: result.data.companyName,
-          period: result.data.period,
-          fileName: result.data.fileName,
-          createdAt: result.data.createdAt,
-          summary: computeSummary(result.data.ratios),
-        };
-        const { analyses: current } = useAnalysisStore.getState();
-        setAnalyses([historyItem, ...current]);
-        toast('success', `Analysis complete: ${result.data.companyName}`);
-      } else if (result.error) {
-        toast('error', result.error.message);
-      }
-    } catch (err: any) {
-      toast('error', `Analysis failed: ${err.message || 'Unknown error'}`);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -143,17 +110,16 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Upload Section */}
+      {/* Evidence-first entry point */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">Quick Analysis</h2>
-        {isLoading ? (
-          <div className="card py-16">
-            <Spinner size={32} />
-            <p className="text-sm text-cascade-sage mt-4">Analyzing your financial statement...</p>
-          </div>
-        ) : (
-          <FileUpload onFileSelected={handleFileSelected} isLoading={isLoading} />
-        )}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div><h2 className="text-lg font-semibold">Evidence Compiler</h2><p className="mt-1 text-sm text-cascade-sage">Inspect evidence, resolve findings, then continue to financial analysis.</p></div>
+          <Link to="/analysis" className="btn-primary">Start evidence review</Link>
+        </div>
+        <div className="card flex flex-col gap-4 border-cascade-gold/30 bg-cascade-gold/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3"><Shield size={20} className="mt-0.5 shrink-0 text-cascade-gold" /><p className="text-sm text-cascade-sage">PDF tax-audit reports now pass through cited fact extraction and evidence-health checks. CSV and Excel files pass through mapping review before ratio analysis.</p></div>
+          <Link to="/analysis" className="whitespace-nowrap text-sm font-semibold text-cascade-gold hover:text-cascade-gold-hover">Open review →</Link>
+        </div>
       </div>
 
       {/* Recent Analyses */}
@@ -224,20 +190,4 @@ function StatCard({ icon: Icon, iconBg, iconColor, value, label }: {
 function MiniScore({ value }: { label: string; value: number }) {
   const color = value >= 70 ? 'text-semantic-success' : value >= 50 ? 'text-semantic-warning' : 'text-semantic-danger';
   return <span className={`text-sm font-bold ${color}`}>{value}%</span>;
-}
-
-function computeSummary(ratios: AnalysisResult['ratios']): AnalysisHistoryItem['summary'] {
-  const byCategory = { profitability: [] as number[], liquidity: [] as number[], leverage: [] as number[], efficiency: [] as number[] };
-  for (const r of ratios) {
-    if (byCategory[r.category]) {
-      byCategory[r.category].push(r.status === 'good' ? 100 : r.status === 'warning' ? 60 : 30);
-    }
-  }
-  const avg = (arr: number[]) => arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
-  return {
-    profitability: avg(byCategory.profitability),
-    liquidity: avg(byCategory.liquidity),
-    leverage: avg(byCategory.leverage),
-    efficiency: avg(byCategory.efficiency),
-  };
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceReviewResult, DocumentExtractResult, BenchmarkResult, ComplianceReport, ConsolidatedCompany, ConsolidationResult, TSETMCStockData, TSETMCOverview } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceInspectionResult, DocumentExtractResult, BenchmarkResult, ComplianceReport, ConsolidatedCompany, ConsolidationResult, TSETMCStockData, TSETMCOverview } from '../../types';
 
 let apiClient: ReturnType<typeof axios.create> | null = null;
 
@@ -46,7 +46,7 @@ async function buildUploadFormData(filePath: string, mappingOverrides?: Record<s
 export async function inspectEvidence(
   filePath: string,
   mappingOverrides?: Record<string, string | null>,
-): Promise<ApiResponse<EvidenceReviewResult>> {
+): Promise<ApiResponse<EvidenceInspectionResult>> {
   try {
     const client = await getApiClient();
     const formData = await buildUploadFormData(filePath, mappingOverrides);

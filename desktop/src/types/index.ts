@@ -77,25 +77,39 @@ export interface EvidenceMapping {
   status: EvidenceMappingStatus;
 }
 
+export interface EvidenceLocation {
+  file_name: string;
+  sheet_name: string;
+  column_name: string;
+  row_number: number | null;
+  page_number: number | null;
+  table_index: number | null;
+  cell_reference: string | null;
+}
+
 export interface EvidenceIssue {
   rule_id: string;
   severity: EvidenceSeverity;
   status: 'pass' | 'fail' | 'not_applicable';
   message: string;
   remediation: string;
+  evidence_locations?: EvidenceLocation[];
+}
+
+export interface EvidenceManifest {
+  file_name: string;
+  file_hash: string;
+  source_type: string;
+  sheet_name: string;
+  imported_at: string;
+  detected_locale: string | null;
+  row_count: number;
+  column_count: number;
 }
 
 export interface EvidenceReviewResult {
-  manifest: {
-    file_name: string;
-    file_hash: string;
-    source_type: string;
-    sheet_name: string;
-    imported_at: string;
-    detected_locale: string | null;
-    row_count: number;
-    column_count: number;
-  };
+  kind: 'financial_statement';
+  manifest: EvidenceManifest;
   mappings: EvidenceMapping[];
   health: Record<EvidenceSeverity, number>;
   ready_for_analysis: boolean;
@@ -231,3 +245,23 @@ export interface TSETMCOverview {
   status: string;
   error: string | null;
 }
+
+export interface TaxAuditFact {
+  concept_id: string;
+  value: number;
+  period: string;
+  currency: string | null;
+  scale: string | null;
+  locations: EvidenceLocation[];
+}
+
+export interface TaxAuditEvidenceResult {
+  kind: 'tax_audit_pdf';
+  manifest: EvidenceManifest;
+  extraction_mode: string;
+  ready_for_review: boolean;
+  facts: TaxAuditFact[];
+  issues: EvidenceIssue[];
+}
+
+export type EvidenceInspectionResult = EvidenceReviewResult | TaxAuditEvidenceResult;
