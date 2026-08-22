@@ -13,13 +13,13 @@ async def upload_and_analyze(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ):
-    """Upload a CSV/XLSX financial statement and run full analysis."""
+    """Upload a CSV/XLSX/PDF financial statement and run full analysis."""
     if not file.filename:
         raise HTTPException(status_code=400, detail="No filename provided")
     
     ext = file.filename.split(".")[-1].lower()
-    if ext not in ("csv", "xlsx", "xls"):
-        raise HTTPException(status_code=400, detail="Unsupported file format")
+    if ext not in ("csv", "xlsx", "xls", "pdf"):
+        raise HTTPException(status_code=400, detail="Unsupported file format. Use CSV, XLSX, XLS, or PDF.")
     
     content = await file.read()
     

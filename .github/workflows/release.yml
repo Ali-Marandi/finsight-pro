@@ -141,18 +141,22 @@ jobs:
             3. Place anywhere on your system
 
             ### What's Included
+            - **AI Financial Copilot** — Chat with your financial data in English & Persian
+            - **5 Bankruptcy Prediction Models** — Altman Z-Score, Springate, Ohlson O-Score, Grover
             - **17+ financial ratios** across 4 categories (Profitability, Liquidity, Leverage, Efficiency)
             - **Interactive charts** — Bar and Radar visualizations
             - **Status classification** — Good / Warning / Critical with color coding
             - **Industry benchmarks** — Compare against standard thresholds
             - **PDF & Excel export** — Professional reports with Cascade design
-            - **Drag-and-drop upload** — CSV, XLS, XLSX support
+            - **PDF import** — Extract financial data from PDF statements
+            - **Drag-and-drop upload** — CSV, XLS, XLSX, PDF support
             - **Custom Windows titlebar** — Frameless modern UI
             - **Toast notifications** — Real-time feedback
             - **API status monitor** — Live backend health indicator
             - **Demo data** — 3 pre-loaded sample analyses
             - **Multi-language** — English, فارسی, العربية
             - **100% offline & private** — Your data never leaves your machine
+            - **Connect any LLM** — OpenAI, DeepSeek, Ollama, OpenRouter
 
             ### Tech Stack
             - Electron 32 · React 18 · TypeScript · Tailwind CSS

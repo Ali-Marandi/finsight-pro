@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinSight Pro - Professional Financial Statement Analysis</title>
-    <meta name="description" content="Transform financial statements into actionable insights. 15+ ratios, interactive charts, and professional reports - all on your desktop.">
+    <title>FinSight Pro - AI-Powered Financial Analysis & Bankruptcy Prediction</title>
+    <meta name="description" content="First AI-powered financial analysis tool with bankruptcy prediction. Chat with your data in English & Persian. 17 ratios, 5 prediction models, offline & private.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -219,8 +219,34 @@
         .fi-amber { background: rgba(217,119,6,0.1); }
         .fi-red { background: rgba(220,38,38,0.1); }
         .fi-charcoal { background: rgba(26,26,25,0.1); }
+        .fi-purple { background: rgba(139,92,246,0.1); }
         .feature-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
         .feature-card p { font-size: 14px; color: var(--sage); line-height: 1.7; }
+
+        /* ===== AI SECTION ===== */
+        .ai-section {
+            padding: 120px 24px;
+            background: linear-gradient(135deg, var(--charcoal) 0%, #2a2520 50%, var(--olive) 100%);
+            color: #fff;
+        }
+        .ai-section-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .ai-section .section-label { color: var(--gold); }
+        .ai-section .section-title { color: #fff; }
+        .ai-section .section-desc { color: rgba(255,255,255,0.5); }
+        .ai-chat-demo { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; }
+        .ai-msg { padding: 12px 16px; border-radius: 12px; margin-bottom: 12px; font-size: 13px; line-height: 1.6; }
+        .ai-msg-user { background: var(--gold); color: #fff; margin-left: 40px; border-bottom-right-radius: 4px; }
+        .ai-msg-ai { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); margin-right: 40px; border-bottom-left-radius: 4px; }
+        .ai-msg-ai strong { color: var(--gold); }
+        .ai-features-list { list-style: none; margin-top: 32px; }
+        .ai-features-list li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 12px; }
+        .ai-features-list li:last-child { border-bottom: none; }
+        .ai-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+        .predict-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 32px; }
+        .predict-model { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 12px; text-align: center; transition: border-color 0.3s; }
+        .predict-model:hover { border-color: var(--gold); }
+        .predict-model .pm-name { font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .predict-model .pm-year { font-size: 10px; color: rgba(255,255,255,0.35); }
 
         /* ===== RATIOS SHOWCASE ===== */
         .ratios { padding: 100px 24px; background: var(--charcoal); color: #fff; }
@@ -462,37 +488,118 @@
 <section class="features" id="features">
     <div class="section-label">Features</div>
     <h2 class="section-title">Everything you need to analyze financials</h2>
-    <p class="section-desc">Built for financial analysts, accountants, and business owners who need fast, reliable insights without complex software.</p>
+    <p class="section-desc">The first AI-powered financial analysis tool. Chat with your data, predict bankruptcy risk, and get actionable insights.</p>
     <div class="features-grid">
         <div class="feature-card">
-            <div class="feature-icon fi-gold">📊</div>
-            <h3>15+ Financial Ratios</h3>
-            <p>Profitability, liquidity, leverage, and efficiency ratios calculated instantly from your income statement and balance sheet data.</p>
+            <div class="feature-icon fi-gold">✨</div>
+            <h3>AI Financial Copilot</h3>
+            <p>Chat with your financial data in English or Persian. Get instant insights, explanations, and recommendations. Works offline with built-in engine.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-red">⚠️</div>
+            <h3>Bankruptcy Prediction</h3>
+            <p>5 scientific models including Altman Z-Score, Springate, and Ohlson O-Score predict financial distress probability with consensus scoring.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-blue">📊</div>
+            <h3>17 Financial Ratios</h3>
+            <p>Profitability, liquidity, leverage, and efficiency ratios calculated instantly from income statement and balance sheet data.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon fi-green">📈</div>
             <h3>Interactive Charts</h3>
-            <p>Bar charts, radar plots, and trend lines that update in real-time. Hover for details, click to drill down into specific metrics.</p>
+            <p>Bar charts, radar plots, probability gauges, and trend lines that update in real-time. Hover for details, click to drill down.</p>
         </div>
         <div class="feature-card">
-            <div class="feature-icon fi-blue">📄</div>
-            <h3>Professional Reports</h3>
-            <p>Generate publication-ready PDF reports with your branding. One-click export to Excel, HTML, or PDF format.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon fi-amber">📁</div>
-            <h3>Multi-Format Import</h3>
-            <p>Drop CSV or Excel files directly. Auto-detects column structures and maps data to the correct financial statement fields.</p>
+            <div class="feature-icon fi-purple">📄</div>
+            <h3>PDF Import & Export</h3>
+            <p>Drop PDF, CSV or Excel files. Auto-extracts financial data from tables. One-click export to professional PDF reports.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon fi-charcoal">🔒</div>
             <h3>100% Offline & Private</h3>
-            <p>All processing happens locally on your machine. No data leaves your computer. Perfect for sensitive financial information.</p>
+            <p>All processing happens locally. No data leaves your machine. Connect your own LLM optionally for enhanced AI analysis.</p>
         </div>
         <div class="feature-card">
-            <div class="feature-icon fi-red">🎯</div>
+            <div class="feature-icon fi-amber">🌐</div>
+            <h3>Multi-Language</h3>
+            <p>Full English, Persian (فارسی), and Arabic (العربية) support. AI Copilot responds in your language of choice.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-green">🎯</div>
             <h3>Industry Benchmarks</h3>
-            <p>Compare your ratios against industry medians. Color-coded status indicators show where you stand instantly.</p>
+            <p>Compare ratios against standard thresholds. Color-coded status: green for good, amber for warning, red for critical.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon fi-blue">🔌</div>
+            <h3>Connect Any LLM</h3>
+            <p>OpenAI, DeepSeek, Ollama, OpenRouter, or any OpenAI-compatible API. Your key, your model, your control.</p>
+        </div>
+    </div>
+</section>
+
+<!-- AI Copilot + Prediction Showcase -->
+<section class="ai-section" id="ai-copilot">
+    <div class="ai-section-inner">
+        <div>
+            <div class="section-label">AI-Powered Analysis</div>
+            <h2 class="section-title">Chat with Your<br>Financial Data</h2>
+            <p class="section-desc">The first financial analysis tool with an AI copilot that speaks your language. Ask questions, get insights, predict risks.</p>
+            <ul class="ai-features-list">
+                <li><span class="ai-dot"></span> Built-in rule-based engine (no API key needed)</li>
+                <li><span class="ai-dot"></span> English & Persian (فارسی) response support</li>
+                <li><span class="ai-dot"></span> Context-aware: analyzes your uploaded statements</li>
+                <li><span class="ai-dot"></span> Connect OpenAI, DeepSeek, Ollama, or any LLM</li>
+                <li><span class="ai-dot"></span> Suggested questions for quick analysis</li>
+            </ul>
+            <div style="margin-top:40px">
+                <div class="section-label" style="color:var(--gold)">5 Prediction Models</div>
+                <div class="predict-grid">
+                    <div class="predict-model">
+                        <div class="pm-name">Altman Z</div>
+                        <div class="pm-year">1968</div>
+                    </div>
+                    <div class="predict-model">
+                        <div class="pm-name">Altman Z'</div>
+                        <div class="pm-year">1983</div>
+                    </div>
+                    <div class="predict-model">
+                        <div class="pm-name">Springate</div>
+                        <div class="pm-year">1978</div>
+                    </div>
+                    <div class="predict-model">
+                        <div class="pm-name">Ohlson</div>
+                        <div class="pm-year">1980</div>
+                    </div>
+                    <div class="predict-model">
+                        <div class="pm-name">Grover</div>
+                        <div class="pm-year">Altman-derived</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ai-chat-demo">
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:16px;display:flex;align-items:center;gap:6px">
+                <span style="width:8px;height:8px;border-radius:50%;background:var(--gold)"></span> AI Financial Copilot
+            </div>
+            <div class="ai-msg ai-msg-user">What's the overall financial health?</div>
+            <div class="ai-msg ai-msg-ai">
+                <strong>Financial Health Summary: Acme Corp (FY 2024)</strong><br><br>
+                <strong>Profitability:</strong> 78/100 — 4/5 ratios in good range<br>
+                <strong>Liquidity:</strong> 85/100 — Strong cash position<br>
+                <strong>Leverage:</strong> 62/100 — Debt-to-Assets at 65% (warning)<br>
+                <strong>Efficiency:</strong> 71/100 — Inventory turnover above benchmark<br><br>
+                <strong>Overall Score: 74%</strong> — Healthy with leverage concerns
+            </div>
+            <div class="ai-msg ai-msg-user">What's the bankruptcy risk?</div>
+            <div class="ai-msg ai-msg-ai">
+                Running 5 prediction models...<br><br>
+                <strong>Consensus Distress Probability: 18.4%</strong><br>
+                Altman Z-Score: <strong>3.21</strong> (Safe) | Springate: <strong>1.12</strong> (Safe)<br>
+                Ohlson O-Score: <strong>12.2%</strong> prob | 4/5 models: SAFE zone<br><br>
+                Recommendation: Company shows strong financial stability.<br>
+                Monitor debt-to-assets ratio (currently 65%, benchmark 50%).
+            </div>
         </div>
     </div>
 </section>
@@ -556,13 +663,13 @@
             <div class="pricing-price">$0 <span>/ forever</span></div>
             <div class="pricing-desc">Open-source command-line tool for quick analysis</div>
             <ul class="pricing-features">
-                <li><span class="check">✓</span> All 15+ financial ratios</li>
-                <li><span class="check">✓</span> CSV & XLSX import</li>
+                <li><span class="check">✓</span> All 17 financial ratios</li>
+                <li><span class="check">✓</span> CSV, XLSX & PDF import</li>
                 <li><span class="check">✓</span> HTML report output</li>
                 <li><span class="check">✓</span> Matplotlib charts</li>
+                <li class="disabled"><span class="check">✗</span> AI Financial Copilot</li>
+                <li class="disabled"><span class="check">✗</span> Bankruptcy Prediction</li>
                 <li class="disabled"><span class="check">✗</span> Interactive GUI</li>
-                <li class="disabled"><span class="check">✗</span> PDF report generation</li>
-                <li class="disabled"><span class="check">✗</span> Industry benchmarks</li>
             </ul>
             <a href="https://github.com/Ali-Marandi/finsight-pro" class="btn btn-secondary btn-full" target="_blank">Get on GitHub</a>
         </div>
@@ -573,11 +680,11 @@
             <ul class="pricing-features">
                 <li><span class="check">✓</span> Everything in Free</li>
                 <li><span class="check">✓</span> Beautiful desktop GUI</li>
-                <li><span class="check">✓</span> Interactive charts & dashboards</li>
+                <li><span class="check">✓</span> AI Financial Copilot (built-in)</li>
+                <li><span class="check">✓</span> 5 Bankruptcy Prediction Models</li>
                 <li><span class="check">✓</span> PDF & XLSX report export</li>
                 <li><span class="check">✓</span> Industry benchmarks</li>
-                <li><span class="check">✓</span> Analysis history & comparison</li>
-                <li><span class="check">✓</span> Batch processing (10 files)</li>
+                <li><span class="check">✓</span> LLM integration (your key)</li>
             </ul>
             <a href="#waitlist" class="btn btn-primary btn-full">Join Waitlist</a>
         </div>
@@ -681,7 +788,7 @@
         });
     }, observerOptions);
 
-    document.querySelectorAll('.feature-card, .ratio-cat, .pricing-card').forEach(el => {
+    document.querySelectorAll('.feature-card, .ratio-cat, .pricing-card, .ai-chat-demo, .predict-model').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
         el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
@@ -697,7 +804,7 @@
             }
         });
     }, observerOptions);
-    document.querySelectorAll('.feature-card, .ratio-cat, .pricing-card').forEach(el => {
+    document.querySelectorAll('.feature-card, .ratio-cat, .pricing-card, .ai-chat-demo, .predict-model').forEach(el => {
         animObserver.observe(el);
     });
 </script>

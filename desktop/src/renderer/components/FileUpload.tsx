@@ -31,6 +31,7 @@ export default function FileUpload({ onFileSelected, isLoading = false }: FileUp
       'text/csv': ['.csv'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
       'application/vnd.ms-excel': ['.xls'],
+      'application/pdf': ['.pdf'],
     },
     multiple: false,
   });
@@ -62,7 +63,7 @@ export default function FileUpload({ onFileSelected, isLoading = false }: FileUp
               {isDragActive ? 'Drop your file here' : 'Drag & drop a financial statement'}
             </p>
             <p className="text-sm text-cascade-sage mt-1">
-              or click to browse • CSV, XLS, XLSX
+              or click to browse • CSV, XLS, XLSX, PDF
             </p>
           </div>
         </div>

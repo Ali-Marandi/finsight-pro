@@ -24,64 +24,109 @@ def analyze_financial_statement(
 ) -> dict:
     """
     Parse a financial statement file and compute all financial ratios.
+    Supports CSV, XLSX, XLS, and PDF formats.
     
     Returns:
         dict with company_name, period, and ratios list
     """
-    # Parse file
-    if extension == "csv":
-        df = pd.read_csv(io.BytesIO(file_content))
-    elif extension in ("xlsx", "xls"):
-        df = pd.read_excel(io.BytesIO(file_content))
+    # Handle PDF extraction
+    if extension == "pdf":
+        from app.services.pdf_extractor import extract_financial_data_from_pdf
+        pdf_result = extract_financial_data_from_pdf(file_content)
+        fd = pdf_result["financial_data"]
+        
+        company_name = filename.replace(".pdf", "").replace("_", " ").title()
+        period = "Unknown"
+        
+        # Extract values from PDF result
+        revenue = float(fd.get("revenue", 0))
+        cogs = float(fd.get("cogs", 0))
+        gross_profit = float(fd.get("gross_profit", 0))
+        net_income = float(fd.get("net_income", 0))
+        ebit = float(fd.get("ebit", 0))
+        interest_expense = float(fd.get("interest_expense", 0))
+        tax_expense = float(fd.get("tax_expense", 0))
+        total_assets = float(fd.get("total_assets", 0))
+        total_equity = float(fd.get("total_equity", 0))
+        total_liabilities = float(fd.get("total_liabilities", 0))
+        current_assets = float(fd.get("current_assets", 0))
+        current_liabilities = float(fd.get("current_liabilities", 0))
+        inventory = float(fd.get("inventory", 0))
+        cash = float(fd.get("cash", 0))
+        accounts_receivable = float(fd.get("accounts_receivable", 0))
+        retained_earnings = fd.get("retained_earnings")
+        if retained_earnings is not None:
+            retained_earnings = float(retained_earnings)
+        
+        # Skip to ratio calculation
     else:
-        raise ValueError(f"Unsupported format: {extension}")
+        # Parse CSV/Excel file
+        if extension == "csv":
+            df = pd.read_csv(io.BytesIO(file_content))
+        elif extension in ("xlsx", "xls"):
+            df = pd.read_excel(io.BytesIO(file_content))
+        else:
+            raise ValueError(f"Unsupported format: {extension}")
+        
+        # Normalize column names
+        df.columns = [str(c).strip().lower().replace(" ", "_") for c in df.columns]
+        
+        # Try to detect company name and period from data
+        company_name = filename.replace(f".{extension}", "").replace("_", " ").title()
+        period = "Unknown"
+        
+        # Extract financial figures (flexible column matching)
+        def get_value(*possible_names, default=0.0) -> float:
+            for name in possible_names:
+                for col in df.columns:
+                    if name in col:
+                        val = df[col].iloc[0] if len(df) > 0 else 0
+                        try:
+                            return float(val)
+                        except (ValueError, TypeError):
+                            continue
+            return default
+        
+        # Core financial figures
+        revenue = get_value("revenue", "sales", "net_sales", "total_revenue")
+        cogs = get_value("cost_of_goods", "cogs", "cost_of_revenue")
+        gross_profit = get_value("gross_profit", "gross_margin")
+        if gross_profit == 0 and revenue > 0:
+            gross_profit = revenue - cogs
+        
+        net_income = get_value("net_income", "net_profit", "net_earnings")
+        ebit = get_value("ebit", "operating_income", "operating_profit")
+        interest_expense = get_value("interest_expense", "interest")
+        tax_expense = get_value("tax", "income_tax")
+        
+        total_assets = get_value("total_assets", "assets")
+        total_equity = get_value("total_equity", "shareholders_equity", "stockholders_equity")
+        total_liabilities = get_value("total_liabilities", "liabilities")
+        if total_liabilities == 0 and total_assets > 0 and total_equity > 0:
+            total_liabilities = total_assets - total_equity
+        
+        current_assets = get_value("current_assets")
+        current_liabilities = get_value("current_liabilities")
+        inventory = get_value("inventory", "inventories")
+        cash = get_value("cash", "cash_and_equivalents")
+        
+        accounts_receivable = get_value("accounts_receivable", "receivables")
+        average_inventory = get_value("average_inventory")
+        if average_inventory == 0:
+            average_inventory = inventory
+        retained_earnings = None
     
-    # Normalize column names
-    df.columns = [str(c).strip().lower().replace(" ", "_") for c in df.columns]
-    
-    # Try to detect company name and period from data
-    company_name = filename.replace(f".{extension}", "").replace("_", " ").title()
-    period = "Unknown"
-    
-    # Extract financial figures (flexible column matching)
-    def get_value(*possible_names, default=0.0) -> float:
-        for name in possible_names:
-            for col in df.columns:
-                if name in col:
-                    val = df[col].iloc[0] if len(df) > 0 else 0
-                    try:
-                        return float(val)
-                    except (ValueError, TypeError):
-                        continue
-        return default
-    
-    # Core financial figures
-    revenue = get_value("revenue", "sales", "net_sales", "total_revenue")
-    cogs = get_value("cost_of_goods", "cogs", "cost_of_revenue")
-    gross_profit = get_value("gross_profit", "gross_margin")
-    if gross_profit == 0 and revenue > 0:
+    # Derived calculations (common for both PDF and CSV/Excel)
+    if gross_profit == 0 and revenue > 0 and cogs > 0:
         gross_profit = revenue - cogs
-    
-    net_income = get_value("net_income", "net_profit", "net_earnings")
-    ebit = get_value("ebit", "operating_income", "operating_profit")
-    interest_expense = get_value("interest_expense", "interest")
-    tax_expense = get_value("tax", "income_tax")
-    
-    total_assets = get_value("total_assets", "assets")
-    total_equity = get_value("total_equity", "shareholders_equity", "stockholders_equity")
-    total_liabilities = get_value("total_liabilities", "liabilities")
     if total_liabilities == 0 and total_assets > 0 and total_equity > 0:
         total_liabilities = total_assets - total_equity
     
-    current_assets = get_value("current_assets")
-    current_liabilities = get_value("current_liabilities")
-    inventory = get_value("inventory", "inventories")
-    cash = get_value("cash", "cash_and_equivalents")
-    
-    accounts_receivable = get_value("accounts_receivable", "receivables")
-    average_inventory = get_value("average_inventory")
-    if average_inventory == 0:
+    # Default average_inventory for PDF path
+    if extension == "pdf":
         average_inventory = inventory
+        if tax_expense == 0:
+            tax_expense = 0
     
     # Calculate all ratios
     ratios = []
