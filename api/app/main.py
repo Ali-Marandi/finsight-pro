@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.models.database import engine, Base, init_db
-from app.routers import analysis, evidence, reports, license as license_router, settings, ai_copilot, prediction
+from app.routers import (
+    analysis, evidence, reports, license as license_router, settings,
+    ai_copilot, prediction,
+    document_intelligence, benchmarking, compliance as compliance_router,
+    consolidation, tsetmc,
+)
 
 
 @asynccontextmanager
@@ -37,8 +42,13 @@ app.include_router(license_router.router, prefix="/api/v1/license", tags=["Licen
 app.include_router(settings.router, prefix="/api/v1/settings", tags=["Settings"])
 app.include_router(ai_copilot.router, prefix="/api/v1/ai", tags=["AI Copilot"])
 app.include_router(prediction.router, prefix="/api/v1/prediction", tags=["Prediction"])
+app.include_router(document_intelligence.router, prefix="/api/v1/document-intelligence", tags=["Document Intelligence"])
+app.include_router(benchmarking.router, prefix="/api/v1/benchmarking", tags=["Benchmarking"])
+app.include_router(compliance_router.router, prefix="/api/v1/compliance", tags=["Compliance"])
+app.include_router(consolidation.router, prefix="/api/v1/consolidation", tags=["Consolidation"])
+app.include_router(tsetmc.router, prefix="/api/v1/tsetmc", tags=["TSETMC"])
 
 
 @app.get("/api/v1/health")
 async def health_check():
-    return {"status": "ok", "version": "0.3.0"}
+    return {"status": "ok", "version": "0.4.0"}

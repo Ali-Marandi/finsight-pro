@@ -270,8 +270,8 @@ export default function Settings() {
       {/* About */}
       <SettingsCard icon={Monitor} iconBg="bg-cascade-mist" iconColor="text-cascade-sage" title="About" desc="Application information">
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between"><span className="text-cascade-sage">Version</span><span className="font-medium">0.3.0</span></div>
-          <div className="flex justify-between"><span className="text-cascade-sage">Engine</span><span className="font-medium">17 Ratios + 5 Prediction Models + AI</span></div>
+          <div className="flex justify-between"><span className="text-cascade-sage">Version</span><span className="font-medium">0.4.0</span></div>
+          <div className="flex justify-between"><span className="text-cascade-sage">Engine</span><span className="font-medium">17 Ratios + 5 Models + 7 Engines</span></div>
           <div className="flex justify-between"><span className="text-cascade-sage">License</span><span className="font-medium">{isPro ? (license?.tier?.toUpperCase() || 'PRO') : 'Free Tier'}</span></div>
           <div className="flex justify-between"><span className="text-cascade-sage">Data</span><span className="font-medium">Local Only</span></div>
         </div>

@@ -143,13 +143,18 @@ jobs:
             ### What's Included
             - **AI Financial Copilot** — Chat with your financial data in English & Persian
             - **5 Bankruptcy Prediction Models** — Altman Z-Score, Springate, Ohlson O-Score, Grover
+            - **Document Intelligence** — OCR-based extraction from PDF, scanned docs & images (Persian + English)
+            - **Industry Benchmarking** — Compare against 8 industry profiles with percentile rankings
+            - **Compliance Engine** — Iranian Accounting Standards + IFRS automated checking
+            - **Consolidation Engine** — Multi-company financial statement consolidation
+            - **TSETMC Live Market** — Tehran Stock Exchange real-time data integration
             - **17+ financial ratios** across 4 categories (Profitability, Liquidity, Leverage, Efficiency)
             - **Interactive charts** — Bar and Radar visualizations
             - **Status classification** — Good / Warning / Critical with color coding
             - **Industry benchmarks** — Compare against standard thresholds
             - **PDF & Excel export** — Professional reports with Cascade design
             - **PDF import** — Extract financial data from PDF statements
-            - **Drag-and-drop upload** — CSV, XLS, XLSX, PDF support
+            - **Drag-and-drop upload** — CSV, XLS, XLSX, PDF, Image support
             - **Custom Windows titlebar** — Frameless modern UI
             - **Toast notifications** — Real-time feedback
             - **API status monitor** — Live backend health indicator

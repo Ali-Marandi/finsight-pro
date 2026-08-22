@@ -101,3 +101,133 @@ export interface EvidenceReviewResult {
   ready_for_analysis: boolean;
   issues: EvidenceIssue[];
 }
+
+// Document Intelligence
+export interface DocumentExtractResult {
+  financial_data: Record<string, number>;
+  extraction_method: 'native' | 'ocr' | 'structured' | 'text_parse' | 'failed';
+  confidence: number;
+  fields_found: number;
+  raw_text?: string;
+  filename?: string;
+  document_type?: string;
+  quality?: {
+    completeness: number;
+    fields_found: number;
+    critical_found: number;
+    critical_missing: string[];
+    warnings: string[];
+    quality_score: number;
+  };
+}
+
+// Benchmarking
+export interface BenchmarkComparison {
+  ratio_name: string;
+  company_value: number;
+  industry_median: number | null;
+  industry_p25: number | null;
+  industry_p75: number | null;
+  percentile: number | null;
+  rank: 'excellent' | 'above_average' | 'below_average' | 'poor' | 'no_benchmark';
+  deviation_pct: number | null;
+}
+
+export interface BenchmarkResult {
+  industry_id: string;
+  industry_name_en: string;
+  industry_name_fa: string;
+  overall_percentile: number;
+  overall_rank: string;
+  comparisons: BenchmarkComparison[];
+  ratios_benchmarked: number;
+  ratios_total: number;
+  recommendations: string[];
+}
+
+// Compliance
+export interface ComplianceCheckResult {
+  standard: string;
+  standard_fa: string;
+  check_id: string;
+  rule: string;
+  rule_fa: string;
+  severity: 'blocking' | 'warning' | 'info';
+  status: 'pass' | 'fail' | 'not_applicable';
+  message: string;
+  remediation?: string;
+}
+
+export interface ComplianceReport {
+  compliance_score: number;
+  total_checks: number;
+  passed: number;
+  failed: number;
+  not_applicable: number;
+  critical_issues: string[];
+  warnings: string[];
+  info_items: string[];
+  status: 'compliant' | 'needs_attention' | 'non_compliant';
+  results: ComplianceCheckResult[];
+  recommendations: { priority: string; title: string; title_fa: string; description: string }[];
+}
+
+// Consolidation
+export interface ConsolidatedCompany {
+  company_name: string;
+  ownership_pct: number;
+  financial_data: Record<string, number>;
+}
+
+export interface ConsolidationResult {
+  consolidated_financials: Record<string, number>;
+  eliminations: Record<string, number>;
+  ratios: RatioResult[];
+  contributions: {
+    company_name: string;
+    revenue: number;
+    net_income: number;
+    ownership_pct: number;
+    revenue_contribution: number;
+  }[];
+  company_count: number;
+}
+
+// TSETMC
+export interface TSETMCStock {
+  symbol: string;
+  instrument_id: string;
+  source: string;
+}
+
+export interface TSETMCStockData {
+  instrument_id: string;
+  available: boolean;
+  data: {
+    name?: string;
+    last_price?: number;
+    closing_price?: number;
+    open_price?: number;
+    high_price?: number;
+    low_price?: number;
+    volume?: number;
+    value?: number;
+    market_cap?: number;
+    yesterday_price?: number;
+    shares_outstanding?: number;
+    eps?: number;
+    pe_ratio?: number;
+    sector?: string;
+    change_pct?: number;
+    change_value?: number;
+    status?: string;
+  } | null;
+  error: string | null;
+}
+
+export interface TSETMCOverview {
+  indices: { name: string; value: number; change: number }[];
+  popular_stocks: { symbol: string; name_en: string; sector: string }[];
+  status: string;
+  error: string | null;
+}

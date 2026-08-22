@@ -8,6 +8,11 @@ import History from '../renderer/pages/History';
 import Settings from '../renderer/pages/Settings';
 import AICopilot from '../renderer/pages/AICopilot';
 import Prediction from '../renderer/pages/Prediction';
+import DocumentIntelligence from '../renderer/pages/DocumentIntelligence';
+import Benchmarking from '../renderer/pages/Benchmarking';
+import Compliance from '../renderer/pages/Compliance';
+import Consolidation from '../renderer/pages/Consolidation';
+import TSETMC from '../renderer/pages/TSETMC';
 
 export default function App() {
   return (
@@ -20,6 +25,11 @@ export default function App() {
             <Route path="/analysis/:id" element={<Analysis />} />
             <Route path="/ai-copilot" element={<AICopilot />} />
             <Route path="/prediction" element={<Prediction />} />
+            <Route path="/document-intelligence" element={<DocumentIntelligence />} />
+            <Route path="/benchmarking" element={<Benchmarking />} />
+            <Route path="/compliance" element={<Compliance />} />
+            <Route path="/consolidation" element={<Consolidation />} />
+            <Route path="/tsetmc" element={<TSETMC />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />

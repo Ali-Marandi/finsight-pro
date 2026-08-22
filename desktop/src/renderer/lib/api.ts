@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceReviewResult } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceReviewResult, DocumentExtractResult, BenchmarkResult, ComplianceReport, ConsolidatedCompany, ConsolidationResult, TSETMCStockData, TSETMCOverview } from '../../types';
 
 let apiClient: ReturnType<typeof axios.create> | null = null;
 
@@ -176,5 +176,101 @@ export async function configureAI(apiKey: string, endpoint: string, model: strin
 export async function runPrediction(analysisId: string): Promise<any> {
   const client = await getApiClient();
   const { data } = await client.post('/prediction/from-analysis', { analysis_id: analysisId });
+  return data;
+}
+
+// Document Intelligence
+export async function extractFromPDF(file: File | Blob, forceOcr = false): Promise<DocumentExtractResult> {
+  const client = await getApiClient();
+  const formData = new FormData();
+  formData.append('file', file);
+  const { data } = await client.post('/document-intelligence/extract-pdf', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    params: { force_ocr: forceOcr },
+  });
+  return data;
+}
+
+export async function extractFromImage(file: File | Blob): Promise<DocumentExtractResult> {
+  const client = await getApiClient();
+  const formData = new FormData();
+  formData.append('file', file);
+  const { data } = await client.post('/document-intelligence/extract-image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return data;
+}
+
+export async function extractFromExcel(file: File | Blob): Promise<DocumentExtractResult> {
+  const client = await getApiClient();
+  const formData = new FormData();
+  formData.append('file', file);
+  const { data } = await client.post('/document-intelligence/extract-excel', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return data;
+}
+
+export async function extractFromText(text: string): Promise<DocumentExtractResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/document-intelligence/extract-text', { text });
+  return data;
+}
+
+// Benchmarking
+export async function getIndustries(): Promise<{ industries: { id: string; name_en: string; name_fa: string }[] }> {
+  const client = await getApiClient();
+  const { data } = await client.get('/benchmarking/industries');
+  return data;
+}
+
+export async function compareBenchmark(companyName: string, ratios: { ratio_name: string; value: number; unit: string }[], industryId?: string): Promise<BenchmarkResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/benchmarking/compare', { company_name: companyName, ratios, industry_id: industryId });
+  return data;
+}
+
+// Compliance
+export async function runComplianceCheck(financialData: Record<string, number>): Promise<ComplianceReport> {
+  const client = await getApiClient();
+  const { data } = await client.post('/compliance/check', { financial_data: financialData });
+  return data;
+}
+
+export async function getComplianceStandards(): Promise<{ standards: { code: string; name: string; name_fa: string; check_count: number }[] }> {
+  const client = await getApiClient();
+  const { data } = await client.get('/compliance/standards');
+  return data;
+}
+
+// Consolidation
+export async function consolidateCompanies(companies: ConsolidatedCompany[]): Promise<ConsolidationResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/consolidation/consolidate', { companies });
+  return data;
+}
+
+// TSETMC
+export async function searchTSETMC(query: string): Promise<{ query: string; results: { symbol: string; instrument_id: string; source: string }[] }> {
+  const client = await getApiClient();
+  const { data } = await client.get('/tsetmc/search', { params: { query } });
+  return data;
+}
+
+export async function getTSETMCStock(instrumentId: string): Promise<TSETMCStockData> {
+  const client = await getApiClient();
+  const { data } = await client.get(`/tsetmc/stock/${instrumentId}`);
+  return data;
+}
+
+export async function getTSETMCOverview(): Promise<TSETMCOverview> {
+  const client = await getApiClient();
+  const { data } = await client.get('/tsetmc/market-overview');
+  return data;
+}
+
+export async function getTSETMCPopular(): Promise<{ stocks: { symbol: string; name_en: string; sector: string }[] }> {
+  const client = await getApiClient();
+  const { data } = await client.get('/tsetmc/popular');
   return data;
 }

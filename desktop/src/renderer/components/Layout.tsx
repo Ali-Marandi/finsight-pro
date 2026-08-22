@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, BarChart3, FileText, History, Settings,
   ChevronLeft, ChevronRight, Menu, Sparkles, Activity,
+  FileSearch, ShieldCheck, Merge, Globe,
 } from 'lucide-react';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import Header from './Header';
@@ -14,6 +15,11 @@ const navItems = [
   { to: '/analysis', icon: BarChart3, label: 'New Analysis' },
   { to: '/ai-copilot', icon: Sparkles, label: 'AI Copilot' },
   { to: '/prediction', icon: Activity, label: 'Prediction' },
+  { to: '/document-intelligence', icon: FileSearch, label: 'Doc Intelligence' },
+  { to: '/benchmarking', icon: BarChart3, label: 'Benchmarking' },
+  { to: '/compliance', icon: ShieldCheck, label: 'Compliance' },
+  { to: '/consolidation', icon: Merge, label: 'Consolidation' },
+  { to: '/tsetmc', icon: Globe, label: 'TSETMC Live' },
   { to: '/reports', icon: FileText, label: 'Reports' },
   { to: '/history', icon: History, label: 'History' },
   { to: '/settings', icon: Settings, label: 'Settings' },

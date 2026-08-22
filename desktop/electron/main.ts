@@ -145,7 +145,8 @@ ipcMain.handle('open-file', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile'],
     filters: [
-      { name: 'Financial Statements', extensions: ['csv', 'xlsx', 'xls'] },
+      { name: 'Financial Statements', extensions: ['csv', 'xlsx', 'xls', 'pdf'] },
+      { name: 'Images (OCR)', extensions: ['png', 'jpg', 'jpeg', 'tiff', 'bmp'] },
       { name: 'All Files', extensions: ['*'] },
     ],
   });
@@ -175,6 +176,12 @@ ipcMain.handle('read-file-buffer', async (_event, filePath: string) => {
       '.csv': 'text/csv',
       '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       '.xls': 'application/vnd.ms-excel',
+      '.pdf': 'application/pdf',
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.tiff': 'image/tiff',
+      '.bmp': 'image/bmp',
     };
     return {
       buffer: buffer.toString('base64'),

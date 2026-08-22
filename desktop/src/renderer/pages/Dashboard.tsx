@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
-import { BarChart3, FileText, TrendingUp, Clock, Shield, Zap, Globe, Sparkles, Activity } from 'lucide-react';
+import { BarChart3, FileText, TrendingUp, Clock, Shield, Zap, Globe, Sparkles, Activity, FileSearch, ShieldCheck, Merge } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../lib/utils';
 import { uploadAndAnalyze, getAnalysisHistory } from '../lib/api';
@@ -68,7 +68,7 @@ export default function Dashboard() {
       </div>
 
       {/* Feature Highlights */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-3 lg:grid-cols-5 xl:grid-cols-10 gap-2">
         <div className="card py-3 px-4 flex items-center gap-3">
           <Shield size={16} className="text-cascade-gold shrink-0" />
           <span className="text-xs text-cascade-sage">100% Offline & Private</span>
@@ -87,7 +87,27 @@ export default function Dashboard() {
         </Link>
         <Link to="/prediction" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-red-50 to-transparent">
           <Activity size={16} className="text-red-400 shrink-0" />
-          <span className="text-xs text-red-500 font-medium">Bankruptcy Prediction</span>
+          <span className="text-xs text-red-500 font-medium">Prediction</span>
+        </Link>
+        <Link to="/document-intelligence" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-blue-50 to-transparent">
+          <FileSearch size={16} className="text-blue-500 shrink-0" />
+          <span className="text-xs text-blue-600 font-medium">Doc Intel</span>
+        </Link>
+        <Link to="/benchmarking" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-emerald-50 to-transparent">
+          <TrendingUp size={16} className="text-emerald-500 shrink-0" />
+          <span className="text-xs text-emerald-600 font-medium">Benchmark</span>
+        </Link>
+        <Link to="/compliance" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-amber-50 to-transparent">
+          <ShieldCheck size={16} className="text-amber-500 shrink-0" />
+          <span className="text-xs text-amber-600 font-medium">Compliance</span>
+        </Link>
+        <Link to="/consolidation" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-violet-50 to-transparent">
+          <Merge size={16} className="text-violet-500 shrink-0" />
+          <span className="text-xs text-violet-600 font-medium">Consolidate</span>
+        </Link>
+        <Link to="/tsetmc" className="card py-3 px-4 flex items-center gap-3 hover:shadow-elevated transition-shadow cursor-pointer bg-gradient-to-r from-cyan-50 to-transparent">
+          <Globe size={16} className="text-cyan-500 shrink-0" />
+          <span className="text-xs text-cyan-600 font-medium">TSETMC</span>
         </Link>
       </div>
 
