@@ -44,16 +44,7 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: FinSight Pro
-  installerLanguages:
-    - en
-    - fa
-    - ar
-  language: 1033
-  # NSIS display name shown in Add/Remove Programs
   uninstallDisplayName: FinSight Pro
-  # Show a custom install header
-  # installerHeaderIcon: public/icon.ico
-  # Run the app after installation
   runAfterFinish: true
 
 portable:
