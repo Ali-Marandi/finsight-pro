@@ -1,167 +1,193 @@
 <h1 align="center">
-  <img src="https://raw.githubusercontent.com/Ali-Marandi/finsight-pro/main/.github/assets/banner.png" alt="FinSight Pro" width="600">
+  <a href="https://github.com/Ali-Marandi/finsight-pro">
+    <img src="https://raw.githubusercontent.com/Ali-Marandi/finsight-pro/main/.github/assets/banner.png" alt="FinSight Pro" width="600">
+  </a>
+  <br>
+  <a href="https://github.com/Ali-Marandi/finsight-pro/stargazers"><img src="https://img.shields.io/github/stars/Ali-Marandi/finsight-pro?style=for-the-badge&logo=github&logoColor=white&label=Stars" alt="Stars"></a>
+  <a href="https://github.com/Ali-Marandi/finsight-pro/forks"><img src="https://img.shields.io/github/forks/Ali-Marandi/finsight-pro?style=for-the-badge&logo=github&logoColor=white&label=Forks" alt="Forks"></a>
+  <a href="https://github.com/Ali-Marandi/finsight-pro/releases/latest"><img src="https://img.shields.io/github/v/release/Ali-Marandi/finsight-pro?style=for-the-badge&color=92761f&label=Release" alt="Release"></a>
+  <br><br>
+  <img src="https://img.shields.io/github/actions/workflow/status/Ali-Marandi/finsight-pro/ci.yml/ci.yml?branch=main&style=flat-square&label=CI" alt="CI">
+  <img src="https://img.shields.io/github/actions/workflow/status/Ali-Marandi/finsight-pro/release.yml/release.yml?branch=main&style=flat-square&label=Release" alt="Release Build">
+  <img src="https://img.shields.io/github/license/Ali-Marandi/finsight-pro?style=flat-square&color=4e4732" alt="License">
+  <img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=flat-square&logo=windows&logoColor=white" alt="Windows">
+  <img src="https://img.shields.io/badge/Electron-32-47848F?style=flat-square&logo=electron&logoColor=white" alt="Electron">
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React">
+  <img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/100%25_Offline-16a34a?style=flat-square&logo=shield-halved&logoColor=white" alt="Offline">
+  <img src="https://img.shields.io/badge/Privacy_First-92761f?style=flat-square" alt="Privacy">
 </h1>
 
 <p align="center">
   <b>The most complete offline financial analysis desktop app.</b><br>
-  7 Analysis Engines · 17+ Ratios · 5 Bankruptcy Models · AI Copilot · TSETMC Live
+  <sub>7 Analysis Engines &middot; 17+ Ratios &middot; 5 Bankruptcy Models &middot; AI Copilot &middot; OCR &middot; TSETMC Live</sub>
 </p>
 
 <p align="center">
-  <a href="https://github.com/Ali-Marandi/finsight-pro/stargazers"><img src="https://img.shields.io/github/stars/Ali-Marandi/finsight-pro?style=social" alt="Stars"></a>
-  <a href="https://github.com/Ali-Marandi/finsight-pro/forks"><img src="https://img.shields.io/github/forks/Ali-Marandi/finsight-pro?style=social" alt="Forks"></a>
-  <a href="https://github.com/Ali-Marandi/finsight-pro/releases/latest"><img src="https://img.shields.io/github/v/release/Ali-Marandi/finsight-pro?color=92761f&label=version" alt="Release"></a>
-  <a href="https://github.com/Ali-Marandi/finsight-pro/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Ali-Marandi/finsight-pro?color=4e4732" alt="License"></a>
+  <a href="#-download"><b>Download</b></a> &middot;
+  <a href="https://ali-marandi.github.io/finsight-pro/"><b>Live Demo</b></a> &middot;
+  <a href="#-quick-start"><b>Quick Start</b></a> &middot;
+  <a href="https://github.com/Ali-Marandi/finsight-pro/issues"><b>Issues</b></a>
+</p>
+
+---
+
+## Why FinSight Pro?
+
+Most financial analysis tools are either cloud-based (data leaves your machine), limited to one function (just ratios, just prediction), or require expensive subscriptions. FinSight Pro is the **first and only** tool that combines **7 specialized analysis engines** in a single offline desktop application.
+
+| &nbsp; | **FinSight Pro** | **Excel** | **Online Tools** | **Python Libraries** |
+|-------|:---------------:|:---------:|:----------------:|:--------------------:|
+| **17+ Financial Ratios** | &#10003; | &#10007; Manual | &#10003; Limited | &#10003; Code required |
+| **AI Copilot (EN + FA)** | &#10003; | &#10007; | &#10007; | &#10007; |
+| **Bankruptcy Prediction** | 5 models | &#10007; | 1-2 models | &#10003; Manual |
+| **OCR Document Extraction** | &#10003; | &#10007; | &#10007; | &#10003; Code required |
+| **Industry Benchmarking** | 8 industries | &#10007; | &#10007; | &#10007; |
+| **IFRS + Iran Compliance** | 12+ checks | &#10007; | &#10007; | &#10007; |
+| **Consolidation Engine** | &#10003; | &#10007; | &#10007; | &#10003; Code required |
+| **TSETMC Integration** | &#10003; | &#10007; | Some | &#10007; |
+| **100% Offline** | &#10003; | &#10003; | &#10007; | &#10003; |
+| **Privacy / No Cloud** | &#10003; | &#10003; | &#10007; | &#10003; |
+| **No Subscription** | &#10003; | &#10003; | &#10007; | &#10003; |
+| **Visual Dashboard** | &#10003; | &#10007; | &#10003; Basic | &#10007; |
+| **PDF/Excel Reports** | &#10003; | &#10003; | Some | &#10003; Code required |
+| **Multi-Language (EN/FA/AR)** | &#10003; | &#10007; | &#10007; | &#10007; |
+
+---
+
+## Screenshots
+
+> 📸 Screenshots coming soon — check the [live demo](https://ali-marandi.github.io/finsight-pro/) for a preview!
+
+<!--
+<p align="center">
+  <img src=".github/assets/screenshot-dashboard.png" alt="Dashboard" width="800">
+  <br><sub>Dashboard — 10 feature cards with quick analysis</sub>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Windows-10/11-0078D6?logo=windows&logoColor=white" alt="Windows">
-  <img src="https://img.shields.io/badge/Electron-32-47848F?logo=electron&logoColor=white" alt="Electron">
-  <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black" alt="React">
-  <img src="https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white" alt="FastAPI">
-  <img src="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/100%25_Offline-4CAF50?logo=shield-halved" alt="Offline">
-  <img src="https://img.shields.io/badge/Privacy_First-92761f" alt="Privacy">
+  <img src=".github/assets/screenshot-ratios.png" alt="Ratio Analysis" width="800">
+  <br><sub>Ratio Analysis — 17+ ratios with status classification</sub>
 </p>
 
----
-
-## ⚡ What makes it different?
-
-**FinSight Pro is the first financial analysis tool** that combines 7 specialized engines in a single offline desktop application. No cloud. No subscriptions. No data leaves your machine.
-
-| Engine | What it does |
-|--------|--------------|
-| **Ratio Analysis** | 17+ financial ratios across 4 categories with status classification |
-| **AI Copilot** | Chat with your data in English & Persian — built-in or connect any LLM |
-| **Bankruptcy Prediction** | 5 statistical models (Altman, Springate, Ohlson, Grover) with consensus |
-| **Document Intelligence** | OCR extraction from PDF, scanned docs & images (Persian + English) |
-| **Industry Benchmarking** | Compare against 8 industry profiles with percentile rankings |
-| **Compliance Engine** | Iranian Accounting Standards + IFRS automated checking (12 checks) |
-| **Consolidation** | Multi-company financial statement consolidation with eliminations |
-| **TSETMC Live** | Tehran Stock Exchange real-time data integration |
+<p align="center">
+  <img src=".github/assets/screenshot-ai-copilot.png" alt="AI Copilot" width="800">
+  <br><sub>AI Copilot — Chat with your financial data</sub>
+</p>
+-->
 
 ---
 
-## 📥 Download
+## 7 Analysis Engines
 
-| Format | Link | Size |
-|--------|------|------|
-| **NSIS Installer** (.exe) | [Download Latest](https://github.com/Ali-Marandi/finsight-pro/releases/latest) | ~80 MB |
-| **Portable** (.exe, no install) | [Download Latest](https://github.com/Ali-Marandi/finsight-pro/releases/latest) | ~70 MB |
-| **CLI** (pip, open-source) | `pip install finsight-pro` | — |
+### 1. Ratio Analysis
+17+ financial ratios across 4 categories with color-coded status classification (Good / Warning / Critical):
 
-> Requires **Windows 10/11 (64-bit)**. No .NET, no Java, no other dependencies.
+| Category | Ratios |
+|----------|--------|
+| **Profitability** | Gross Margin, Net Margin, Operating Margin, ROA, ROE |
+| **Liquidity** | Current Ratio, Quick Ratio, Cash Ratio, Working Capital |
+| **Leverage** | Debt-to-Equity, Debt-to-Assets, Interest Coverage, Equity Multiplier |
+| **Efficiency** | Asset Turnover, Inventory Turnover, Receivables Turnover, DSO |
 
----
+### 2. AI Financial Copilot
+- **Dual-mode**: Built-in rule-based engine (offline, EN/FA) + connect any LLM
+- **Providers**: OpenAI, DeepSeek, Ollama, OpenRouter
+- **Context-aware**: Automatically analyzes your uploaded financial data
+- **Smart suggestions**: Quick-start prompts for common financial queries
 
-## 🖼️ App Overview
+### 3. Bankruptcy Prediction
+5 statistical models with consensus scoring:
 
-```
-┌──────────────────────────────────────────────────────┐
-│  F FinSight Pro                  [PRO] [●API] [□ □ ✕] │
-├──────┬───────────────────────────────────────────────┤
-│      │  Dashboard                                     │
-│  ▣   │  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐    │
-│  ▤   │  │  3  │ │ 17  │ │ AI  │ │  5  │ │ Doc │    │
-│  ■   │  │Anlys│ │Ratios│ │Bot │ │Pred │ │Intel│    │
-│  ◉   │  └─────┘ └─────┘ └─────┘ └─────┘ └─────┘    │
-│  ■   │  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐    │
-│  ■   │  │Bnch │ │Comp │ │Cons │ │TSET │ │Rprt │    │
-│  ⚙   │  │mark │ │lianc│ │olid │ │MC   │ │     │    │
-│      │  └─────┘ └─────┘ └─────┘ └─────┘ └─────┘    │
-│      │  ┌─ Quick Analysis ──────────────────────┐    │
-│      │  │  Drop CSV / XLSX / PDF / Image        │    │
-│      │  └──────────────────────────────────────┘    │
-│      │  ┌─ Recent Analyses ────────────────────┐    │
-│      │  │  Acme Corporation    FY 2024  78%      │    │
-│      │  │  GlobalTech          Q3 2024  65%      │    │
-│      │  └──────────────────────────────────────┘    │
-└──────┴──────────────────────────────────────────────┘
-```
-
----
-
-## 🎯 17+ Financial Ratios
-
-| Category | Ratios | Classification |
-|----------|--------|---------------|
-| **Profitability** | Gross Margin, Net Margin, Operating Margin, ROA, ROE | Good / Warning / Critical |
-| **Liquidity** | Current Ratio, Quick Ratio, Cash Ratio, Working Capital | Industry benchmarks |
-| **Leverage** | Debt-to-Equity, Debt-to-Assets, Interest Coverage, Equity Multiplier | Risk-level coding |
-| **Efficiency** | Asset Turnover, Inventory Turnover, Receivables Turnover, DSO | Threshold alerts |
-
-## 🤖 AI Financial Copilot
-
-- **Dual-mode**: Built-in rule-based engine (offline, EN/FA) + any LLM
-- **Connect**: OpenAI, DeepSeek, Ollama, OpenRouter
-- **Context-aware**: Analyzes your uploaded financial data
-- **Suggested questions**: Quick-start prompts for common queries
-
-## ⚠️ 5 Bankruptcy Prediction Models
-
-| Model | Year | Type | Best For |
-|--------|------|------|----------|
-| **Altman Z-Score** | 1968 | Linear | Public manufacturing companies |
-| **Altman Z-Score** | 1983 | Linear | Private companies |
-| **Springate** | 1978 | Linear | Canadian/public firms |
-| **Ohlson O-Score** | 1980 | Logistic | Probability estimation |
-| **Grover** | 2001 | Linear | General purpose |
+| Model | Type | Best For |
+|--------|------|----------|
+| **Altman Z-Score** (1968) | Linear | Public manufacturing companies |
+| **Altman Z-Score** (1983) | Linear | Private companies |
+| **Springate** (1978) | Linear | Canadian/public firms |
+| **Ohlson O-Score** (1980) | Logistic | Probability estimation |
+| **Grover** (2001) | Linear | General purpose |
 
 All models produce a **consensus probability** with zone classification (Safe / Grey / Distress) and actionable recommendations.
 
-## 📄 Document Intelligence (OCR)
-
-- **PDF**: Native text extraction + fallback OCR for scanned docs
+### 4. Document Intelligence (OCR)
+- **PDF**: Native text extraction + fallback OCR for scanned documents
 - **Images**: PNG, JPG, TIFF, BMP with Persian + English OCR
 - **Excel**: Multi-sheet smart extraction with header detection
-- **Text paste**: Direct text input with 70+ financial term mappings
+- **Text paste**: Direct text input with 70+ financial term mappings (EN ↔ FA)
 - **Quality scoring**: Completeness, balance sheet validation, field analysis
 
-## 📈 Industry Benchmarking
+### 5. Industry Benchmarking
+Compare against **8 industry profiles** with real percentile rankings:
 
-Compare your company against **8 industry profiles** with real percentile rankings:
-
-| Industry | Persian |
-|----------|---------|
-| Technology & Software | فناوری و نرم‌افزار |
-| Manufacturing & Industrial | تولید و صنعت |
-| Retail & Commerce | خرده‌فروشی و بازرگانی |
-| Banking & Finance | بانکداری و مالی |
-| Pharmaceutical & Healthcare | دارویی و بهداشتی |
-| Oil, Gas & Petrochemical | نفت، گاز و پتروشیمی |
-| Real Estate & Construction | املاک و مستغلات |
-| Food & Beverage | غذایی و نوشیدنی |
+Technology, Manufacturing, Retail, Banking, Pharmaceutical, Oil & Gas, Real Estate, Food & Beverage
 
 Includes **auto-detection** based on company name and ratio profile.
 
-## 🛡️ Compliance Engine
-
+### 6. Compliance Engine
 Automated checks against **12+ standards**:
-
 - **IAS 1, 2, 7, 16, 36** — Presentation, Inventories, Cash Flows, PPE, Impairment
 - **IFRS 9, 15, 16** — Financial Instruments, Revenue, Leases
 - **Iran-specific**: VAT Law (9%), Corporate Tax (25%), Audit requirements, Social Security
 
 Produces a compliance score (0-100%) with prioritized recommendations.
 
-## 🔗 Consolidation Engine
+### 7. Consolidation Engine
+- Multi-company aggregation with ownership percentages
+- Automatic intercompany elimination entries
+- Minority interest calculation for <100% owned subsidiaries
+- Full consolidated ratio analysis (profitability, liquidity, leverage, efficiency)
 
-- **Multi-company**: Add 2+ companies with ownership percentages
-- **Automatic**: Proportional aggregation, intercompany eliminations
-- **Minority interest**: Calculated automatically for <100% owned subs
-- **Full ratio analysis**: Consolidated profitability, liquidity, leverage, efficiency
-
-## 🌍 TSETMC Live Market
-
-- **Search**: Find any stock on Tehran Stock Exchange by Persian symbol
-- **Real-time**: Price, change %, volume, market cap, EPS, P/E ratio
-- **Market overview**: Index data and popular stocks grid
-- **Pre-loaded**: 12 popular symbols (خپارس, فولاد, خودرو, وبملت, ...)
+### + TSETMC Live Market
+- Search any stock on Tehran Stock Exchange by Persian symbol
+- Real-time: Price, change %, volume, market cap, EPS, P/E ratio
+- Market overview with index data and popular stocks grid
 
 ---
 
-## 🏗️ Tech Stack
+## Download
+
+| Format | Link | Size |
+|--------|------|------|
+| **NSIS Installer** (.exe) | [Download Latest](https://github.com/Ali-Marandi/finsight-pro/releases/latest) | ~80 MB |
+| **Portable** (.exe, no install) | [Download Latest](https://github.com/Ali-Marandi/finsight-pro/releases/latest) | ~70 MB |
+| **CLI** (pip, MIT) | `pip install finsight-pro` | — |
+
+> Requires **Windows 10/11 (64-bit)**. No .NET, no Java, no other dependencies.
+
+---
+
+## App Overview
+
+```
++--------------------------------------------------------------+
+|  FinSight Pro                        [PRO] [API] [Min Max X] |
++------+-------------------------------------------------------+
+|      |  Dashboard                                               |
+|  D   |  +-------+ +-------+ +-------+ +-------+ +-------+     |
+|  a   |  |  3    | |  17   | |  AI   | |  5    | |  Doc  |     |
+|  s   |  |Anlys  | | Ratios| |  Bot  | | Pred  | | Intel |     |
+|  h   |  +-------+ +-------+ +-------+ +-------+ +-------+     |
+|  b   |  +-------+ +-------+ +-------+ +-------+ +-------+     |
+|  o   |  |Bnchmrk| |Complnc| |Consol | | TSETMC| |Reprts|     |
+|  a   |  +-------+ +-------+ +-------+ +-------+ +-------+     |
+|  r   |  +-- Quick Analysis --------------------------------+   |
+|  d   |  |  Drop CSV / XLSX / PDF / Image                    |   |
+|      |  +---------------------------------------------------+   |
+|  S   |  +-- Recent Analyses --------------------------------+   |
+|  e   |  |  Acme Corporation    FY 2024  78%                   |   |
+|  t   |  |  GlobalTech          Q3 2024  65%                   |   |
+|  t   |  +---------------------------------------------------+   |
+|  i   |                                                        |
+|  n   |                                                        |
+|  g   |                                                        |
+|  s   |                                                        |
++------+-------------------------------------------------------+
+```
+
+---
+
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -182,23 +208,24 @@ Produces a compliance score (0-100%) with prioritized recommendations.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-# Clone
+# Clone the repository
 git clone https://github.com/Ali-Marandi/finsight-pro.git
+cd finsight-pro
 
-# Frontend (Electron + React)
+# --- Frontend + Electron (Desktop App) ---
 cd desktop
 npm install
-npm run electron:dev          # Full dev mode
+npm run electron:dev          # Full dev mode with hot reload
 
-# Backend only
+# --- Backend API only ---
 cd api
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 
-# Production build
+# --- Production Build ---
 cd desktop
 npm run electron:build:win    # NSIS + Portable EXE
 ```
@@ -207,47 +234,60 @@ npm run electron:build:win    # NSIS + Portable EXE
 
 ```
 finsight-pro/
-├── desktop/                  # Electron + React desktop app
-│   ├── electron/             #   Main process + preload
-│   ├── src/renderer/         #   12 pages, components, hooks, lib
-│   └── electron-builder.yml  #   NSIS + Portable config
-├── api/                      # FastAPI backend
-│   └── app/
-│       ├── routers/          #   10 API router modules
-│       ├── services/         #   10 service modules
-│       ├── models/           #   SQLAlchemy ORM, Pydantic v2
-│       └── middleware/       #   License validation
-├── src/finsight/              # Core CLI engine (MIT)
-├── docs/                     # Architecture, API spec, brand
-├── .github/workflows/        # CI + Release workflows
-└── tests/                    # Test suite
++-- desktop/                  # Electron + React desktop app
+|   +-- electron/             #   Main process + preload
+|   +-- src/renderer/         #   12 pages, components, hooks, lib
+|   +-- electron-builder.yml  #   NSIS + Portable config
++-- api/                      # FastAPI backend
+|   +-- app/
+|       +-- routers/          #   10 API router modules
+|       +-- services/         #   10 service modules
+|       +-- models/           #   SQLAlchemy ORM, Pydantic v2
+|       +-- middleware/       #   License validation
++-- src/finsight/              # Core CLI engine (MIT)
++-- landing/                  # GitHub Pages landing page
++-- docs/                     # Architecture, API spec, brand
++-- .github/workflows/        # CI + Release workflows
++-- tests/                    # Test suite
 ```
 
 ---
 
-## 🔄 CI/CD
+## CI/CD
 
 | Workflow | Trigger | What it does |
 |----------|---------|-------------|
-| **CI** | Push / PR | Tests, TypeScript check, build, ruff lint |
-| **Release** | Tag `v*` | Windows NSIS + Portable, auto-publish |
+| **CI** | Push / PR | Python tests, TypeScript check, Vite build, ruff lint |
+| **Release** | Tag `v*` | Windows NSIS + Portable, auto-publish to GitHub Releases |
 
 ```bash
+# Create a release (triggers GitHub Actions automatically)
 git tag v0.4.0
 git push origin v0.4.0
-# GitHub Actions builds and publishes automatically
 ```
 
 ---
 
-## 📄 License
+## Contributing
 
-- **CLI** (`src/finsight/`): [MIT License](LICENSE) |
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+- **CLI** (`src/finsight/`): [MIT License](LICENSE) — free to use, modify, and distribute
 - **Desktop & API**: [Commercial License](docs/legal/LICENSE-COMMERCIAL)
 
 ---
 
 <p align="center">
-  <sub>Built with <a href="https://github.com/Ali-Marandi">Ali Marandi</a></sub><br>
-  <sub>If you find this useful, please give it a ⭐!</sub>
+  <sub>Built with precision by <a href="https://github.com/Ali-Marandi">Ali Marandi</a></sub><br>
+  <sub>If you find this useful, please give it a &#11088;!</sub>
 </p>
