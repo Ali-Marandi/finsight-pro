@@ -13,6 +13,8 @@ import Benchmarking from '../renderer/pages/Benchmarking';
 import Compliance from '../renderer/pages/Compliance';
 import Consolidation from '../renderer/pages/Consolidation';
 import TSETMC from '../renderer/pages/TSETMC';
+import TimeSeries from '../renderer/pages/TimeSeries';
+import FinancialEngineering from '../renderer/pages/FinancialEngineering';
 
 export default function App() {
   return (
@@ -30,6 +32,8 @@ export default function App() {
             <Route path="/compliance" element={<Compliance />} />
             <Route path="/consolidation" element={<Consolidation />} />
             <Route path="/tsetmc" element={<TSETMC />} />
+            <Route path="/time-series" element={<TimeSeries />} />
+            <Route path="/financial-engineering" element={<FinancialEngineering />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />

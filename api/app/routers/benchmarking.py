@@ -1,1 +1,43 @@
-from fastapi import APIRouter, HTTPExceptionfrom pydantic import BaseModelfrom typing import Optionalfrom app.services.benchmarking import (    get_available_industries, compare_against_industry, auto_detect_industry,)router = APIRouter()class BenchmarkRequest(BaseModel):    company_name: str    ratios: list[dict]    # Each: {ratio_name: str, value: float, unit: str}    industry_id: Optional[str] = None  # If None, auto-detect@router.get("/industries")async def list_industries():    """List all available industry benchmarks."""    return {"industries": get_available_industries()}@router.post("/compare")async def compare(request: BenchmarkRequest):    """Compare company ratios against an industry benchmark."""    industry_id = request.industry_id or auto_detect_industry(request.company_name, request.ratios)    result = compare_against_industry(request.ratios, industry_id)    return result@router.post("/auto-detect")async def auto_detect(request: BenchmarkRequest):    """Auto-detect the best matching industry for a company."""    industry_id = auto_detect_industry(request.company_name, request.ratios)    from app.services.benchmarking import INDUSTRY_BENCHMARKS    industry = INDUSTRY_BENCHMARKS.get(industry_id, {})    return {        "industry_id": industry_id,        "name_en": industry.get("name_en", ""),        "name_fa": industry.get("name_fa", ""),        "confidence": 0.7,    }
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import Optional
+
+from app.services.benchmarking import (
+    get_available_industries, compare_against_industry, auto_detect_industry,
+)
+from app.services.benchmarking import INDUSTRY_BENCHMARKS
+
+router = APIRouter()
+
+
+class BenchmarkRequest(BaseModel):
+    company_name: str
+    ratios: list[dict]  # Each: {ratio_name: str, value: float, unit: str}
+    industry_id: Optional[str] = None  # If None, auto-detect
+
+
+@router.get("/industries")
+async def list_industries():
+    """List all available industry benchmarks."""
+    return {"industries": get_available_industries()}
+
+
+@router.post("/compare")
+async def compare(request: BenchmarkRequest):
+    """Compare company ratios against an industry benchmark."""
+    industry_id = request.industry_id or auto_detect_industry(request.company_name, request.ratios)
+    result = compare_against_industry(request.ratios, industry_id)
+    return result
+
+
+@router.post("/auto-detect")
+async def auto_detect_endpoint(request: BenchmarkRequest):
+    """Auto-detect the best matching industry for a company."""
+    industry_id = auto_detect_industry(request.company_name, request.ratios)
+    industry = INDUSTRY_BENCHMARKS.get(industry_id, {})
+    return {
+        "industry_id": industry_id,
+        "name_en": industry.get("name_en", ""),
+        "name_fa": industry.get("name_fa", ""),
+        "confidence": 0.7,
+    }

@@ -1,1 +1,34 @@
-from fastapi import APIRouter, Queryfrom app.services.tsetmc import search_symbol, get_stock_data, get_market_overview, get_popular_symbolsrouter = APIRouter()@router.get("/search")async def search(query: str = Query(..., min_length=1, max_length=50)):    """Search for stocks on TSETMC."""    results = await search_symbol(query)    return {"query": query, "results": results}@router.get("/stock/{instrument_id}")async def stock_data(instrument_id: str):    """Get real-time stock data for an instrument."""    result = await get_stock_data(instrument_id)    return result@router.get("/popular")async def popular():    """Get popular stock symbols."""    return {"stocks": get_popular_symbols()}@router.get("/market-overview")async def market_overview():    """Get TSE market overview."""    overview = await get_market_overview()    return overview
+from fastapi import APIRouter, Query
+
+from app.services.tsetmc import (
+    search_symbol, get_stock_data, get_market_overview, get_popular_symbols,
+)
+
+router = APIRouter()
+
+
+@router.get("/search")
+async def search(query: str = Query(..., min_length=1, max_length=50)):
+    """Search for stocks on TSETMC."""
+    results = await search_symbol(query)
+    return {"query": query, "results": results}
+
+
+@router.get("/stock/{instrument_id}")
+async def stock_data(instrument_id: str):
+    """Get real-time stock data for an instrument."""
+    result = await get_stock_data(instrument_id)
+    return result
+
+
+@router.get("/popular")
+async def popular():
+    """Get popular stock symbols."""
+    return {"stocks": get_popular_symbols()}
+
+
+@router.get("/market-overview")
+async def market_overview():
+    """Get TSE market overview."""
+    overview = await get_market_overview()
+    return overview

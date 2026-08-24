@@ -8,6 +8,7 @@ from app.routers import (
     ai_copilot, prediction,
     document_intelligence, benchmarking, compliance as compliance_router,
     consolidation, tsetmc, cloud_sync,
+    time_series, financial_engineering,
 )
 
 
@@ -48,8 +49,10 @@ app.include_router(compliance_router.router, prefix="/api/v1/compliance", tags=[
 app.include_router(consolidation.router, prefix="/api/v1/consolidation", tags=["Consolidation"])
 app.include_router(tsetmc.router, prefix="/api/v1/tsetmc", tags=["TSETMC"])
 app.include_router(cloud_sync.router, prefix="/api/v1/cloud-sync", tags=["Cloud Sync"])
+app.include_router(time_series.router, prefix="/api/v1/time-series", tags=["Time Series"])
+app.include_router(financial_engineering.router, prefix="/api/v1/financial-engineering", tags=["Financial Engineering"])
 
 
 @app.get("/api/v1/health")
 async def health_check():
-    return {"status": "ok", "version": "0.4.0"}
+    return {"status": "ok", "version": "0.6.0"}

@@ -1,6 +1,6 @@
 {
   "name": "finsight-pro-desktop",
-  "version": "0.2.0",
+  "version": "0.6.0",
   "description": "FinSight Pro - Professional Financial Statement Analysis Desktop App",
   "main": "dist/electron/main.js",
   "author": "FinSight Pro LLC",

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceInspectionResult, DocumentExtractResult, BenchmarkResult, ComplianceReport, ConsolidatedCompany, ConsolidationResult, TSETMCStockData, TSETMCOverview } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceInspectionResult, DocumentExtractResult, BenchmarkResult, ComplianceReport, ConsolidatedCompany, ConsolidationResult, TSETMCStockData, TSETMCOverview, ARIMAResult, GARCHResult, VaRResult, MonteCarloResult, BlackScholesResult, PortfolioOptResult } from '../../types';
 
 let apiClient: ReturnType<typeof axios.create> | null = null;
 
@@ -272,5 +272,49 @@ export async function getTSETMCOverview(): Promise<TSETMCOverview> {
 export async function getTSETMCPopular(): Promise<{ stocks: { symbol: string; name_en: string; sector: string }[] }> {
   const client = await getApiClient();
   const { data } = await client.get('/tsetmc/popular');
+  return data;
+}
+
+// Time Series
+export async function runTimeSeriesFull(prices: number[], forecastSteps = 30): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/time-series/full', { prices, forecast_steps: forecastSteps });
+  return data;
+}
+
+export async function runARIMA(prices: number[], forecastSteps = 30): Promise<ARIMAResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/time-series/arima', { prices, forecast_steps: forecastSteps });
+  return data;
+}
+
+export async function runGARCH(prices: number[]): Promise<GARCHResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/time-series/garch', { prices });
+  return data;
+}
+
+// Financial Engineering
+export async function calculateVaR(prices: number[], confidence = 0.95, method = 'historical', positionValue = 1000000): Promise<VaRResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/financial-engineering/var', { prices, confidence, method, position_value: positionValue });
+  return data;
+}
+
+export async function runMonteCarlo(s0: number, mu: number, sigma: number, days = 252, simulations = 10000): Promise<MonteCarloResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/financial-engineering/monte-carlo', { s0, mu, sigma, days, simulations });
+  return data;
+}
+
+export async function runBlackScholes(spot: number, strike: number, time: number, rate: number, volatility: number, optionType = 'call'): Promise<BlackScholesResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/financial-engineering/black-scholes', { spot, strike, time, rate, volatility, option_type: optionType });
+  return data;
+}
+
+export async function optimizePortfolio(expectedReturns: number[], covMatrix: number[][], riskFreeRate = 0): Promise<PortfolioOptResult> {
+  const client = await getApiClient();
+  const { data } = await client.post('/financial-engineering/portfolio-optimize', { expected_returns: expectedReturns, cov_matrix: covMatrix, risk_free_rate: riskFreeRate });
   return data;
 }

@@ -1,1 +1,31 @@
-from fastapi import APIRouter, HTTPExceptionfrom pydantic import BaseModelfrom typing import Optionalfrom app.services.consolidation import consolidate_statementsrouter = APIRouter()class CompanyData(BaseModel):    company_name: str    ownership_pct: float = 100.0    # 0-100    financial_data: dict  # {revenue, net_income, total_assets, etc.}class ConsolidationRequest(BaseModel):    companies: list[CompanyData]@router.post("/consolidate")async def consolidate(request: ConsolidationRequest):    """Consolidate multiple company financial statements."""    if len(request.companies) < 2:        raise HTTPException(400, "At least 2 companies required for consolidation")        companies = [        {"company_name": c.company_name, **c.financial_data}        for c in request.companies    ]    ownership = [c.ownership_pct for c in request.companies]        result = consolidate_statements(companies, ownership)    return result
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import Optional
+
+from app.services.consolidation import consolidate_statements
+
+router = APIRouter()
+
+
+class CompanyData(BaseModel):
+    company_name: str
+    ownership_pct: float = 100.0  # 0-100
+    financial_data: dict  # {revenue, net_income, total_assets, etc.}
+
+
+class ConsolidationRequest(BaseModel):
+    companies: list[CompanyData]
+
+
+@router.post("/consolidate")
+async def consolidate(request: ConsolidationRequest):
+    """Consolidate multiple company financial statements."""
+    if len(request.companies) < 2:
+        raise HTTPException(400, "At least 2 companies required for consolidation")
+    companies = [
+        {"company_name": c.company_name, **c.financial_data}
+        for c in request.companies
+    ]
+    ownership = [c.ownership_pct for c in request.companies]
+    result = consolidate_statements(companies, ownership)
+    return result

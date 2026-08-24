@@ -265,3 +265,98 @@ export interface TaxAuditEvidenceResult {
 }
 
 export type EvidenceInspectionResult = EvidenceReviewResult | TaxAuditEvidenceResult;
+
+// Time Series Analysis
+export interface ARIMAResult {
+  method: string;
+  aic: number | null;
+  bic: number | null;
+  historical: { dates: string[]; values: number[] };
+  forecast: { dates: string[]; values: number[]; lower: number[]; upper: number[] };
+  forecast_steps: number;
+  error?: string;
+}
+
+export interface GARCHResult {
+  method: string;
+  parameters: { omega: number; alpha: number; beta: number } | null;
+  persistence: number | null;
+  long_run_volatility: number | null;
+  current_annual_volatility: number;
+  conditional_volatility: number[];
+  forecast_volatility: number[] | null;
+  aic: number | null;
+  error?: string;
+}
+
+export interface DecompositionResult {
+  method: string;
+  period: number;
+  trend: number[];
+  seasonal: number[];
+  residual: number[];
+  observed: number[];
+  error?: string;
+}
+
+export interface TimeSeriesSummary {
+  count: number;
+  first: number;
+  last: number;
+  min: number;
+  max: number;
+  mean: number;
+  std: number;
+  total_return_pct: number;
+  volatility_annual: number;
+  skewness: number;
+  kurtosis: number;
+}
+
+// Financial Engineering
+export interface VaRResult {
+  method: string;
+  confidence: number;
+  position_value: number;
+  var_return_pct: number;
+  var_absolute: number;
+  cvar_return_pct: number;
+  cvar_absolute: number;
+  interpretation: string;
+  error?: string;
+}
+
+export interface MonteCarloResult {
+  parameters: { s0: number; mu_annual: number; sigma_annual: number; days: number; simulations: number };
+  statistics: {
+    mean_final_price: number;
+    median_final_price: number;
+    prob_profit: number;
+    prob_loss: number;
+    var_95_pct: number;
+    expected_return_pct: number;
+  };
+  percentiles: Record<number, number>;
+  sample_paths: number[][];
+}
+
+export interface BlackScholesResult {
+  option_type: string;
+  inputs: { spot: number; strike: number; time: number; rate: number; volatility: number };
+  price: number;
+  d1: number;
+  d2: number;
+  greeks: { delta: number; gamma: number; vega: number; theta: number };
+  error?: string;
+}
+
+export interface PortfolioOptResult {
+  optimal_weights: number[];
+  optimal_return: number;
+  optimal_volatility: number;
+  sharpe_ratio: number;
+  min_var_weights: number[];
+  min_var_return: number;
+  min_var_volatility: number;
+  num_assets: number;
+}
