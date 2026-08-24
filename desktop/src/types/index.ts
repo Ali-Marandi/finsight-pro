@@ -350,6 +350,85 @@ export interface BlackScholesResult {
   error?: string;
 }
 
+// Fuzzy MCDM
+export interface FuzzyAHPResult {
+  method: string;
+  criteria_count: number;
+  weights: number[];
+  criteria_names: string[];
+  ranking: { rank: number; name: string; weight: number; weight_pct: number }[];
+  consistency: { lambda_max: number; ci: number; ri: number; cr: number; consistent: boolean };
+  is_fuzzy: boolean;
+  recommendation: string;
+  error?: string;
+}
+
+export interface StockRankingResult {
+  method: string;
+  stocks_analyzed: number;
+  criteria_used: string[];
+  ahp_weights: number[];
+  ahp_ranking: { rank: number; name: string; weight: number; weight_pct: number }[];
+  consistency: { lambda_max: number; ci: number; ri: number; cr: number; consistent: boolean };
+  topsis_ranking: { rank: number; name: string; closeness: number; d_positive: number; d_negative: number }[];
+  best_stock: string;
+  best_score: number;
+  error?: string;
+}
+
+// Black-Litterman
+export interface BlackLittermanResult {
+  method: string;
+  num_assets: number;
+  parameters: { risk_aversion: number; tau: number; risk_free_rate: number; num_views: number };
+  implied_equilibrium_returns: number[];
+  posterior_returns: number[];
+  optimal_weights: number[];
+  market_weights: number[];
+  active_weights: number[];
+  portfolio_metrics: {
+    expected_return: number;
+    volatility: number;
+    sharpe_ratio: number;
+    tracking_error: number;
+    information_ratio: number;
+  };
+  return_changes: number[];
+  error?: string;
+}
+
+// Factor Analysis
+export interface PCAResult {
+  method: string;
+  observations: number;
+  assets: number;
+  components_analyzed: number;
+  kaiser_components: number;
+  total_explained_variance_pct: number;
+  eigenvalues: number[];
+  explained_variance_pct: number[];
+  cumulative_variance_pct: number[];
+  scree_plot_data: { component: number; eigenvalue: number; explained_var_pct: number; cumulative_var_pct: number }[];
+  top_loadings: { component: number; explained_var_pct: number; top_assets: { name: string; loading: number }[] }[];
+  mean_returns: number[];
+  recommendation: string;
+  error?: string;
+}
+
+export interface FamaFrenchResult {
+  method: string;
+  observations: number;
+  assets: number;
+  factor_names: string[];
+  factor_statistics: { factor: string; mean_annual_pct: number; volatility_annual_pct: number; sharpe: number }[];
+  factor_correlation: number[][];
+  asset_loadings: { asset: string; alpha: number; beta_mkt: number; beta_smb: number; beta_hml: number; r_squared: number }[];
+  avg_r_squared: number;
+  mean_alpha_pct: number;
+  recommendation: string;
+  error?: string;
+}
+
 export interface PortfolioOptResult {
   optimal_weights: number[];
   optimal_return: number;

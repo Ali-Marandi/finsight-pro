@@ -9,6 +9,7 @@ from app.routers import (
     document_intelligence, benchmarking, compliance as compliance_router,
     consolidation, tsetmc, cloud_sync,
     time_series, financial_engineering,
+    fuzzy_mcdm, black_litterman, factor_analysis,
 )
 
 
@@ -51,6 +52,9 @@ app.include_router(tsetmc.router, prefix="/api/v1/tsetmc", tags=["TSETMC"])
 app.include_router(cloud_sync.router, prefix="/api/v1/cloud-sync", tags=["Cloud Sync"])
 app.include_router(time_series.router, prefix="/api/v1/time-series", tags=["Time Series"])
 app.include_router(financial_engineering.router, prefix="/api/v1/financial-engineering", tags=["Financial Engineering"])
+app.include_router(fuzzy_mcdm.router, prefix="/api/v1/fuzzy-mcdm", tags=["Fuzzy MCDM"])
+app.include_router(black_litterman.router, prefix="/api/v1/black-litterman", tags=["Black-Litterman"])
+app.include_router(factor_analysis.router, prefix="/api/v1/factor-analysis", tags=["Factor Analysis"])
 
 
 @app.get("/api/v1/health")
