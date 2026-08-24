@@ -21,7 +21,7 @@
 
 <p align="center">
   <b>The most complete offline financial analysis desktop app.</b><br>
-  <sub>7 Analysis Engines &middot; 17+ Ratios &middot; 5 Bankruptcy Models &middot; AI Copilot &middot; OCR &middot; TSETMC Live</sub>
+  <sub>9 Engines &middot; ARIMA &middot; GARCH &middot; VaR &middot; Monte Carlo &middot; Black-Scholes &middot; Markowitz &middot; AI Copilot &middot; OCR &middot; TSETMC</sub>
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@
 
 ## Why FinSight Pro?
 
-Most financial analysis tools are either cloud-based (data leaves your machine), limited to one function (just ratios, just prediction), or require expensive subscriptions. FinSight Pro is the **first and only** tool that combines **7 specialized analysis engines** in a single offline desktop application.
+Most financial analysis tools are either cloud-based (data leaves your machine), limited to one function (just ratios, just prediction), or require expensive subscriptions. FinSight Pro is the **first and only** tool that combines **9 specialized analysis engines** — including quantitative finance — in a single offline desktop application.
 
 | &nbsp; | **FinSight Pro** | **Excel** | **Online Tools** | **Python Libraries** |
 |-------|:---------------:|:---------:|:----------------:|:--------------------:|
@@ -47,6 +47,9 @@ Most financial analysis tools are either cloud-based (data leaves your machine),
 | **IFRS + Iran Compliance** | 12+ checks | &#10007; | &#10007; | &#10007; |
 | **Consolidation Engine** | &#10003; | &#10007; | &#10007; | &#10003; Code required |
 | **TSETMC Integration** | &#10003; | &#10007; | Some | &#10007; |
+| **ARIMA/GARCH Forecasting** | &#10003; | &#10007; | &#10007; | &#10003; Code required |
+| **VaR / Monte Carlo / BS** | &#10003; | &#10007; | &#10007; | &#10003; Code required |
+| **Portfolio Optimization** | &#10003; | &#10007; | &#10007; | &#10003; Code required |
 | **100% Offline** | &#10003; | &#10003; | &#10007; | &#10003; |
 | **Privacy / No Cloud** | &#10003; | &#10003; | &#10007; | &#10003; |
 | **No Subscription** | &#10003; | &#10003; | &#10007; | &#10003; |
@@ -79,7 +82,7 @@ Most financial analysis tools are either cloud-based (data leaves your machine),
 
 ---
 
-## 7 Analysis Engines
+## 9 Analysis Engines
 
 ### 1. Ratio Analysis
 17+ financial ratios across 4 categories with color-coded status classification (Good / Warning / Critical):
@@ -137,6 +140,18 @@ Produces a compliance score (0-100%) with prioritized recommendations.
 - Automatic intercompany elimination entries
 - Minority interest calculation for <100% owned subsidiaries
 - Full consolidated ratio analysis (profitability, liquidity, leverage, efficiency)
+
+### 8. Time Series Analysis
+- **ARIMA(5,1,0)** — Price forecasting with confidence intervals, auto-tuned AIC/BIC
+- **GARCH(1,1)** — Conditional volatility modeling, persistence analysis, volatility clustering detection
+- **Decomposition** — Trend, seasonal, and residual component extraction
+- **Full pipeline** — One-click analysis with summary statistics + actionable recommendations
+
+### 9. Financial Engineering
+- **Value at Risk (VaR/CVaR)** — 3 methods: Historical, Parametric, Cornish-Fisher
+- **Monte Carlo Simulation** — Geometric Brownian Motion with 10,000+ paths
+- **Black-Scholes** — Option pricing with Greeks (Delta, Gamma, Vega, Theta)
+- **Markowitz Optimization** — Sharpe ratio maximization + minimum variance portfolio
 
 ### + TSETMC Live Market
 - Search any stock on Tehran Stock Exchange by Persian symbol

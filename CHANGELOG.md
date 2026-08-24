@@ -5,7 +5,23 @@ All notable changes to FinSight Pro will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 2025-08-23
+## [0.6.0] - 2026-08-25
+
+### Added
+- **Time Series Analysis Engine** — ARIMA(5,1,0) forecasting, GARCH(1,1) volatility modeling, time series decomposition, full pipeline
+- **Financial Engineering Engine** — VaR/CVaR (3 methods), Monte Carlo simulation, Black-Scholes with Greeks, Markowitz portfolio optimization
+- 10 new API endpoints, 2 new frontend pages, 100+ TypeScript interfaces, 8 API client functions
+- `statsmodels`, `arch`, `scipy`, `numpy` backend dependencies
+
+### Fixed
+- **CI Pipeline** — Fixed YAML branches syntax, restored 6 minified Python files, split CLI tests
+- All 5 CI jobs pass: CLI Tests, API Tests, Type Check, Desktop Build, Ruff Lint
+
+### Strategic Research
+- 33 financial science techniques analyzed across 5 categories with ROI scoring
+- 4-phase roadmap: Phase 1 (GARCH, VaR, Markowitz, ARIMA — implemented), Phase 2 (Monte Carlo, BS, PCA, LSTM, Fuzzy), Phase 3 (RL, NLP, Causal ML), Phase 4 (Quantum, TDA, Federated)
+
+## [0.4.0] - 2026-08-22
 
 ### Added
 - **Document Intelligence Engine** — OCR extraction from PDF, scanned docs & images (Persian + English)
