@@ -3,8 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, BarChart3, FileText, History, Settings,
   ChevronLeft, ChevronRight, Menu, Sparkles, Activity,
-  FileSearch, ShieldCheck, Merge, Globe, TrendingUp, Calculator,
-  GitBranch, Scale, Layers,
+  FileSearch, ShieldCheck, Merge, Globe, TrendingUp, Calculator, Target,
 } from 'lucide-react';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import Header from './Header';
@@ -23,9 +22,7 @@ const navItems = [
   { to: '/tsetmc', icon: Globe, label: 'TSETMC Live' },
   { to: '/time-series', icon: TrendingUp, label: 'Time Series' },
   { to: '/financial-engineering', icon: Calculator, label: 'Fin. Engineering' },
-  { to: '/fuzzy-mcdm', icon: GitBranch, label: 'Fuzzy MCDM' },
-  { to: '/black-litterman', icon: Scale, label: 'Black-Litterman' },
-  { to: '/factor-analysis', icon: Layers, label: 'Factor Analysis' },
+  { to: '/backtest', icon: Target, label: 'Backtesting' },
   { to: '/reports', icon: FileText, label: 'Reports' },
   { to: '/history', icon: History, label: 'History' },
   { to: '/settings', icon: Settings, label: 'Settings' },

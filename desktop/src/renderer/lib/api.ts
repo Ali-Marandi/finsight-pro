@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceInspectionResult, DocumentExtractResult, BenchmarkResult, ComplianceReport, ConsolidatedCompany, ConsolidationResult, TSETMCStockData, TSETMCOverview, ARIMAResult, GARCHResult, VaRResult, MonteCarloResult, BlackScholesResult, PortfolioOptResult, StockRankingResult, BlackLittermanResult, PCAResult, FamaFrenchResult } from '../../types';
+import type { AnalysisResult, AnalysisHistoryItem, UserPreferences, LicenseInfo, ApiResponse, AIConfig, EvidenceInspectionResult, DocumentExtractResult, BenchmarkResult, ComplianceReport, ConsolidatedCompany, ConsolidationResult, TSETMCStockData, TSETMCOverview, ARIMAResult, GARCHResult, VaRResult, MonteCarloResult, BlackScholesResult, PortfolioOptResult, BacktestDemoResult, SingleBacktestResult, PortfolioBacktestResult } from '../../types';
 
 let apiClient: ReturnType<typeof axios.create> | null = null;
 
@@ -319,70 +319,42 @@ export async function optimizePortfolio(expectedReturns: number[], covMatrix: nu
   return data;
 }
 
-// Fuzzy MCDM
-export async function runFuzzyStockRanking(stocks: Record<string, any>[], criteria?: string[]): Promise<StockRankingResult> {
+// Backtesting
+export async function runBacktestStrategy(
+  prices: number[],
+  signals?: number[],
+  initialCapital = 1000000,
+  commission = 0.001,
+  slippage = 0.0005,
+  benchmarkPrices?: number[],
+  strategyName = 'Strategy',
+): Promise<SingleBacktestResult> {
   const client = await getApiClient();
-  const { data } = await client.post('/fuzzy-mcdm/stock-ranking', { stocks, criteria });
-  return data;
-}
-
-export async function getFuzzyMCDMDemo(): Promise<{ demo_stocks: Record<string, any>[]; analysis: StockRankingResult }> {
-  const client = await getApiClient();
-  const { data } = await client.get('/fuzzy-mcdm/demo');
-  return data;
-}
-
-// Black-Litterman
-export async function runBlackLitterman(
-  marketCapWeights: number[],
-  covMatrix: number[][],
-  riskAversion = 2.5,
-  tau = 0.05,
-  views?: { assets: number[]; value: number; confidence: number }[],
-  riskFreeRate = 0,
-): Promise<BlackLittermanResult> {
-  const client = await getApiClient();
-  const { data } = await client.post('/black-litterman/optimize', {
-    market_cap_weights: marketCapWeights,
-    covariance_matrix: covMatrix,
-    risk_aversion: riskAversion,
-    tau,
-    views,
-    risk_free_rate: riskFreeRate,
+  const { data } = await client.post('/backtest/strategy', {
+    prices, signals, initial_capital: initialCapital,
+    commission, slippage, benchmark_prices: benchmarkPrices, strategy_name: strategyName,
   });
   return data;
 }
 
-export async function getBlackLittermanDemo(): Promise<BlackLittermanResult> {
-  const client = await getApiClient();
-  const { data } = await client.get('/black-litterman/demo');
-  return data;
-}
-
-// Factor Analysis
-export async function runPCA(returnsMatrix: number[][], assetNames?: string[], nComponents?: number): Promise<PCAResult> {
-  const client = await getApiClient();
-  const { data } = await client.post('/factor-analysis/pca', { returns_matrix: returnsMatrix, asset_names: assetNames, n_components: nComponents });
-  return data;
-}
-
-export async function runFamaFrench(
-  returnsMatrix: number[],
-  marketReturns: number[],
+export async function runBacktestPortfolio(
+  assetPrices: number[][],
+  weights?: number[],
+  rebalanceDays = 21,
+  initialCapital = 10000000,
+  benchmarkPrices?: number[],
   assetNames?: string[],
-  marketCap?: number[],
-  bookToMarket?: number[],
-): Promise<FamaFrenchResult> {
+): Promise<PortfolioBacktestResult> {
   const client = await getApiClient();
-  const { data } = await client.post('/factor-analysis/fama-french', {
-    returns_matrix: returnsMatrix, market_returns: marketReturns,
-    asset_names: assetNames, market_cap: marketCap, book_to_market: bookToMarket,
+  const { data } = await client.post('/backtest/portfolio', {
+    asset_prices: assetPrices, weights, rebalance_days: rebalanceDays,
+    initial_capital: initialCapital, benchmark_prices: benchmarkPrices, asset_names: assetNames,
   });
   return data;
 }
 
-export async function getFactorAnalysisDemo(): Promise<{ pca: PCAResult; fama_french: FamaFrenchResult }> {
+export async function getBacktestDemo(): Promise<BacktestDemoResult> {
   const client = await getApiClient();
-  const { data } = await client.get('/factor-analysis/demo');
+  const { data } = await client.get('/backtest/demo');
   return data;
 }

@@ -15,9 +15,7 @@ import Consolidation from '../renderer/pages/Consolidation';
 import TSETMC from '../renderer/pages/TSETMC';
 import TimeSeries from '../renderer/pages/TimeSeries';
 import FinancialEngineering from '../renderer/pages/FinancialEngineering';
-import FuzzyMCDM from '../renderer/pages/FuzzyMCDM';
-import BlackLitterman from '../renderer/pages/BlackLitterman';
-import FactorAnalysis from '../renderer/pages/FactorAnalysis';
+import Backtest from '../renderer/pages/Backtest';
 
 export default function App() {
   return (
@@ -37,9 +35,7 @@ export default function App() {
             <Route path="/tsetmc" element={<TSETMC />} />
             <Route path="/time-series" element={<TimeSeries />} />
             <Route path="/financial-engineering" element={<FinancialEngineering />} />
-            <Route path="/fuzzy-mcdm" element={<FuzzyMCDM />} />
-            <Route path="/black-litterman" element={<BlackLitterman />} />
-            <Route path="/factor-analysis" element={<FactorAnalysis />} />
+            <Route path="/backtest" element={<Backtest />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />

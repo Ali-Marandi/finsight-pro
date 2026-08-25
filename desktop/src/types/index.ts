@@ -439,3 +439,101 @@ export interface PortfolioOptResult {
   min_var_volatility: number;
   num_assets: number;
 }
+
+// Backtesting
+export interface BacktestTrade {
+  day: number;
+  action: string;
+  price: number;
+  shares: number;
+  pnl: number;
+}
+
+export interface BacktestRisk {
+  sharpe_ratio: number;
+  sortino_ratio: number;
+  max_drawdown_pct: number;
+  max_drawdown_duration_days: number;
+  calmar_ratio: number;
+  var_95_pct: number;
+  cvar_95_pct: number;
+}
+
+export interface BacktestBenchmark {
+  total_return_pct: number;
+  cagr_pct: number;
+  volatility_pct: number;
+  sharpe: number;
+  alpha_pct: number;
+  beta: number;
+  tracking_error_pct: number;
+  information_ratio: number;
+  excess_return_pct: number;
+}
+
+export interface SingleBacktestResult {
+  strategy_name: string;
+  period: { days: number; years: number };
+  capital: { initial: number; final: number };
+  performance: {
+    total_return_pct: number;
+    cagr_pct: number;
+    annual_volatility_pct: number;
+  };
+  risk: BacktestRisk;
+  trades: {
+    total: number;
+    buy_count: number;
+    sell_count: number;
+    win_rate: number;
+    profit_factor: number;
+    expectancy: number;
+    avg_win: number;
+    avg_loss: number;
+    winning_trades: number;
+    losing_trades: number;
+  };
+  benchmark: BacktestBenchmark | null;
+  charts: {
+    equity_curve: number[];
+    benchmark_curve: number[] | null;
+    drawdown_series: number[];
+  };
+  trade_log: BacktestTrade[];
+  error?: string;
+}
+
+export interface PortfolioBacktestResult {
+  strategy_name: string;
+  num_assets: number;
+  asset_names: string[];
+  period: { days: number; years: number };
+  capital: { initial: number; final: number };
+  weights: number[];
+  rebalance_days: number;
+  performance: {
+    total_return_pct: number;
+    cagr_pct: number;
+    annual_volatility_pct: number;
+  };
+  risk: BacktestRisk;
+  assets: { name: string; weight_pct: number; total_return_pct: number; volatility_pct: number }[];
+  benchmark: { total_return_pct: number; excess_return_pct: number } | null;
+  charts: {
+    equity_curve: number[];
+    benchmark_curve: number[] | null;
+    drawdown_series: number[];
+  };
+  error?: string;
+}
+
+export interface BacktestDemoResult {
+  demo_info: {
+    description: string;
+    assets: string[];
+    assets_fa: string[];
+    period_days: number;
+  };
+  single_asset: SingleBacktestResult;
+  portfolio: PortfolioBacktestResult;
+}
