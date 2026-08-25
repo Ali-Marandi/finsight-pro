@@ -350,85 +350,6 @@ export interface BlackScholesResult {
   error?: string;
 }
 
-// Fuzzy MCDM
-export interface FuzzyAHPResult {
-  method: string;
-  criteria_count: number;
-  weights: number[];
-  criteria_names: string[];
-  ranking: { rank: number; name: string; weight: number; weight_pct: number }[];
-  consistency: { lambda_max: number; ci: number; ri: number; cr: number; consistent: boolean };
-  is_fuzzy: boolean;
-  recommendation: string;
-  error?: string;
-}
-
-export interface StockRankingResult {
-  method: string;
-  stocks_analyzed: number;
-  criteria_used: string[];
-  ahp_weights: number[];
-  ahp_ranking: { rank: number; name: string; weight: number; weight_pct: number }[];
-  consistency: { lambda_max: number; ci: number; ri: number; cr: number; consistent: boolean };
-  topsis_ranking: { rank: number; name: string; closeness: number; d_positive: number; d_negative: number }[];
-  best_stock: string;
-  best_score: number;
-  error?: string;
-}
-
-// Black-Litterman
-export interface BlackLittermanResult {
-  method: string;
-  num_assets: number;
-  parameters: { risk_aversion: number; tau: number; risk_free_rate: number; num_views: number };
-  implied_equilibrium_returns: number[];
-  posterior_returns: number[];
-  optimal_weights: number[];
-  market_weights: number[];
-  active_weights: number[];
-  portfolio_metrics: {
-    expected_return: number;
-    volatility: number;
-    sharpe_ratio: number;
-    tracking_error: number;
-    information_ratio: number;
-  };
-  return_changes: number[];
-  error?: string;
-}
-
-// Factor Analysis
-export interface PCAResult {
-  method: string;
-  observations: number;
-  assets: number;
-  components_analyzed: number;
-  kaiser_components: number;
-  total_explained_variance_pct: number;
-  eigenvalues: number[];
-  explained_variance_pct: number[];
-  cumulative_variance_pct: number[];
-  scree_plot_data: { component: number; eigenvalue: number; explained_var_pct: number; cumulative_var_pct: number }[];
-  top_loadings: { component: number; explained_var_pct: number; top_assets: { name: string; loading: number }[] }[];
-  mean_returns: number[];
-  recommendation: string;
-  error?: string;
-}
-
-export interface FamaFrenchResult {
-  method: string;
-  observations: number;
-  assets: number;
-  factor_names: string[];
-  factor_statistics: { factor: string; mean_annual_pct: number; volatility_annual_pct: number; sharpe: number }[];
-  factor_correlation: number[][];
-  asset_loadings: { asset: string; alpha: number; beta_mkt: number; beta_smb: number; beta_hml: number; r_squared: number }[];
-  avg_r_squared: number;
-  mean_alpha_pct: number;
-  recommendation: string;
-  error?: string;
-}
-
 export interface PortfolioOptResult {
   optimal_weights: number[];
   optimal_return: number;
@@ -441,99 +362,15 @@ export interface PortfolioOptResult {
 }
 
 // Backtesting
-export interface BacktestTrade {
-  day: number;
-  action: string;
-  price: number;
-  shares: number;
-  pnl: number;
-}
+export interface BacktestTrade { day: number; action: string; price: number; shares: number; pnl: number; }
+export interface BacktestRisk { sharpe_ratio: number; sortino_ratio: number; max_drawdown_pct: number; max_drawdown_duration_days: number; calmar_ratio: number; var_95_pct: number; cvar_95_pct: number; }
+export interface BacktestBenchmark { total_return_pct: number; cagr_pct: number; volatility_pct: number; sharpe: number; alpha_pct: number; beta: number; tracking_error_pct: number; information_ratio: number; excess_return_pct: number; }
+export interface SingleBacktestResult { strategy_name: string; period: { days: number; years: number }; capital: { initial: number; final: number }; performance: { total_return_pct: number; cagr_pct: number; annual_volatility_pct: number }; risk: BacktestRisk; trades: { total: number; buy_count: number; sell_count: number; win_rate: number; profit_factor: number; expectancy: number; avg_win: number; avg_loss: number; winning_trades: number; losing_trades: number }; benchmark: BacktestBenchmark | null; charts: { equity_curve: number[]; benchmark_curve: number[] | null; drawdown_series: number[] }; trade_log: BacktestTrade[]; error?: string; }
+export interface PortfolioBacktestResult { strategy_name: string; num_assets: number; asset_names: string[]; period: { days: number; years: number }; capital: { initial: number; final: number }; weights: number[]; rebalance_days: number; performance: { total_return_pct: number; cagr_pct: number; annual_volatility_pct: number }; risk: BacktestRisk; assets: { name: string; weight_pct: number; total_return_pct: number; volatility_pct: number }[]; benchmark: { total_return_pct: number; excess_return_pct: number } | null; charts: { equity_curve: number[]; benchmark_curve: number[] | null; drawdown_series: number[] }; error?: string; }
+export interface BacktestDemoResult { demo_info: { description: string; assets: string[]; assets_fa: string[]; period_days: number }; single_asset: SingleBacktestResult; portfolio: PortfolioBacktestResult; }
 
-export interface BacktestRisk {
-  sharpe_ratio: number;
-  sortino_ratio: number;
-  max_drawdown_pct: number;
-  max_drawdown_duration_days: number;
-  calmar_ratio: number;
-  var_95_pct: number;
-  cvar_95_pct: number;
-}
-
-export interface BacktestBenchmark {
-  total_return_pct: number;
-  cagr_pct: number;
-  volatility_pct: number;
-  sharpe: number;
-  alpha_pct: number;
-  beta: number;
-  tracking_error_pct: number;
-  information_ratio: number;
-  excess_return_pct: number;
-}
-
-export interface SingleBacktestResult {
-  strategy_name: string;
-  period: { days: number; years: number };
-  capital: { initial: number; final: number };
-  performance: {
-    total_return_pct: number;
-    cagr_pct: number;
-    annual_volatility_pct: number;
-  };
-  risk: BacktestRisk;
-  trades: {
-    total: number;
-    buy_count: number;
-    sell_count: number;
-    win_rate: number;
-    profit_factor: number;
-    expectancy: number;
-    avg_win: number;
-    avg_loss: number;
-    winning_trades: number;
-    losing_trades: number;
-  };
-  benchmark: BacktestBenchmark | null;
-  charts: {
-    equity_curve: number[];
-    benchmark_curve: number[] | null;
-    drawdown_series: number[];
-  };
-  trade_log: BacktestTrade[];
-  error?: string;
-}
-
-export interface PortfolioBacktestResult {
-  strategy_name: string;
-  num_assets: number;
-  asset_names: string[];
-  period: { days: number; years: number };
-  capital: { initial: number; final: number };
-  weights: number[];
-  rebalance_days: number;
-  performance: {
-    total_return_pct: number;
-    cagr_pct: number;
-    annual_volatility_pct: number;
-  };
-  risk: BacktestRisk;
-  assets: { name: string; weight_pct: number; total_return_pct: number; volatility_pct: number }[];
-  benchmark: { total_return_pct: number; excess_return_pct: number } | null;
-  charts: {
-    equity_curve: number[];
-    benchmark_curve: number[] | null;
-    drawdown_series: number[];
-  };
-  error?: string;
-}
-
-export interface BacktestDemoResult {
-  demo_info: {
-    description: string;
-    assets: string[];
-    assets_fa: string[];
-    period_days: number;
-  };
-  single_asset: SingleBacktestResult;
-  portfolio: PortfolioBacktestResult;
-}
+// Sentiment Analysis
+export interface SentimentTextResult { text_preview: string; label_name: string; lang: string; weight: number; pos_score: number; neg_score: number; sentiment_score: number; label: string; pos_words: string[]; neg_words: string[]; token_count: number; }
+export interface SentimentOverall { score: number; label: string; positive_pct: number; negative_pct: number; neutral_pct: number; }
+export interface SentimentStockResult { symbol: string; score: number; signal: string; news_count: number; recommendation: string; }
+export interface SentimentDemoResult { demo_info: { description: string; news_count: number; social_count: number; stocks_analyzed: string[] }; market_overall: SentimentOverall; market_distribution: { positive: number; negative: number; neutral: number }; market_keywords: { positive: string[]; negative: string[] }; score_timeline: number[]; per_stock: SentimentStockResult[]; }
