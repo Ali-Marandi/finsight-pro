@@ -358,3 +358,134 @@ export async function getBacktestDemo(): Promise<BacktestDemoResult> {
   const { data } = await client.get('/backtest/demo');
   return data;
 }
+
+// Fuzzy MCDM
+export async function runFuzzyAHP(criteriaMatrix: number[][], criteriaNames: string[]): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/fuzzy-mcdm/ahp', { criteria_matrix: criteriaMatrix, criteria_names: criteriaNames });
+  return data;
+}
+
+export async function runFuzzyTOPSIS(
+  decisionMatrix: number[][], criteriaNames: string[], alternativeNames: string[],
+  criteriaWeights: number[], benefitCriteria?: boolean[],
+): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/fuzzy-mcdm/topsis', {
+    decision_matrix: decisionMatrix, criteria_names: criteriaNames,
+    alternative_names: alternativeNames, criteria_weights: criteriaWeights, benefit_criteria: benefitCriteria,
+  });
+  return data;
+}
+
+export async function getFuzzyMCDDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/fuzzy-mcdm/demo');
+  return data;
+}
+
+// Factor Analysis
+export async function runPCA(returnsMatrix: number[][], assetNames?: string[], nComponents?: number): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/factor-analysis/pca', { returns_matrix: returnsMatrix, asset_names: assetNames, n_components: nComponents });
+  return data;
+}
+
+export async function runFamaFrench(
+  returnsMatrix: number[][], marketReturns: number[],
+  assetNames?: string[], marketCap?: number[], bookToMarket?: number[],
+): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/factor-analysis/fama-french', {
+    returns_matrix: returnsMatrix, market_returns: marketReturns,
+    asset_names: assetNames, market_cap: marketCap, book_to_market: bookToMarket,
+  });
+  return data;
+}
+
+export async function getFactorAnalysisDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/factor-analysis/demo');
+  return data;
+}
+
+// Black-Litterman
+export async function runBlackLitterman(
+  marketCapWeights: number[], covarianceMatrix: number[][],
+  riskAversion = 2.5, tau = 0.05, views?: { assets: number[]; value: number; confidence: number }[],
+  riskFreeRate = 0,
+): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/black-litterman/optimize', {
+    market_cap_weights: marketCapWeights, covariance_matrix: covarianceMatrix,
+    risk_aversion: riskAversion, tau, views, risk_free_rate: riskFreeRate,
+  });
+  return data;
+}
+
+export async function getBlackLittermanDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/black-litterman/demo');
+  return data;
+}
+
+// Sentiment Analysis
+export async function analyzeSentiment(texts: string[], labels?: string[], weights?: number[]): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/sentiment/analyze', { texts, labels, weights });
+  return data;
+}
+
+export async function analyzeStockSentiment(symbol: string, newsTexts: string[], socialTexts?: string[]): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.post('/sentiment/stock', { symbol, news_texts: newsTexts, social_texts: socialTexts });
+  return data;
+}
+
+export async function getSentimentDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/sentiment/demo');
+  return data;
+}
+
+// Stochastic Calculus
+export async function getStochasticDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/stochastic-calculus/demo');
+  return data;
+}
+
+// Network Analysis
+export async function getNetworkDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/network-analysis/demo');
+  return data;
+}
+
+// Causal Inference
+export async function getCausalDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/causal-inference/demo');
+  return data;
+}
+
+// Reinforcement Learning
+export async function getRLDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/reinforcement-learning/demo');
+  return data;
+}
+
+// Fuzzy Neural
+export async function getFuzzyNeuralDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/fuzzy-neural/demo');
+  return data;
+}
+
+// Advanced Optimization
+export async function getAdvOptDemo(): Promise<any> {
+  const client = await getApiClient();
+  const { data } = await client.get('/advanced-optimization/demo');
+  return data;
+}

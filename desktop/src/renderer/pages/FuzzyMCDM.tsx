@@ -78,13 +78,13 @@ export default function FuzzyMCDM() {
           <div className="bg-white rounded-xl border p-5">
             <h3 className="font-semibold text-cascade-charcoal mb-4">AHP Criteria Weights</h3>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={result.ahp_ranking.map(r => ({ name: r.name, weight: r.weight_pct }))} layout="vertical">
+              <BarChart data={result.ahp_ranking.map((r: any) => ({ name: r.name, weight: r.weight_pct }))} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
                 <XAxis type="number" tick={{ fontSize: 11 }} unit="%" />
                 <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={120} />
                 <Tooltip />
                 <Bar dataKey="weight" radius={[0, 6, 6, 0]}>
-                  {result.ahp_ranking.map((_, i) => <Cell key={i} fill={chartColors[i % chartColors.length]} />)}
+                  {result.ahp_ranking.map((_: any, i: number) => <Cell key={i} fill={chartColors[i % chartColors.length]} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -94,13 +94,13 @@ export default function FuzzyMCDM() {
           <div className="bg-white rounded-xl border p-5">
             <h3 className="font-semibold text-cascade-charcoal mb-4">TOPSIS Ranking (Closeness to Ideal)</h3>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={result.topsis_ranking.map(r => ({ name: r.name, score: r.closeness * 100 }))}>
+              <BarChart data={result.topsis_ranking.map((r: any) => ({ name: r.name, score: r.closeness * 100 }))}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
                 <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-20} textAnchor="end" height={60} />
                 <YAxis tick={{ fontSize: 11 }} unit="%" />
                 <Tooltip />
                 <Bar dataKey="score" radius={[6, 6, 0, 0]}>
-                  {result.topsis_ranking.map((_, i) => (
+                  {result.topsis_ranking.map((_: any, i: number) => (
                     <Cell key={i} fill={i === 0 ? '#3c8855' : chartColors[(i + 1) % chartColors.length]} />
                   ))}
                 </Bar>
@@ -113,7 +113,7 @@ export default function FuzzyMCDM() {
             <div className="bg-white rounded-xl border p-5">
               <h3 className="font-semibold text-cascade-charcoal mb-4">Criteria Importance Radar</h3>
               <ResponsiveContainer width="100%" height={300}>
-                <RadarChart data={result.ahp_ranking.map(r => ({ name: r.name, weight: r.weight_pct }))}>
+                <RadarChart data={result.ahp_ranking.map((r: any) => ({ name: r.name, weight: r.weight_pct }))}>
                   <PolarGrid stroke="#e5e5e5" />
                   <PolarAngleAxis dataKey="name" tick={{ fontSize: 11 }} />
                   <PolarRadiusAxis tick={{ fontSize: 10 }} />

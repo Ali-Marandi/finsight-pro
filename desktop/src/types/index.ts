@@ -374,3 +374,21 @@ export interface SentimentTextResult { text_preview: string; label_name: string;
 export interface SentimentOverall { score: number; label: string; positive_pct: number; negative_pct: number; neutral_pct: number; }
 export interface SentimentStockResult { symbol: string; score: number; signal: string; news_count: number; recommendation: string; }
 export interface SentimentDemoResult { demo_info: { description: string; news_count: number; social_count: number; stocks_analyzed: string[] }; market_overall: SentimentOverall; market_distribution: { positive: number; negative: number; neutral: number }; market_keywords: { positive: string[]; negative: string[] }; score_timeline: number[]; per_stock: SentimentStockResult[]; }
+
+// Stochastic Calculus
+export interface StochasticDemoResult { demo_title: string; description: string; gbm_ito_simulation: Record<string, any>; heston_stochastic_volatility: Record<string, any>; option_greeks_surface: Record<string, any>; barrier_option_pricing: Record<string, any>; jump_diffusion_model: Record<string, any>; }
+
+// Network Analysis
+export interface NetworkDemoResult { demo_info: Record<string, any>; correlation_network: Record<string, any>; minimum_spanning_tree: Record<string, any>; contagion_simulation: Record<string, any>; systemic_risk: Record<string, any>; }
+
+// Causal Inference
+export interface CausalDemoResult { summary: Record<string, any>; granger_causality: Record<string, any>; impulse_response: Record<string, any>; transfer_entropy: Record<string, any>; mutual_information: Record<string, any>; causal_discovery: Record<string, any>; }
+
+// Reinforcement Learning
+export interface RLDemoResult { demo_title: string; description: string; daily_price_series_summary: Record<string, any>; intraday_execution_summary: Record<string, any>; asset_names: string[]; q_learning_execution: Record<string, any>; twap_vwap_strategy: Record<string, any>; portfolio_rl_allocation: Record<string, any>; }
+
+// Fuzzy Neural
+export interface FuzzyNeuralDemoResult { demo_title: string; description: string; credit_scoring: Record<string, any>; bankruptcy_prediction: Record<string, any>; rule_extraction: Record<string, any>; }
+
+// Advanced Optimization
+export interface AdvOptDemoResult { demo: Record<string, any>; assets: string[]; sectors: Record<string, any>; expected_returns: number[]; socp_optimization: Record<string, any>; robust_optimization: Record<string, any>; hrp_optimization: Record<string, any>; pareto_frontier: Record<string, any>; }

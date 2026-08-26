@@ -9,6 +9,9 @@ from app.routers import (
     document_intelligence, benchmarking, compliance as compliance_router,
     consolidation, tsetmc, cloud_sync,
     time_series, financial_engineering, backtest,
+    fuzzy_mcdm, factor_analysis, black_litterman, sentiment,
+    stochastic_calculus, network_analysis, causal_inference,
+    reinforcement_learning, fuzzy_neural, advanced_optimization,
 )
 
 
@@ -24,7 +27,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="FinSight Pro API",
     description="Backend API for FinSight Pro Desktop — AI-Powered Financial Analysis",
-    version="0.3.0",
+    version="0.7.0",
     lifespan=lifespan,
 )
 
@@ -52,8 +55,18 @@ app.include_router(cloud_sync.router, prefix="/api/v1/cloud-sync", tags=["Cloud 
 app.include_router(time_series.router, prefix="/api/v1/time-series", tags=["Time Series"])
 app.include_router(financial_engineering.router, prefix="/api/v1/financial-engineering", tags=["Financial Engineering"])
 app.include_router(backtest.router, prefix="/api/v1/backtest", tags=["Backtesting"])
+app.include_router(fuzzy_mcdm.router, prefix="/api/v1/fuzzy-mcdm", tags=["Fuzzy MCDM"])
+app.include_router(factor_analysis.router, prefix="/api/v1/factor-analysis", tags=["Factor Analysis"])
+app.include_router(black_litterman.router, prefix="/api/v1/black-litterman", tags=["Black-Litterman"])
+app.include_router(sentiment.router, prefix="/api/v1/sentiment", tags=["Sentiment Analysis"])
+app.include_router(stochastic_calculus.router, prefix="/api/v1/stochastic-calculus", tags=["Stochastic Calculus"])
+app.include_router(network_analysis.router, prefix="/api/v1/network-analysis", tags=["Network Analysis"])
+app.include_router(causal_inference.router, prefix="/api/v1/causal-inference", tags=["Causal Inference"])
+app.include_router(reinforcement_learning.router, prefix="/api/v1/reinforcement-learning", tags=["Reinforcement Learning"])
+app.include_router(fuzzy_neural.router, prefix="/api/v1/fuzzy-neural", tags=["Fuzzy Neural"])
+app.include_router(advanced_optimization.router, prefix="/api/v1/advanced-optimization", tags=["Advanced Optimization"])
 
 
 @app.get("/api/v1/health")
 async def health_check():
-    return {"status": "ok", "version": "0.6.0"}
+    return {"status": "ok", "version": "0.7.0"}

@@ -4,6 +4,8 @@ import {
   LayoutDashboard, BarChart3, FileText, History, Settings,
   ChevronLeft, ChevronRight, Menu, Sparkles, Activity,
   FileSearch, ShieldCheck, Merge, Globe, TrendingUp, Calculator, Target,
+  BrainCircuit, Network, GitBranch, MessageSquareHeart, Layers, Scale,
+  Waves, Brain, ArrowRightLeft, Sliders, Atom,
 } from 'lucide-react';
 import { useAnalysisStore } from '../hooks/useAnalysisStore';
 import Header from './Header';
@@ -23,6 +25,16 @@ const navItems = [
   { to: '/time-series', icon: TrendingUp, label: 'Time Series' },
   { to: '/financial-engineering', icon: Calculator, label: 'Fin. Engineering' },
   { to: '/backtest', icon: Target, label: 'Backtesting' },
+  { to: '/fuzzy-mcdm', icon: BrainCircuit, label: 'Fuzzy MCDM' },
+  { to: '/factor-analysis', icon: Layers, label: 'Factor Analysis' },
+  { to: '/black-litterman', icon: Scale, label: 'Black-Litterman' },
+  { to: '/sentiment', icon: MessageSquareHeart, label: 'Sentiment' },
+  { to: '/stochastic-calculus', icon: Waves, label: 'Stochastic' },
+  { to: '/network-analysis', icon: Network, label: 'Network' },
+  { to: '/causal-inference', icon: ArrowRightLeft, label: 'Causal' },
+  { to: '/reinforcement-learning', icon: Brain, label: 'RL Engine' },
+  { to: '/fuzzy-neural', icon: Atom, label: 'Fuzzy Neural' },
+  { to: '/advanced-optimization', icon: Sliders, label: 'Adv. Optim.' },
   { to: '/reports', icon: FileText, label: 'Reports' },
   { to: '/history', icon: History, label: 'History' },
   { to: '/settings', icon: Settings, label: 'Settings' },
